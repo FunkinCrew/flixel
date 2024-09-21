@@ -360,6 +360,7 @@ class SoundFrontEnd
 		volume = logToLinear(volume);
 		volume += Amount;
 		volume = linearToLog(volume);
+        volume = (volume == 0.001 ? 0 : volume);
 		showSoundTray(Amount > 0);
 	}
 
@@ -367,11 +368,6 @@ class SoundFrontEnd
     {
         // Ensure x is between 0 and 1
         x = Math.max(0, Math.min(1, x));
-
-		if (x == 0)
-		{
-			return 0;
-		}
 
         // Convert linear scale to logarithmic
         return Math.exp(Math.log(minValue) * (1 - x));
