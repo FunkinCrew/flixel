@@ -367,10 +367,10 @@ class SoundFrontEnd
         // Ensure x is between 0 and 1
         x = Math.max(0, Math.min(1, x));
 
-				if (x == 0)
-				{
-					return 0;
-				}
+		if (x == 0)
+		{
+			return 0;
+		}
 
         // Convert linear scale to logarithmic
         return Math.exp(Math.log(minValue) * (1 - x));
@@ -380,10 +380,10 @@ class SoundFrontEnd
         // Ensure x is between minValue and 1
         x = Math.max(minValue, Math.min(1, x));
 
-				if (x == minValue)
-				{
-					return 0;
-				}
+		if (x == minValue)
+		{
+			return 0;
+		}
 
         // Convert logarithmic scale to linear
         return 1 - (Math.log(x) / Math.log(minValue));
