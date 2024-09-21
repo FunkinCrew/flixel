@@ -363,20 +363,22 @@ class SoundFrontEnd
 		showSoundTray(Amount > 0);
 	}
 
-	public function linearToLog(x:Float, minValue:Float = 0.001):Float {
+	public function linearToLog(x:Float, minValue:Float = 0.001):Float 
+    {
         // Ensure x is between 0 and 1
         x = Math.max(0, Math.min(1, x));
 
 		if (x == 0)
 		{
-			return 0;
+			return minValue;
 		}
 
         // Convert linear scale to logarithmic
         return Math.exp(Math.log(minValue) * (1 - x));
     }
 
-    public function logToLinear(x:Float, minValue:Float = 0.001):Float {
+    public function logToLinear(x:Float, minValue:Float = 0.001):Float 
+    {
         // Ensure x is between minValue and 1
         x = Math.max(minValue, Math.min(1, x));
 
