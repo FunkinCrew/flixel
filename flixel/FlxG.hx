@@ -517,9 +517,11 @@ class FlxG
 	 */
 	public static inline function openURL(url:String, target = "_blank"):Void
 	{
-		// if the url does not already start with a protocol, add it.
-		if (!~/^.\w+?:\/*/.match(url))
-			url = "https://" + url;
+	    // Ensure you can't open protocols such as steam://, file://, etc
+	    var protocol:Array<String> = url.split("://");
+	    if (protocol.length == 1) url = 'https://${targetUrl}';
+	    else if (protocol[0] != 'http' && protocol[0] != 'https') throw "openURL can only open http and https links.";
+			
 		Lib.getURL(new URLRequest(url), target);
 	}
 
