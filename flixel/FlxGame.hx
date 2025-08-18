@@ -327,9 +327,18 @@ class FlxGame extends Sprite
 		#end
 
 		// Focus gained/lost monitoring
-		#if (sys && openfl >= "9.3.0")
-		stage.nativeWindow.addEventListener(Event.DEACTIVATE, onFocusLost);
-		stage.nativeWindow.addEventListener(Event.ACTIVATE, onFocus);
+		#if sys
+		if (!stage.window.onActivate.has(onActivate))
+			stage.window.onActivate.add(onActivate);
+			
+		if (!stage.window.onDeactivate.has(onDeactivate))
+			stage.window.onDeactivate.add(onDeactivate);
+			
+		if (!stage.window.onFocusIn.has(onFocus))
+			stage.window.onFocusIn.add(onFocus);
+			
+		if (!stage.window.onFocusOut.has(onFocusLost))
+			stage.window.onFocusOut.add(onFocusLost);
 		#else
 		stage.addEventListener(Event.DEACTIVATE, onFocusLost);
 		stage.addEventListener(Event.ACTIVATE, onFocus);
@@ -355,23 +364,68 @@ class FlxGame extends Sprite
 		Assets.addEventListener(Event.CHANGE, FlxG.bitmap.onAssetsReload);
 	}
 
+	#if sys
+	function onActivate():Void
+	{
+		if (!_lostFocus)
+			return;
+			
+		_lostFocus = false;
+		resumeGame(true);
+	}
+	
+	function onDeactivate():Void
+	{
+		if (_lostFocus)
+			return;
+			
+		_lostFocus = true;
+		pauseGame(true);
+	}
+	
+	function onFocus():Void
+	{
+		if (!_lostFocus)
+			return;
+			
+		_lostFocus = false;
+		resumeGame(false);
+	}
+	
+	function onFocusLost():Void
+	{
+		if (_lostFocus)
+			return;
+			
+		_lostFocus = true;
+		pauseGame(false);
+	}
+	#else
 	function onFocus(_):Void
 	{
-		#if flash
 		if (!_lostFocus)
-			return; // Don't run this function twice (bug in standalone flash player)
-		#end
-
-		#if mobile
-		// just check if device orientation has been changed
-		onResize(_);
-		#end
-
+			return;
+			
 		_lostFocus = false;
+		resumeGame(false);
+	}
+	
+	function onFocusLost(_):Void
+	{
+		if (_lostFocus)
+			return;
+			
+		_lostFocus = true;
+		pauseGame(false);
+	}
+	#end
+	
+	function resumeGame(force:Bool):Void
+	{
 		FlxG.signals.focusGained.dispatch();
 		_state.onFocus();
 
-		if (!FlxG.autoPause)
+		if (!force && !FlxG.autoPause)
 			return;
 
 		#if FLX_FOCUS_LOST_SCREEN
@@ -390,18 +444,12 @@ class FlxGame extends Sprite
 		FlxG.inputs.onFocus();
 	}
 
-	function onFocusLost(event:Event):Void
+	function pauseGame(force:Bool):Void
 	{
-		#if flash
-		if (_lostFocus)
-			return; // Don't run this function twice (bug in standalone flash player)
-		#end
-
-		_lostFocus = true;
 		FlxG.signals.focusLost.dispatch();
 		_state.onFocusLost();
 
-		if (!FlxG.autoPause)
+		if (!force && !FlxG.autoPause)
 			return;
 
 		#if FLX_FOCUS_LOST_SCREEN
@@ -539,7 +587,7 @@ class FlxGame extends Sprite
 		}
 		else
 		{
-			_nextState = ()->new FlxIntroSplash(_initialState);
+			_nextState = () -> new FlxIntroSplash(_initialState);
 			_skipSplash = true; // only play it once
 		}
 
@@ -701,7 +749,7 @@ class FlxGame extends Sprite
 
 		#if FLX_POINTER_INPUT
 		var len = FlxG.swipes.length;
-		while(len-- > 0)
+		while (len-- > 0)
 		{
 			final swipe = FlxG.swipes.pop();
 			if (swipe != null)
