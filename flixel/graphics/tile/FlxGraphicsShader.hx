@@ -35,9 +35,6 @@ class FlxGraphicsShader extends GraphicsShader
 		{
 			vec4 color = texture2D(bitmap, coord);
 
-			if (premultiplyAlpha)
-				color.rgb *= color.a;
-
 			if (!(hasTransform || openfl_HasColorTransform))
 				return color;
 
@@ -56,7 +53,12 @@ class FlxGraphicsShader extends GraphicsShader
 				return vec4 (color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);
 			}
 
-			return color * openfl_Alphav;
+			float alphaMulti = openfl_Alphav;
+
+			if (premultiplyAlpha)
+				alphaMulti *= color.a;
+
+			return color * alphaMulti;
 		}
 	", true)
 	@:glFragmentBody("
