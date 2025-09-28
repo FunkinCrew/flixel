@@ -50,7 +50,9 @@ class FlxGraphicsShader extends GraphicsShader
 				if (color.a == 0.0)
 					return vec4 (0.0, 0.0, 0.0, 0.0);
 
-				return vec4 (color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);
+				float alphaMulti = min (color.a * openfl_Alphav, 1.0);
+
+				return vec4 (color.rgb * alphaMulti, alphaMulti);
 			}
 
 			float alphaMulti = openfl_Alphav;
@@ -58,7 +60,7 @@ class FlxGraphicsShader extends GraphicsShader
 			if (premultiplyAlpha)
 				alphaMulti *= color.a;
 
-			return color * alphaMulti;
+			return color * min (alphaMulti, 1.0);
 		}
 	", true)
 	@:glFragmentBody("
