@@ -77,7 +77,7 @@ class FlxTouch extends FlxPointer implements IFlxDestroyable implements IFlxInpu
 	/**
 	 * Time in ticks of last press.
 	 */
-	public var justPressedTimeInTicks(default, null):Int = -1;
+	public var justPressedTimeInTicks(default, null):Float = -1;
 
 	/**
 	 * Distance in pixels this touch has moved since the last frame in the X direction.
@@ -107,7 +107,7 @@ class FlxTouch extends FlxPointer implements IFlxDestroyable implements IFlxInpu
 	/**
 	 * Time in ticks that had passed since of last press
 	 */
-	public var ticksDeltaSincePress(get, default):Int;
+	public var ticksDeltaSincePress(get, default):Float;
 
 	/**
 	 * The speed of this touch, always updates.
@@ -326,7 +326,7 @@ class FlxTouch extends FlxPointer implements IFlxDestroyable implements IFlxInpu
 		return viewY - _startY;
 
 	@:noCompletion
-	inline function get_ticksDeltaSincePress():Int
+	inline function get_ticksDeltaSincePress():Float
 		return FlxG.game.ticks - justPressedTimeInTicks;
 }
 #else

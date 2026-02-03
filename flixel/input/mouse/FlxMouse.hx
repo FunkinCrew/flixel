@@ -156,12 +156,12 @@ class FlxMouse extends FlxPointer implements IFlxInputManager
 	 * Time in ticks of last left mouse button press.
 	 * @since 4.3.0
 	 */
-	public var justPressedTimeInTicks(get, never):Int;
+	public var justPressedTimeInTicks(get, never):Float;
 
 	/**
 	 * Time in ticks that had passed since of last press
 	 */
-	public var ticksDeltaSincePress(get, never):Int;
+	public var ticksDeltaSincePress(get, never):Float;
 
 	/**
 	 * The speed of this mouse, always updates.
@@ -206,7 +206,7 @@ class FlxMouse extends FlxPointer implements IFlxInputManager
 	 * Time in ticks of last right mouse button press.
 	 * @since 4.3.0
 	 */
-	public var justPressedTimeInTicksRight(get, never):Int;
+	public var justPressedTimeInTicksRight(get, never):Float;
 
 	/**
 	 * Check to see if the middle mouse button is currently pressed.
@@ -233,7 +233,7 @@ class FlxMouse extends FlxPointer implements IFlxInputManager
 	 * Time in ticks of last middle mouse button press.
 	 * @since 4.3.0
 	 */
-	public var justPressedTimeInTicksMiddle(get, never):Int;
+	public var justPressedTimeInTicksMiddle(get, never):Float;
 	#end
 
 	/**
@@ -797,11 +797,11 @@ class FlxMouse extends FlxPointer implements IFlxInputManager
 		return _leftButton.justReleased;
 
 	@:noCompletion
-	function get_justPressedTimeInTicks():Int
+	function get_justPressedTimeInTicks():Float
 		return _leftButton.justPressedTimeInTicks;
 
 	@:noCompletion
-	function get_ticksDeltaSincePress():Int
+	function get_ticksDeltaSincePress():Float
 		return FlxG.game.ticks - justPressedTimeInTicks;
 
 	#if FLX_MOUSE_ADVANCED
@@ -822,7 +822,7 @@ class FlxMouse extends FlxPointer implements IFlxInputManager
 		return _rightButton.justReleased;
 
 	@:noCompletion
-	inline function get_justPressedTimeInTicksRight():Int
+	inline function get_justPressedTimeInTicksRight():Float
 		return _rightButton.justPressedTimeInTicks;
 
 	@:noCompletion
@@ -842,7 +842,7 @@ class FlxMouse extends FlxPointer implements IFlxInputManager
 		return _middleButton.justReleased;
 
 	@:noCompletion
-	inline function get_justPressedTimeInTicksMiddle():Int
+	inline function get_justPressedTimeInTicksMiddle():Float
 		return _middleButton.justPressedTimeInTicks;
 	#end
 

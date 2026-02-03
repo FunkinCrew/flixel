@@ -43,7 +43,7 @@ class Stats extends Window
 	var _leftTextField:TextField;
 	var _rightTextField:TextField;
 
-	var _itvTime:Int = 0;
+	var _itvTime:Float = 0;
 	var _frameCount:Int;
 	var _currentTime:Int;
 
