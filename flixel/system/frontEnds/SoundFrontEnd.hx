@@ -27,7 +27,13 @@ class SoundFrontEnd
 	/**
 	 * Whether or not the game sounds are muted.
 	 */
-	public var muted:Bool = false;
+	public var muted(default, set):Bool = false;
+	
+	public function set_muted(v:Bool):Bool
+	{
+		return muted = #if mobile false #else v #end;
+	}
+
 
 	/**
 	 * Set this hook to get a callback whenever the volume changes.
