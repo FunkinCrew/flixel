@@ -524,6 +524,7 @@ class SoundFrontEnd
 	@:haxe.warning("-WDeprecated")
 	function set_volume(Volume:Float):Float
 	{
+		#if mobile Volume = 1; #end
 		volume = FlxMath.bound(Volume, 0, 1);
 
 		if (volumeHandler != null)
