@@ -166,7 +166,7 @@ class FlxCamera extends FlxBasic
 	 * The natural background color of the camera, in `AARRGGBB` format. Defaults to `FlxG.cameras.bgColor`.
 	 * On Flash, transparent backgrounds can be used in conjunction with `useBgAlphaBlending`.
 	 */
-	public var bgColor:FlxColor;
+	public var bgColor(default, set):FlxColor;
 
 	/**
 	 * Sometimes it's easier to just work with a `FlxSprite`, than it is to work directly with the `BitmapData` buffer.
@@ -1371,13 +1371,14 @@ class FlxCamera extends FlxBasic
 	function updateScrollRect():Void
 	{
 		var rect:Rectangle = (_scrollRect != null) ? _scrollRect.scrollRect : null;
+		var isTransparent:Bool = (bgColor == FlxColor.TRANSPARENT);
 
 		if (rect != null)
 		{
 			rect.x = rect.y = 0;
 
-			rect.width = width * initialZoom * FlxG.scaleMode.scale.x;
-			rect.height = height * initialZoom * FlxG.scaleMode.scale.y;
+			rect.width = Math.round(width * initialZoom * FlxG.scaleMode.scale.x) + (isTransparent ? 0 : -2);
+			rect.height = Math.round(height * initialZoom * FlxG.scaleMode.scale.y) + (isTransparent ? 0 : -2);
 
 			_scrollRect.scrollRect = rect;
 
@@ -1984,6 +1985,16 @@ class FlxCamera extends FlxBasic
 		return Color;
 	}
 
+	function set_bgColor(Color:FlxColor):FlxColor
+	{
+		if (bgColor != Color)
+		{
+			bgColor = Color;
+			updateScrollRect();
+		}
+
+		return Color;
+	}
 	function set_antialiasing(Antialiasing:Bool):Bool
 	{
 		antialiasing = Antialiasing;
