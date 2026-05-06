@@ -1377,8 +1377,8 @@ class FlxCamera extends FlxBasic
 		{
 			rect.x = rect.y = 0;
 
-			rect.width = Math.round(width * initialZoom * FlxG.scaleMode.scale.x) + (isTransparent ? 0 : -2);
-			rect.height = Math.round(height * initialZoom * FlxG.scaleMode.scale.y) + (isTransparent ? 0 : -2);
+			rect.width = Math.round(width * initialZoom * FlxG.scaleMode.scale.x) + (isTransparent ? 0 : -1);
+			rect.height = Math.round(height * initialZoom * FlxG.scaleMode.scale.y) + (isTransparent ? 0 : -1);
 
 			_scrollRect.scrollRect = rect;
 
