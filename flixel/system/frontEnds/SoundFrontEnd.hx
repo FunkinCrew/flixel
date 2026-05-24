@@ -12,6 +12,7 @@ import flixel.system.ui.FlxSoundTray;
 import flixel.text.FlxInputText;
 import flixel.util.FlxSignal;
 import openfl.media.Sound;
+import lime.media.AudioManager;
 
 /**
  * Accessed via `FlxG.sound`.
@@ -23,6 +24,16 @@ class SoundFrontEnd
 	 * A handy container for a background music object.
 	 */
 	public var music:FlxSound;
+
+	/**
+	 * Whether or not should it automatically switch to a new default playback device if detected.
+	 */
+	public var automaticDefaultDevice(get, set):Bool;
+
+	/**
+	 * The current used playback device name to play audios.
+	 */
+	public var deviceName(get, set):String;
 
 	/**
 	 * Whether or not the game sounds are muted.
@@ -46,6 +57,21 @@ class SoundFrontEnd
 	 * A signal that gets dispatched whenever the volume changes.
 	 */
 	public var onVolumeChange(default, null):FlxTypedSignal<Float->Void> = new FlxTypedSignal<Float->Void>();
+
+	/**
+	 * Dispatched when the default for the playback device is changed.
+	 */
+	public var onDefaultDeviceChanged(default, null):FlxTypedSignal<String->Void> = new FlxTypedSignal<String->Void>();
+
+	/**
+	 * Dispatched whenever a playback device is added.
+	 */
+	public var onDeviceAdded(default, null):FlxTypedSignal<String->Void> = new FlxTypedSignal<String->Void>();
+
+	/**
+	 * Dispatched whenever a playbck device is removed.
+	 */
+	public var onDeviceRemoved(default, null):FlxTypedSignal<String->Void> = new FlxTypedSignal<String->Void>();
 
 	#if FLX_KEYBOARD
 	/**
@@ -406,6 +432,9 @@ class SoundFrontEnd
 	
 	function new()
 	{
+		AudioManager.onDefaultPlaybackDeviceChanged.add(onDefaultDeviceChanged.dispatch);
+		AudioManager.onPlaybackDeviceAdded.add(onDeviceAdded.dispatch);
+		AudioManager.onPlaybackDeviceRemoved.add(onDeviceRemoved.dispatch);
 		#if FLX_SAVE
 		loadSavedPrefs();
 		#end
@@ -490,6 +519,47 @@ class SoundFrontEnd
 		}
 	}
 	#end
+
+	function get_automaticDefaultDevice():Bool
+	{
+		return AudioManager.automaticDefaultPlaybackDevice;
+	}
+
+	function set_automaticDefaultDevice(value:Bool):Bool
+	{
+		if (AudioManager.automaticDefaultPlaybackDevice != value)
+		{
+			AudioManager.automaticDefaultPlaybackDevice = value;
+			if (value && AudioManager.getCurrentPlaybackDeviceName() != AudioManager.getPlaybackDefaultDeviceName())
+			{
+				AudioManager.refresh();
+			}
+		}
+		return value;
+	}
+
+	function get_deviceName():String
+	{
+		return AudioManager.getCurrentPlaybackDeviceName();
+	}
+
+	function set_deviceName(value:String):String
+	{
+		if (AudioManager.getCurrentPlaybackDeviceName() != value)
+		{
+			if (AudioManager.refresh(value)) return value;
+			else
+			{
+				AudioManager.refresh();
+				return AudioManager.getCurrentPlaybackDeviceName();
+			}
+		}
+		else
+		{
+			return value;
+		}
+	}
+
 
 	@:haxe.warning("-WDeprecated")
 	function set_volume(Volume:Float):Float
