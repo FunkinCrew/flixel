@@ -117,8 +117,11 @@ class Console extends Window
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, function(e:KeyboardEvent)
 		{
 			if (FlxG.debugger.visible && FlxG.game.debugger.console.visible && e.keyCode == Keyboard.TAB)
+			{
 				FlxG.stage.focus = input;
-		});
+				e.preventDefault();
+			}
+		}, false, 1);
 		#end
 		#end
 
