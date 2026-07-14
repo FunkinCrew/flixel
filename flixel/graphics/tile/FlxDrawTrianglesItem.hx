@@ -21,6 +21,7 @@ typedef DrawData<T> = openfl.Vector<T>;
 #if !flash
 @:access(openfl.display.BitmapData)
 @:access(openfl.display3D.textures.TextureBase)
+@:access(openfl.display3D.backends.bgfx.textures.TextureBase)
 #end
 class FlxDrawTrianglesItem extends FlxDrawBaseItem<FlxDrawTrianglesItem>
 {
