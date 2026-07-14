@@ -12,6 +12,7 @@ import openfl.geom.ColorTransform;
 #if !flash
 @:access(openfl.display.BitmapData)
 @:access(openfl.display3D.textures.TextureBase)
+@:access(openfl.display3D.backends.bgfx.textures.TextureBase)
 #end
 class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 {
