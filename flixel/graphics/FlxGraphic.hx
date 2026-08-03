@@ -186,10 +186,15 @@ class FlxGraphic implements IFlxDestroyable
 	 */
 	public static function fromGraphic(Source:FlxGraphic, Unique:Bool = false, ?Key:String):FlxGraphic
 	{
-		if (!Unique)
+		if (!Unique && Key == null)
 			return Source;
 
 		var key:String = FlxG.bitmap.generateKey(Source.key, Key, Unique);
+		if (!Unique)
+		{
+			Source.key = key;
+			return FlxG.bitmap.addGraphic(Source);
+		}
 		var graphic:FlxGraphic = createGraphic(Source.bitmap, key, Unique);
 		graphic.unique = Unique;
 		graphic.assetsClass = Source.assetsClass;
