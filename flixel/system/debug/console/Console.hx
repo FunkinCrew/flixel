@@ -11,7 +11,7 @@ import openfl.text.TextFormat;
 #if sys
 import openfl.events.MouseEvent;
 #end
-#if hscript
+#if (polymod || hscript)
 import openfl.events.FocusEvent;
 import openfl.events.KeyboardEvent;
 import openfl.text.TextFieldType;
@@ -30,7 +30,7 @@ class Console extends Window
 	/**
 	 * The text that is displayed in the console's input field by default.
 	 */
-	static inline var DEFAULT_TEXT:String = #if hscript "(Click here / press [Tab] to enter command. Type 'help' for help.)" #else "Using the console requires hscript - please run 'haxelib install hscript'." #end;
+	static inline var DEFAULT_TEXT:String = #if (polymod || hscript) "(Click here / press [Tab] to enter command. Type 'help' for help.)" #else "Using the console requires hscript." #end;
 
 	/**
 	 * Map containing all registered Objects. You can use registerObject() or add them directly to this map.
@@ -75,7 +75,7 @@ class Console extends Window
 		this.completionList = completionList;
 		completionList.setY(y + Window.HEADER_HEIGHT);
 
-		#if hscript
+		#if (polymod || hscript)
 		ConsoleUtil.init();
 		#end
 
@@ -106,7 +106,7 @@ class Console extends Window
 
 	function registerEventListeners()
 	{
-		#if hscript
+		#if (polymod || hscript)
 		input.type = TextFieldType.INPUT;
 		input.addEventListener(FocusEvent.FOCUS_IN, onFocus);
 		input.addEventListener(FocusEvent.FOCUS_OUT, onFocusLost);
@@ -194,7 +194,7 @@ class Console extends Window
 		FlxG.game.debugger.onMouseFocusLost();
 	}
 
-	#if hscript
+	#if (polymod || hscript)
 	function onKeyDown(e:KeyboardEvent)
 	{
 		if (completionList.visible)
@@ -302,7 +302,7 @@ class Console extends Window
 	public function registerFunction(alias:String, func:Dynamic, ?helpText:String)
 	{
 		registeredFunctions.set(alias, func);
-		#if hscript
+		#if (polymod || hscript)
 		ConsoleUtil.registerFunction(alias, func);
 		#end
 
@@ -319,7 +319,7 @@ class Console extends Window
 	public function registerObject(alias:String, object:Dynamic)
 	{
 		registeredObjects.set(alias, object);
-		#if hscript
+		#if (polymod || hscript)
 		ConsoleUtil.registerObject(alias, object);
 		#end
 	}
@@ -334,7 +334,7 @@ class Console extends Window
 	{
 		registeredObjects.remove(alias);
 		registeredFunctions.remove(alias);
-		#if hscript
+		#if (polymod || hscript)
 		ConsoleUtil.removeByAlias(alias);
 		#end
 	}
@@ -354,7 +354,7 @@ class Console extends Window
 			if (registeredObjects[alias] == object)
 			{
 				registeredObjects.remove(alias);
-				#if hscript
+				#if (polymod || hscript)
 				ConsoleUtil.removeByAlias(alias);
 				#end
 				break;
@@ -377,7 +377,7 @@ class Console extends Window
 			if (registeredFunctions[alias] == func)
 			{
 				registeredFunctions.remove(alias);
-				#if hscript
+				#if (polymod || hscript)
 				ConsoleUtil.removeByAlias(alias);
 				#end
 				break;
@@ -432,7 +432,7 @@ class Console extends Window
 	{
 		super.destroy();
 
-		#if hscript
+		#if (polymod || hscript)
 		input.removeEventListener(FocusEvent.FOCUS_IN, onFocus);
 		input.removeEventListener(FocusEvent.FOCUS_OUT, onFocusLost);
 		input.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);

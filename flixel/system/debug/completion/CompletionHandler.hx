@@ -8,7 +8,7 @@ using flixel.util.FlxArrayUtil;
 using flixel.util.FlxStringUtil;
 using StringTools;
 
-#if hscript
+#if (polymod || hscript)
 import flixel.system.debug.console.ConsoleUtil;
 #end
 
@@ -72,7 +72,7 @@ class CompletionHandler
 
 	function invokeCompletion(path:String, isPeriod:Bool)
 	{
-		#if hscript
+		#if (polymod || hscript)
 		var items:Array<String> = null;
 
 		try
@@ -104,7 +104,7 @@ class CompletionHandler
 
 	function getGlobals():Array<String>
 	{
-		#if hscript
+		#if (polymod || hscript)
 		return ConsoleUtil.interp.getGlobals().sortAlphabetically();
 		#else
 		return [];
@@ -135,7 +135,7 @@ class CompletionHandler
 
 	function selectionChanged(selectedItem:String)
 	{
-		#if hscript
+		#if (polymod || hscript)
 		try
 		{
 			var lastWord = getLastWord(input.text);
