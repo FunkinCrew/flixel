@@ -260,6 +260,12 @@ class FlxSound extends FlxBasic
 		_target = null;
 		name = null;
 		artist = null;
+
+		if (fadeTween != null)
+		{
+			fadeTween.cancel();
+			fadeTween = null;
+		}
 		
 		if (_channel != null)
 		{
