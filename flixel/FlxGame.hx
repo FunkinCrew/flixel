@@ -197,11 +197,11 @@ class FlxGame extends Sprite
 	 * Instantiate a new game object.
 	 *
 	 * @param gameWidth        The width of your game in pixels. If `0`, the `Project.xml` width is used.
-	 *                         If the demensions don't match the `Project.xml`, 
+	 *                         If the demensions don't match the `Project.xml`,
 	 *                         [`scaleMode`](https://api.haxeflixel.com/flixel/system/scaleModes/index.html)
 	 *                         will determine the actual display size of the game.
 	 * @param gameHeight       The height of your game in pixels. If `0`, the `Project.xml` height is used.
-	 *                         If the demensions don't match the `Project.xml`, 
+	 *                         If the demensions don't match the `Project.xml`,
 	 *                         [`scaleMode`](https://api.haxeflixel.com/flixel/system/scaleModes/index.html)
 	 *                         will determine the actual display size of the game.
 	 * @param initialState     A constructor for the initial state, ex: `PlayState.new` or `()->new PlayState()`.
@@ -504,7 +504,7 @@ class FlxGame extends Sprite
 		#if FLX_DEBUG
 		_skipSplash = true;
 		#end
-		
+
 		if (_skipSplash)
 		{
 			_nextState = _initialState;
@@ -569,7 +569,7 @@ class FlxGame extends Sprite
 
 		FlxG.signals.postStateSwitch.dispatch();
 	}
-	
+
 	function gameStart()
 	{
 		FlxG.signals.postGameStart.dispatch();
@@ -655,7 +655,7 @@ class FlxGame extends Sprite
 		updateElapsed(deltaTime);
 
 		updateInput(deltaTime);
-		
+
 		FlxG.signals.preUpdate.dispatch();
 
 		#if FLX_SOUND_SYSTEM
@@ -682,8 +682,18 @@ class FlxGame extends Sprite
 		}
 		#end
 
-		filters = filtersEnabled ? _filters : null;
+		final targetFilters = filtersEnabled ? _filters : null;
+		final targetLength = targetFilters == null ? -1 : targetFilters.length;
+		if (_lastAppliedFilters != targetFilters || _lastAppliedFiltersLength != targetLength)
+		{
+			_lastAppliedFilters = targetFilters;
+			_lastAppliedFiltersLength = targetLength;
+			filters = targetFilters;
+		}
 	}
+
+	var _lastAppliedFilters:Array<BitmapFilter> = null;
+	var _lastAppliedFiltersLength:Int = -1;
 
 	function updateElapsed(deltaTime:Float):Void
 	{
