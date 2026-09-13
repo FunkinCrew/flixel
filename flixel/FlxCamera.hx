@@ -754,11 +754,11 @@ class FlxCamera extends FlxBasic
 	@:allow(flixel.system.frontEnds.CameraFrontEnd)
 	function render():Void
 	{
-		flashSprite.filters = filtersEnabled ? filters : null;
+		__applyFlashSpriteFilters();
 
 		if (FlxG.renderTile)
 		{
-			canvas.transform.matrix = __get__rotated__matrix();
+			__apply__rotated__matrix();
 		}
 
 		var currItem:FlxDrawBaseItem<Dynamic> = _headOfDrawStack;
@@ -1344,12 +1344,53 @@ class FlxCamera extends FlxBasic
 			__angleMatrix.translate(_fxShakeXOffset, _fxShakeYOffset);
 		__angleMatrix.scale(scaleX, scaleY);
 		// __angleMatrix.scale(totalScaleX, totalScaleY);
-		if (!(_sinScrollAngle == 0 && _sinScrollAngle == 1))
+		if (!(_sinScrollAngle == 0 && _cosScrollAngle == 1))
 			__angleMatrix.rotateWithTrig(_cosScrollAngle, _sinScrollAngle);
 		__angleMatrix.translate(width * 0.5, height * 0.5);
 		__angleMatrix.translate(x, y);
 		__angleMatrix.scale(FlxG.scaleMode.scale.x, FlxG.scaleMode.scale.y);
 		return __angleMatrix;
+	}
+
+	/**
+	 * Assigns `flashSprite.filters` only when the filter array actually changed.
+	 */
+	@:noCompletion function __applyFlashSpriteFilters():Void
+	{
+		final targetFilters = filtersEnabled ? filters : null;
+		final targetLength = targetFilters == null ? -1 : targetFilters.length;
+
+		if (__lastFlashSpriteFilters == targetFilters && __lastFlashSpriteFiltersLength == targetLength)
+			return;
+
+		__lastFlashSpriteFilters = targetFilters;
+		__lastFlashSpriteFiltersLength = targetLength;
+		flashSprite.filters = targetFilters;
+	}
+
+	@:noCompletion var __lastFlashSpriteFilters:Array<BitmapFilter> = null;
+	@:noCompletion var __lastFlashSpriteFiltersLength:Int = -1;
+
+	/**
+	 * Pushes the camera matrix to the canvas only when it actually changed.
+	 */
+	@:noCompletion function __apply__rotated__matrix():Void
+	{
+		final matrix = __get__rotated__matrix();
+		final last = __lastCanvasMatrix;
+
+		if (__lastCanvasMatrixValid
+			&& last.a == matrix.a
+			&& last.b == matrix.b
+			&& last.c == matrix.c
+			&& last.d == matrix.d
+			&& last.tx == matrix.tx
+			&& last.ty == matrix.ty)
+			return;
+
+		last.copyFrom(matrix);
+		__lastCanvasMatrixValid = true;
+		canvas.transform.matrix = matrix;
 	}
 
 	@:noCompletion function __get__bounds():FlxRect
@@ -1360,6 +1401,9 @@ class FlxCamera extends FlxBasic
 
 	@:noCompletion extern inline function __get__rotated__bounds():FlxRect
 	{
+		if (_sinScrollAngle == 0 && _cosScrollAngle == 1)
+			return __rotatedBounds;
+
 		return __rotatedBounds.getRotatedBounds(scrollAngle, FlxPoint.weak(__rotatedBounds.width * 0.5, __rotatedBounds.height * 0.5), __rotatedBounds);
 	}
 
@@ -1369,6 +1413,8 @@ class FlxCamera extends FlxBasic
 	@:noCompletion var _negativeCosScrollAngle = 1.0;
 
 	@:noCompletion final __angleMatrix = new FlxMatrix();
+	@:noCompletion final __lastCanvasMatrix = new FlxMatrix();
+	@:noCompletion var __lastCanvasMatrixValid:Bool = false;
 	@:noCompletion final __rotatedBounds = new FlxRect();
 	@:noCompletion final __origin = new FlxPoint();
 
