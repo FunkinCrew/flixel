@@ -683,17 +683,14 @@ class FlxGame extends Sprite
 		#end
 
 		final targetFilters = filtersEnabled ? _filters : null;
-		final targetLength = targetFilters == null ? -1 : targetFilters.length;
-		if (_lastAppliedFilters != targetFilters || _lastAppliedFiltersLength != targetLength)
+		if (targetFilters != null || _hasAppliedFilters)
 		{
-			_lastAppliedFilters = targetFilters;
-			_lastAppliedFiltersLength = targetLength;
+			_hasAppliedFilters = targetFilters != null;
 			filters = targetFilters;
 		}
 	}
 
-	var _lastAppliedFilters:Array<BitmapFilter> = null;
-	var _lastAppliedFiltersLength:Int = -1;
+	var _hasAppliedFilters:Bool = false;
 
 	function updateElapsed(deltaTime:Float):Void
 	{
