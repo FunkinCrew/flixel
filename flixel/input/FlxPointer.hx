@@ -75,7 +75,10 @@ class FlxPointer
 			camera = FlxG.camera;
 		
 		result = getViewPosition(camera, result);
-		result.add(camera.scroll);
+		
+		if (camera != null)
+			result.add(camera.scroll);
+			
 		return result;
 	}
 	
@@ -114,8 +117,8 @@ class FlxPointer
 		if (result == null)
 			result = FlxPoint.get();
 		
-		result.x = Std.int((gameX - camera.x) / camera.zoom + camera.viewMarginX);
-		result.y = Std.int((gameY - camera.y) / camera.zoom + camera.viewMarginY);
+		result.x = camera != null ? Std.int((gameX - camera.x) / camera.zoom + camera.viewMarginX) : gameX;
+		result.y = camera != null ? Std.int((gameY - camera.y) / camera.zoom + camera.viewMarginY) : gameY;
 		
 		return result;
 	}
@@ -139,8 +142,8 @@ class FlxPointer
 		if (result == null)
 			result = FlxPoint.get();
 		
-		result.x = (gameX - camera.x + 0.5 * camera.width * (camera.zoom - camera.initialZoom)) / camera.zoom;
-		result.y = (gameY - camera.y + 0.5 * camera.height * (camera.zoom - camera.initialZoom)) / camera.zoom;
+		result.x = camera != null ? ((gameX - camera.x + 0.5 * camera.width * (camera.zoom - camera.initialZoom)) / camera.zoom) : gameX;
+		result.y = camera != null ? ((gameY - camera.y + 0.5 * camera.height * (camera.zoom - camera.initialZoom)) / camera.zoom) : gameY;
 		
 		return result;
 	}
@@ -165,8 +168,8 @@ class FlxPointer
 		if (result == null)
 			result = FlxPoint.get();
 		
-		result.x = (gameX - camera.x) / camera.zoom + camera.viewMarginX;
-		result.y = (gameY - camera.y) / camera.zoom + camera.viewMarginY;
+		result.x = camera != null ? ((gameX - camera.x) / camera.zoom + camera.viewMarginX) : gameX;
+		result.y = camera != null ? ((gameY - camera.y) / camera.zoom + camera.viewMarginY) : gameY;
 		
 		return result;
 	}
