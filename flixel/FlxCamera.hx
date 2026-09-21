@@ -1359,14 +1359,43 @@ class FlxCamera extends FlxBasic
 	{
 		final targetFilters = filtersEnabled ? filters : null;
 
-		if (targetFilters == null && !__flashSpriteHasFilters)
+		if (!__flashSpriteFiltersChanged(targetFilters))
 			return;
 
-		__flashSpriteHasFilters = targetFilters != null;
 		flashSprite.filters = targetFilters;
 	}
 
-	@:noCompletion var __flashSpriteHasFilters:Bool = false;
+	/**
+	 * Whether `value` differs from the filter list that was last handed to `flashSprite`.
+	 */
+	@:noCompletion function __flashSpriteFiltersChanged(value:Null<Array<BitmapFilter>>):Bool
+	{
+		final length = value == null ? -1 : value.length;
+
+		if (__lastFlashSpriteFiltersLength == length)
+		{
+			var i = length;
+			while (i-- > 0)
+			{
+				if (__lastFlashSpriteFilters[i] != value[i])
+					break;
+			}
+
+			if (i < 0)
+				return false;
+		}
+
+		__lastFlashSpriteFiltersLength = length;
+		__lastFlashSpriteFilters.resize(length < 0 ? 0 : length);
+
+		for (i in 0...__lastFlashSpriteFilters.length)
+			__lastFlashSpriteFilters[i] = value[i];
+
+		return true;
+	}
+
+	@:noCompletion var __lastFlashSpriteFilters:Array<BitmapFilter> = [];
+	@:noCompletion var __lastFlashSpriteFiltersLength:Int = -1;
 
 	/**
 	 * Pushes the camera matrix to the canvas only when it actually changed.
