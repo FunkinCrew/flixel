@@ -96,7 +96,7 @@ class FlxBitmapText extends FlxSprite
 	 * Default value if true.
 	 */
 	public var autoSize(default, set):Bool = true;
-	
+
 	/**
 	 * Whether to autmatically adjust the `width`, `height`, `offset` and
 	 * `origin` whenever the size of the text is changed.
@@ -161,12 +161,12 @@ class FlxBitmapText extends FlxSprite
 	 * NOTE: If the borderSize is 1, borderQuality of 0 or 1 will have the exact same effect (and performance).
 	 */
 	public var borderQuality(default, set):Float = 0;
-	
+
 	/**
 	 * Internal handler for deprecated `shadowOffset` field
 	 */
 	var _shadowOffset:FlxPoint = FlxPoint.get(1, 1);
-	
+
 	/**
 	 * Offset that is applied to the shadow border style, if active.
 	 * `x` and `y` are multiplied by `borderSize`. Default is `(1, 1)`, or lower-right corner.
@@ -220,7 +220,7 @@ class FlxBitmapText extends FlxSprite
 	 * Constructs a new text field component.
 	 * Warning: The default font may work incorrectly on HTML5
 	 * and is utterly unreliable on Brave Browser with shields up.
-	 * 
+	 *
 	 * @param   x     The initial X position of the text.
 	 * @param   y     The initial Y position of the text.
 	 * @param   text  The text to display.
@@ -245,7 +245,7 @@ class FlxBitmapText extends FlxSprite
 			textDrawData = [];
 			borderDrawData = [];
 		}
-		
+
 		this.text = text;
 	}
 
@@ -289,7 +289,7 @@ class FlxBitmapText extends FlxSprite
 			super.drawFrame(Force);
 		}
 	}
-	
+
 	override function updateHitbox()
 	{
 		checkPendingChanges(true);
@@ -400,11 +400,11 @@ class FlxBitmapText extends FlxSprite
 					matrix.translate(screenPos.x + originX, screenPos.y + originY);
 					final colorTransform = bgColorTransformDrawHelper.reset();
 					colorTransform.setMultipliers(colorHelper).scaleMultipliers(backgroundColor);
-					camera.drawPixels(FlxG.bitmap.whitePixel, null, matrix, colorTransform, blend, antialiasing);
+					camera.drawPixels(FlxG.bitmap.whitePixel, null, matrix, colorTransform, blend, antialiasing, blendTarget);
 				}
 
 				final hasColorOffsets = (colorTransform != null && colorTransform.hasRGBAOffsets());
-				final drawItem = camera.startQuadBatch(font.parent, true, hasColorOffsets, blend, antialiasing, shader);
+				final drawItem = camera.startQuadBatch(font.parent, true, hasColorOffsets, blend, antialiasing, shader, blendTarget);
 				function addQuad(charCode:Int, x:Float, y:Float, color:ColorTransform)
 				{
 					var frame = font.getCharFrame(charCode);

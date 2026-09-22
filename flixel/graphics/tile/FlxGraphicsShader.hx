@@ -31,7 +31,7 @@ class FlxGraphicsShader extends GraphicsShader
 		uniform bool hasTransform;  // TODO: Is this still needed? Apparently, yes!
 		uniform bool hasColorTransform;
 		uniform bool premultiplyAlpha;
-		vec4 flixel_texture2D(sampler2D bitmap, vec2 coord)
+		vec4 flixel_sampleBitmap(sampler2D bitmap, vec2 coord)
 		{
 			vec4 color = texture2D(bitmap, coord);
 
@@ -57,6 +57,11 @@ class FlxGraphicsShader extends GraphicsShader
 			}
 
 			return color * openfl_Alphav;
+		}
+
+		vec4 flixel_texture2D(sampler2D bitmap, vec2 coord)
+		{
+			return openfl_applyBlend(flixel_sampleBitmap(bitmap, coord));
 		}
 	", true)
 	@:glFragmentSource("
