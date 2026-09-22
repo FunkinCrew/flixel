@@ -24,6 +24,7 @@ import flixel.util.FlxDestroyUtil;
 import flixel.util.FlxSpriteUtil;
 import openfl.Vector;
 import openfl.display.BlendMode;
+import openfl.display3D.Context3DBlendTarget;
 import openfl.filters.BitmapFilter;
 
 using flixel.util.FlxColorTransformUtil;
@@ -543,6 +544,13 @@ class FlxCamera extends FlxBasic
 	public var debugLayer:Sprite;
 	#end
 
+	/**
+   * The rectangle of this camera's viewport.
+   */
+  public var viewportRect = new Rectangle();
+
+  var _viewportPoint = new Point();
+
 	var _helperMatrix:FlxMatrix = new FlxMatrix();
 
 	var _helperPoint:Point = new Point();
@@ -596,10 +604,10 @@ class FlxCamera extends FlxBasic
 	static var renderRect:FlxRect = FlxRect.get();
 
 	@:noCompletion
-	public function startQuadBatch(graphic:FlxGraphic, colored:Bool, hasColorOffsets:Bool = false, ?blend:BlendMode, smooth:Bool = false, ?shader:FlxShader)
+	public function startQuadBatch(graphic:FlxGraphic, colored:Bool, hasColorOffsets:Bool = false, ?blend:BlendMode, smooth:Bool = false, ?shader:FlxShader, ?blendTarget:Context3DBlendTarget)
 	{
 		#if FLX_RENDER_TRIANGLE
-		return startTrianglesBatch(graphic, smooth, colored, blend);
+		return startTrianglesBatch(graphic, smooth, colored, blend, blendTarget);
 		#else
 		var itemToReturn = null;
 
@@ -609,8 +617,10 @@ class FlxCamera extends FlxBasic
 			&& _headTiles.colored == colored
 			&& _headTiles.hasColorOffsets == hasColorOffsets
 			&& _headTiles.blend == blend
+			&& _headTiles.blendTarget == blendTarget
 			&& _headTiles.antialiasing == smooth
-			&& _headTiles.shader == shader)
+			&& _headTiles.shader == shader
+			&& isBatchableBlend(blend, blendTarget))
 		{
 			return _headTiles;
 		}
@@ -636,6 +646,7 @@ class FlxCamera extends FlxBasic
 		itemToReturn.colored = colored;
 		itemToReturn.hasColorOffsets = hasColorOffsets;
 		itemToReturn.blend = blend;
+		itemToReturn.blendTarget = blendTarget;
 		itemToReturn.shader = shader;
 
 		itemToReturn.nextTyped = _headTiles;
@@ -658,26 +669,31 @@ class FlxCamera extends FlxBasic
 	}
 
 	@:noCompletion
-	public function startTrianglesBatch(graphic:FlxGraphic, smoothing:Bool = false, isColored:Bool = false, ?blend:BlendMode, ?hasColorOffsets:Bool, ?shader:FlxShader):FlxDrawTrianglesItem
+	public function startTrianglesBatch(graphic:FlxGraphic, smoothing:Bool = false, isColored:Bool = false, ?blend:BlendMode, ?hasColorOffsets:Bool, ?shader:FlxShader, ?blendTarget:Context3DBlendTarget):FlxDrawTrianglesItem
 	{
+		// Callers that omit this pass null, while a draw item defaults to BlendRenderTarget, and the two
+		// do not compare equal. Converging on the one value here is what keeps batches merging.
+		if (blendTarget == null) blendTarget = Context3DBlendTarget.BlendRenderTarget;
 		if (_currentDrawItem != null
 			&& _currentDrawItem.type == FlxDrawItemType.TRIANGLES
 			&& _headTriangles.graphics == graphic
 			&& _headTriangles.antialiasing == smoothing
 			&& _headTriangles.colored == isColored
 			&& _headTriangles.blend == blend
+			&& _headTriangles.blendTarget == blendTarget
 			&& _headTriangles.hasColorOffsets == hasColorOffsets
 			&& _headTriangles.shader == shader
+			&& isBatchableBlend(blend, blendTarget)
 			)
 		{
 			return _headTriangles;
 		}
 
-		return getNewDrawTrianglesItem(graphic, smoothing, isColored, blend, hasColorOffsets, shader);
+		return getNewDrawTrianglesItem(graphic, smoothing, isColored, blend, hasColorOffsets, shader, blendTarget);
 	}
 
 	@:noCompletion
-	public function getNewDrawTrianglesItem(graphic:FlxGraphic, smoothing:Bool = false, isColored:Bool = false, ?blend:BlendMode, ?hasColorOffsets:Bool, ?shader:FlxShader):FlxDrawTrianglesItem
+	public function getNewDrawTrianglesItem(graphic:FlxGraphic, smoothing:Bool = false, isColored:Bool = false, ?blend:BlendMode, ?hasColorOffsets:Bool, ?shader:FlxShader, ?blendTarget:Context3DBlendTarget):FlxDrawTrianglesItem
 	{
 		var itemToReturn:FlxDrawTrianglesItem = null;
 
@@ -697,6 +713,7 @@ class FlxCamera extends FlxBasic
 		itemToReturn.antialiasing = smoothing;
 		itemToReturn.colored = isColored;
 		itemToReturn.blend = blend;
+		itemToReturn.blendTarget = blendTarget;
 		itemToReturn.hasColorOffsets = hasColorOffsets;
 		itemToReturn.shader = shader;
 
@@ -770,7 +787,7 @@ class FlxCamera extends FlxBasic
 	}
 
 	public function drawPixels(?frame:FlxFrame, ?pixels:BitmapData, matrix:FlxMatrix, ?transform:ColorTransform, ?blend:BlendMode, ?smoothing:Bool = false,
-			?shader:FlxShader):Void
+			?shader:FlxShader, ?blendTarget:Context3DBlendTarget):Void
 	{
 		if (FlxG.renderBlit)
 		{
@@ -793,16 +810,16 @@ class FlxCamera extends FlxBasic
 			var hasColorOffsets:Bool = (transform != null && transform.hasRGBAOffsets());
 
 			#if FLX_RENDER_TRIANGLE
-			final drawItem:FlxDrawTrianglesItem = startTrianglesBatch(frame.parent, smoothing, isColored, blend, hasColorOffsets, shader);
+			final drawItem:FlxDrawTrianglesItem = startTrianglesBatch(frame.parent, smoothing, isColored, blend, hasColorOffsets, shader, blendTarget);
 			#else
-			final drawItem:FlxDrawQuadsItem = startQuadBatch(frame.parent, isColored, hasColorOffsets, blend, smoothing, shader);
+			final drawItem:FlxDrawQuadsItem = startQuadBatch(frame.parent, isColored, hasColorOffsets, blend, smoothing, shader, blendTarget);
 			#end
 			drawItem.addQuad(frame, matrix, transform);
 		}
 	}
 
 	public function copyPixels(?frame:FlxFrame, ?pixels:BitmapData, ?sourceRect:Rectangle, destPoint:Point, ?transform:ColorTransform, ?blend:BlendMode,
-			?smoothing:Bool = false, ?shader:FlxShader):Void
+			?smoothing:Bool = false, ?shader:FlxShader, ?blendTarget:Context3DBlendTarget):Void
 	{
 		if (FlxG.renderBlit)
 		{
@@ -837,16 +854,16 @@ class FlxCamera extends FlxBasic
 			var hasColorOffsets:Bool = (transform != null && transform.hasRGBAOffsets());
 
 			#if FLX_RENDER_TRIANGLE
-			final drawItem:FlxDrawTrianglesItem = startTrianglesBatch(frame.parent, smoothing, isColored, blend, hasColorOffsets, shader);
+			final drawItem:FlxDrawTrianglesItem = startTrianglesBatch(frame.parent, smoothing, isColored, blend, hasColorOffsets, shader, blendTarget);
 			#else
-			final drawItem:FlxDrawQuadsItem = startQuadBatch(frame.parent, isColored, hasColorOffsets, blend, smoothing, shader);
+			final drawItem:FlxDrawQuadsItem = startQuadBatch(frame.parent, isColored, hasColorOffsets, blend, smoothing, shader, blendTarget);
 			#end
 			drawItem.addQuad(frame, _helperMatrix, transform);
 		}
 	}
 
 	public function drawTriangles(graphic:FlxGraphic, vertices:DrawData<Float>, indices:DrawData<Int>, uvtData:DrawData<Float>, ?colors:DrawData<Int>,
-			?position:FlxPoint, ?blend:BlendMode, repeat:Bool = false, smoothing:Bool = false, ?transform:ColorTransform, ?shader:FlxShader):Void
+			?position:FlxPoint, ?blend:BlendMode, repeat:Bool = false, smoothing:Bool = false, ?transform:ColorTransform, ?shader:FlxShader, ?blendTarget:Context3DBlendTarget):Void
 	{
 		if (FlxG.renderBlit)
 		{
@@ -928,7 +945,7 @@ class FlxCamera extends FlxBasic
 			final isColored = (colors != null && colors.length != 0) || (transform != null && transform.hasRGBMultipliers());
 			final hasColorOffsets = (transform != null && transform.hasRGBAOffsets());
 
-			final drawItem = startTrianglesBatch(graphic, smoothing, isColored, blend, hasColorOffsets, shader);
+			final drawItem = startTrianglesBatch(graphic, smoothing, isColored, blend, hasColorOffsets, shader, blendTarget);
 			drawItem.addTriangles(vertices, indices, uvtData, colors, position, _bounds, transform);
 		}
 	}
@@ -1159,6 +1176,7 @@ class FlxCamera extends FlxBasic
 		}
 
 		updateFlashSpritePosition();
+    __updateViewportRect();
 	}
 
 	/**
@@ -2207,6 +2225,33 @@ class FlxCamera extends FlxBasic
 		}
 		return this.visible = visible;
 	}
+
+	function __updateViewportRect():Void
+  {
+    _viewportPoint.setTo(0, 0);
+    final origin = canvas.localToGlobal(_viewportPoint);
+
+    _viewportPoint.setTo(width, height);
+    final corner = canvas.localToGlobal(_viewportPoint);
+
+    final scale = FlxG.stage.window.scale;
+    viewportRect.setTo(origin.x * scale, origin.y * scale, (corner.x - origin.x) * scale, (corner.y - origin.y) * scale);
+  }
+
+	static function isBatchableBlend(blend:Null<BlendMode>,
+    blendTarget:Null<Context3DBlendTarget>):Bool
+  {
+		@:privateAccess
+    if (blend == NORMAL || blend == null || !openfl.display.OpenGLRenderer.__requiresShaderBlend(blend, blendTarget)) return true;
+
+    return switch (blendTarget)
+    {
+      case null, BlendRenderTarget:
+        false;
+      default:
+        true;
+    }
+  }
 
 	inline function calcMarginX():Void
 	{
