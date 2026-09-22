@@ -851,13 +851,13 @@ class FlxBar extends FlxSprite
 	override public function draw():Void
 	{
 		super.draw();
-		
+
 		if (!FlxG.renderTile)
 			return;
-		
+
 		if (alpha == 0)
 			return;
-		
+
 		if (percent > 0 && _frontFrame.type != FlxFrameType.EMPTY)
 		{
 			for (camera in getCamerasLegacy())
@@ -866,31 +866,31 @@ class FlxBar extends FlxSprite
 				{
 					continue;
 				}
-				
+
 				_frontFrame.prepareMatrix(_matrix, FlxFrameAngle.ANGLE_0, checkFlipX(), checkFlipY());
 				_matrix.translate(-origin.x, -origin.y);
 				_matrix.scale(scale.x, scale.y);
-				
+
 				// rotate matrix if sprite's graphic isn't prerotated
 				if (bakedRotationAngle <= 0)
 				{
 					updateTrig();
-					
+
 					if (angle != 0)
 						_matrix.rotateWithTrig(_cosAngle, _sinAngle);
 				}
-				
+
 				getScreenPosition(_point, camera).subtract(offset);
 				_point.add(origin.x, origin.y);
 				_matrix.translate(_point.x, _point.y);
-				
+
 				if (isPixelPerfectRender(camera))
 				{
 					_matrix.tx = Math.floor(_matrix.tx);
 					_matrix.ty = Math.floor(_matrix.ty);
 				}
-				
-				camera.drawPixels(_frontFrame, _matrix, colorTransform, blend, antialiasing, shader);
+
+				camera.drawPixels(_frontFrame, _matrix, colorTransform, blend, antialiasing, shader, blendTarget);
 			}
 		}
 	}
@@ -995,7 +995,7 @@ class FlxBar extends FlxSprite
 		{
 			if (value != null && value.parent != null)
 				value.parent.incrementUseCount();
-				
+
 			if (frontFrames != null && frontFrames.parent != null)
 				frontFrames.parent.decrementUseCount();
 
