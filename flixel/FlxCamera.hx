@@ -384,6 +384,11 @@ class FlxCamera extends FlxBasic
 	public var filtersEnabled:Bool = true;
 
 	/**
+	 * Indicates whether camera can be automatically removed by CameraFrontEnd.
+	 */
+	public var removable:Bool = true;
+
+	/**
 	 * Internal, used in blit render mode in camera's `fill()` method for less garbage creation.
 	 * It represents the size of buffer `BitmapData`
 	 * (the area of camera's buffer which should be filled with `bgColor`).
