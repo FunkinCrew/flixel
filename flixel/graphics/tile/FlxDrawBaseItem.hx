@@ -6,6 +6,7 @@ import flixel.math.FlxMatrix;
 import openfl.display.BlendMode;
 import openfl.display3D.Context3DBlendTarget;
 import openfl.geom.ColorTransform;
+import flixel.system.FlxAssets.FlxShader;
 
 /**
  * @author Zaphod
@@ -40,6 +41,8 @@ class FlxDrawBaseItem<T>
 	public var blending:Int = 0;
 
 	public var type:FlxDrawItemType;
+
+	public var shader:FlxShader;
 
 	public var numVertices(get, never):Int;
 
