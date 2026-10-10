@@ -899,8 +899,8 @@ class FlxTypedGroup<T:FlxBasic> extends FlxBasic implements IFlxGroupable<T>
 	{
 		if (_memberAdded != null)
 			_memberAdded.dispatch(cast member);
-
-		member.container = cast this;
+		
+		if (member.container == null) member.container = cast this;
 	}
 
 	function onMemberRemove(member:T)
@@ -908,7 +908,7 @@ class FlxTypedGroup<T:FlxBasic> extends FlxBasic implements IFlxGroupable<T>
 		if (_memberRemoved != null)
 			_memberRemoved.dispatch(cast member);
 
-		member.container = null;
+		if (member.container == cast this) member.container = null;
 	}
 
 	@:noCompletion
