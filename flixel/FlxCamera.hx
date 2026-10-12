@@ -2235,7 +2235,7 @@ class FlxCamera extends FlxBasic
     _viewportPoint.setTo(0, 0);
 		if (canvas == null)
 			return;
-	
+
     final origin = canvas.localToGlobal(_viewportPoint);
 
     _viewportPoint.setTo(width, height);
@@ -2249,7 +2249,7 @@ class FlxCamera extends FlxBasic
     blendTarget:Null<Context3DBlendTarget>):Bool
   {
 		@:privateAccess
-    if (blend == NORMAL || blend == null || !openfl.display.OpenGLRenderer.__requiresShaderBlend(blend, blendTarget)) return true;
+    if (blend == NORMAL || blend == null || !openfl.display.Context3DRenderer.__requiresShaderBlend(blend, blendTarget)) return true;
 
     return switch (blendTarget)
     {
