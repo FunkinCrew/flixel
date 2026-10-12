@@ -2249,7 +2249,7 @@ class FlxCamera extends FlxBasic
     blendTarget:Null<Context3DBlendTarget>):Bool
   {
 		@:privateAccess
-    if (blend == NORMAL || blend == null || !openfl.display.OpenGLRenderer.__requiresShaderBlend(blend, blendTarget)) return true;
+    if (blend == NORMAL || blend == null || !openfl.display.Context3DRenderer.__requiresShaderBlend(blend, blendTarget)) return true;
 
     return switch (blendTarget)
     {
