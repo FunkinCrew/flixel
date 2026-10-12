@@ -2233,6 +2233,9 @@ class FlxCamera extends FlxBasic
 	function __updateViewportRect():Void
   {
     _viewportPoint.setTo(0, 0);
+		if (canvas == null)
+			return;
+	
     final origin = canvas.localToGlobal(_viewportPoint);
 
     _viewportPoint.setTo(width, height);
