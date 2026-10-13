@@ -360,10 +360,14 @@ class FlxTypedSpriteGroup<T:FlxSprite> extends FlxSprite implements IFlxGroupabl
 	 */
 	public function remove(sprite:T, splice = false):T
 	{
+		if (sprite == null)
+			return null;
 		sprite.x -= x;
 		sprite.y -= y;
 		// alpha
 		sprite.cameras = null;
+		if (sprite.container == cast this)
+			sprite.container = null;
 		return group.remove(sprite, splice);
 	}
 
