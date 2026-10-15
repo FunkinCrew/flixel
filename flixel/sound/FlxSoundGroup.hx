@@ -45,7 +45,8 @@ class FlxSoundGroup
 			sounds.push(sound);
 			@:bypassAccessor
 			sound.group = this;
-			sound.updateTransform();
+			sound.updateVolume();
+			sound.updatePan();
 			return true;
 		}
 		return false;
@@ -63,7 +64,8 @@ class FlxSoundGroup
 			@:bypassAccessor
 			sound.group = null;
 			sounds.remove(sound);
-			sound.updateTransform();
+			sound.updateVolume();
+			sound.updatePan();
 			return true;
 		}
 		return false;
@@ -103,7 +105,8 @@ class FlxSoundGroup
 		this.volume = volume;
 		for (sound in sounds)
 		{
-			sound.updateTransform();
+			sound.updateVolume();
+			sound.updatePan();
 		}
 		return volume;
 	}
@@ -113,7 +116,8 @@ class FlxSoundGroup
 		muted = value;
 		for (sound in sounds)
 		{
-			sound.updateTransform();
+			sound.updateVolume();
+			sound.updatePan();
 		}
 		return muted;
 	}
