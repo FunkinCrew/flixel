@@ -60,6 +60,7 @@ class FlxActionInputDigitalMouseWheel extends FlxActionInputDigital
 	override public function update():Void
 	{
 		super.update();
+		input.update();
 		#if !FLX_NO_MOUSE
 		if (FlxG.mouse.wheel * sign > 0)
 		{
@@ -101,6 +102,7 @@ class FlxActionInputDigitalGamepad extends FlxActionInputDigital
 	override public function update():Void
 	{
 		super.update();
+		input.update();
 		#if !FLX_NO_GAMEPAD
 		if (deviceID == FlxInputDeviceID.ALL)
 		{
@@ -289,6 +291,7 @@ class FlxActionInputDigitalSteam extends FlxActionInputDigital
 
 	override public function update():Void
 	{
+		steamInput.update();
 		if (getSteamControllerData(deviceID))
 			steamInput.press();
 		else
