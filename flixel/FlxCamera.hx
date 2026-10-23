@@ -875,7 +875,7 @@ class FlxCamera extends FlxBasic
 			if (position == null)
 				position = renderPoint.set();
 
-			_bounds.set(0, 0, width, height);
+			_bounds.copyFrom(__get__bounds());
 
 			var verticesLength:Int = vertices.length;
 			var currentVertexPosition:Int = 0;
@@ -946,7 +946,7 @@ class FlxCamera extends FlxBasic
 		}
 		else
 		{
-			_bounds.set(0, 0, width, height);
+			_bounds.copyFrom(__get__bounds());
 			final isColored = (colors != null && colors.length != 0) || (transform != null && transform.hasRGBMultipliers());
 			final hasColorOffsets = (transform != null && transform.hasRGBAOffsets());
 
@@ -2235,7 +2235,7 @@ class FlxCamera extends FlxBasic
     _viewportPoint.setTo(0, 0);
 		if (canvas == null)
 			return;
-	
+
     final origin = canvas.localToGlobal(_viewportPoint);
 
     _viewportPoint.setTo(width, height);
