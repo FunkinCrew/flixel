@@ -12,18 +12,6 @@ class FlxInput<T> implements IFlxInput
 	public var current:FlxInputState = RELEASED;
 	public var last:FlxInputState = RELEASED;
 
-	/**
-	 * If `true`, a `release()` call that arrives before `JUST_PRESSED` is set
-	 * causes `JUST_RELEASED` to be delayed by a frame.
-	 * This prevents inputs shorter than one frame from getting dropped.
-	 */
-	public var deferRelease:Bool = true;
-
-	/**
-	 * Whether the key was pressed l
-	 */
-	var pendingRelease:Bool = false;
-
 	public function new(ID:T)
 	{
 		this.ID = ID;
@@ -31,36 +19,19 @@ class FlxInput<T> implements IFlxInput
 
 	public function press():Void
 	{
-		pendingRelease = false;
 		last = current;
 		current = pressed ? PRESSED : JUST_PRESSED;
 	}
 
 	public function release():Void
 	{
-		if (deferRelease)
-		{
-			if (current == JUST_PRESSED && last != JUST_PRESSED)
-			{
-				pendingRelease = true;
-				return;
-			}
-		}
-
 		last = current;
 		current = pressed ? JUST_RELEASED : RELEASED;
 	}
 
 	public function update():Void
 	{
-		if (pendingRelease && last == JUST_PRESSED)
-		{
-			// JUST_PRESSED has been available for at least one frame.
-			// We can now send JUST_RELEASED without the input getting dropped.
-			pendingRelease = false;
-			release();
-		}
-		else if (last == JUST_RELEASED && current == JUST_RELEASED)
+		if (last == JUST_RELEASED && current == JUST_RELEASED)
 		{
 			current = RELEASED;
 		}
@@ -76,7 +47,6 @@ class FlxInput<T> implements IFlxInput
 	{
 		current = RELEASED;
 		last = RELEASED;
-		pendingRelease = false;
 	}
 
 	public function hasState(state:FlxInputState):Bool
