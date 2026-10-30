@@ -41,17 +41,11 @@ class FlxGraphicsShader extends GraphicsShader
 			if (!(hasTransform || openfl_HasColorTransform))
 				return color;
 
-			if (color.a == 0.0)
-				return vec4(0.0, 0.0, 0.0, 0.0);
-
 			if (openfl_HasColorTransform || hasColorTransform)
 			{
-				color = vec4 (color.rgb / color.a, color.a);
+				color = vec4 (color.rgb / max(color.a, ALPHA_EPSILON), color.a);
 				vec4 mult = vec4 (openfl_ColorMultiplierv.rgb, 1.0);
 				color = clamp (openfl_ColorOffsetv + (color * mult), 0.0, 1.0);
-
-				if (color.a == 0.0)
-					return vec4 (0.0, 0.0, 0.0, 0.0);
 
 				return vec4 (color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);
 			}
