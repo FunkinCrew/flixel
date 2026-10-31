@@ -193,6 +193,7 @@ class FlxTouchManager implements IFlxInputManager
 		{
 			touch = recycle(Std.int(FlashEvent.stageX), Std.int(FlashEvent.stageY), FlashEvent.touchPointID, FlashEvent.pressure);
 		}
+		touch.timestamp = FlashEvent.timestamp;
 		touch.input.press();
 	}
 
@@ -205,6 +206,7 @@ class FlxTouchManager implements IFlxInputManager
 
 		if (touch != null)
 		{
+			touch.timestamp = FlashEvent.timestamp;
 			touch.input.release();
 		}
 	}
@@ -220,6 +222,7 @@ class FlxTouchManager implements IFlxInputManager
 		{
 			touch.setXY(Std.int(FlashEvent.stageX), Std.int(FlashEvent.stageY));
 			touch.pressure = FlashEvent.pressure;
+			touch.timestamp = FlashEvent.timestamp;
 		}
 	}
 
