@@ -1,6 +1,7 @@
 package flixel.input.touch;
 
 #if FLX_TOUCH
+import haxe.Int64;
 import openfl.geom.Point;
 import flixel.FlxG;
 import flixel.input.FlxInput;
@@ -28,6 +29,11 @@ class FlxTouch extends FlxPointer implements IFlxDestroyable implements IFlxInpu
 	 * A value between 0.0 and 1.0 indicating force of the contact with the device. If the device does not support detecting the pressure, the value is 1.0.
 	 */
 	public var pressure(default, null):Float;
+
+	/**
+	 * The time (in nanoseconds) in which this touch happened.
+	 */
+	public var timestamp(default, null):Int64;
 
 	/**
 	 * Check to see if this touch has just been moved upwards.
