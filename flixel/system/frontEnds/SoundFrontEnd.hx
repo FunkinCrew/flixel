@@ -326,13 +326,15 @@ class SoundFrontEnd
 	public function changeVolume(Amount:Float):Void
 	{
 		muted = false;
-		volume = linearToLog(logToLinear(volume) + Amount);
+		final logVolume:Float = linearToLog(logToLinear(volume) + Amount);
 		// Makes sure that the volume is fully muted when it hits the lower limit and is fully set back to max when increased
-		if (volume < 0.0011)
-			volume = 0;
-		else if (volume > 0.99)
-			volume = 1;
-		
+		if (logVolume < 0.0011)
+			logVolume = 0;
+		else if (logVolume > 0.99)
+			logVolume = 1;
+
+		volume = logVolume;
+
 		showSoundTray(Amount > 0);
 	}
 
