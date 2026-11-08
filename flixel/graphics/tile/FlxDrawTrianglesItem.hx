@@ -179,14 +179,38 @@ class FlxDrawTrianglesItem extends FlxDrawBaseItem<FlxDrawTrianglesItem>
 				this.indices[prevIndicesLength + i] = indices[i] + prevNumberOfVertices;
 			}
 			
-			alphas.push(indicesLength, transform);
+			final hasVertexColors = colors != null && colors.length > 0;
+
+			if (hasVertexColors)
+			{
+				for (i in 0...indicesLength)
+				{
+					var alpha = transform != null ? transform.alphaMultiplier : 1.0;
+					alphas.push(1, alpha * (((colors[indices[i]] >> 24) & 0xFF) / 255));
+				}
+			}
+			else
+				alphas.push(indicesLength, transform);
 			
 			if (colored)
 			{
 				if (colorOffsets.numIndices < indicesLength)
 					colorOffsets.padTo(indicesLength);
 				
-				colorMultipliers.push(indicesLength, transform);
+				if (hasVertexColors)
+				{
+					for (i in 0...indicesLength)
+					{
+						final rm = transform != null ? transform.redMultiplier : 1.0;
+						final gm = transform != null ? transform.greenMultiplier : 1.0;
+						final bm = transform != null ? transform.blueMultiplier : 1.0;
+
+						final vc:Int = colors[indices[i]];
+						colorMultipliers.push(1, rm * (((vc >> 16) & 0xFF) / 255), gm * (((vc >> 8) & 0xFF) / 255), bm * ((vc & 0xFF) / 255));
+					}
+				}
+				else
+					colorMultipliers.push(indicesLength, transform);
 			}
 			
 			if (hasColorOffsets)
@@ -356,7 +380,7 @@ private abstract ColorMultVector(Array<Float>)
 	{
 		this.resize(0);
 	}
-	
+
 	overload public inline extern function push(numIndices:Int, red:Float, green:Float, blue:Float)
 	{
 		for (i in 0...numIndices)
