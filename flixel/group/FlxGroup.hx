@@ -279,6 +279,15 @@ class FlxTypedGroup<T:FlxBasic> extends FlxBasic implements IFlxGroupable<T>
 	}
 
 	/**
+   * Refreshes the group, by redoing the render order of all objects.
+   * It does this based on the `zIndex` of each object.
+   */
+  public function refresh():Void
+  {
+    sort(FlxSort.byZIndex, FlxSort.ASCENDING);
+  }
+
+	/**
 	 * Recycling is designed to help you reuse game objects without always re-allocating or "newing" them.
 	 * It behaves differently depending on whether `maxSize` equals `0` or is bigger than `0`.
 	 *
@@ -899,7 +908,7 @@ class FlxTypedGroup<T:FlxBasic> extends FlxBasic implements IFlxGroupable<T>
 	{
 		if (_memberAdded != null)
 			_memberAdded.dispatch(cast member);
-		
+
 		if (member.container == null) member.container = cast this;
 	}
 

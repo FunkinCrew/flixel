@@ -303,6 +303,15 @@ class FlxTypedSpriteGroup<T:FlxSprite> extends FlxSprite implements IFlxGroupabl
 		return group.insert(Position, Sprite);
 	}
 
+	  /**
+   * Refreshes the group, by redoing the render order of all objects.
+   * It does this based on the `zIndex` of each object.
+   */
+  public function refresh():Void
+  {
+    group.refresh();
+  }
+
 	/**
 	 * Adjusts the position and other properties of the soon-to-be child of this sprite group.
 	 * Private helper to avoid duplicate code in `add()` and `insert()`.
