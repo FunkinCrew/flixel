@@ -324,7 +324,7 @@ class FlxGraphic implements IFlxDestroyable
 	 * This is only the case for graphics with an `assetsKey` or `assetsClass`.
 	 */
 	public var canBeRefreshed(get, never):Bool;
-	
+
 	@:deprecated("`canBeDumped` is deprecated, use `canBeRefreshed`")
 	public var canBeDumped(get, never):Bool;
 
@@ -332,7 +332,18 @@ class FlxGraphic implements IFlxDestroyable
 	 * GLSL shader for this graphic. Only used if utilizing sprites do not define a shader
 	 * Avoid changing it frequently as this is a costly operation.
 	 */
-	public var shader(default, null):FlxShader;
+	@:isVar
+	public var shader(get, null):FlxShader;
+
+	function get_shader():FlxShader
+	{
+		if (shader == null && !_destroyed)
+			shader = new FlxShader();
+
+		return shader;
+	}
+
+	var _destroyed:Bool = false;
 
 	/**
 	 * Usage counter for this `FlxGraphic` object.
@@ -369,7 +380,7 @@ class FlxGraphic implements IFlxDestroyable
 	 * It is `false` by default, since it significantly increases memory consumption.
 	 */
 	public var unique:Bool = false;
-	
+
 	#if FLX_TRACK_GRAPHICS
 	/**
 	 * **Debug only**
@@ -378,7 +389,7 @@ class FlxGraphic implements IFlxDestroyable
 	 */
 	public var trackingInfo:String = "";
 	#end
-	
+
 	/**
 	 * Internal var holding `FlxImageFrame` for the whole bitmap of this graphic.
 	 * Use public `imageFrame` var to access/generate it.
@@ -413,8 +424,6 @@ class FlxGraphic implements IFlxDestroyable
 		frameCollections = new Map<FlxFrameCollectionType, Array<Dynamic>>();
 		frameCollectionTypes = new Array<FlxFrameCollectionType>();
 		this.bitmap = bitmap;
-
-		shader = new FlxShader();
 	}
 
 	/**
@@ -426,13 +435,13 @@ class FlxGraphic implements IFlxDestroyable
 		if (newBitmap != null)
 			bitmap = newBitmap;
 	}
-	
+
 	@:deprecated("`undump` is deprecated, use `refresh`")
 	public function undump():Void
 	{
 		refresh();
 	}
-	
+
 	/**
 	 * Asset reload callback for this graphic object.
 	 * It regenerates its bitmap data.
@@ -441,7 +450,7 @@ class FlxGraphic implements IFlxDestroyable
 	{
 		if (!canBeRefreshed)
 			return;
-			
+
 		refresh();
 	}
 
@@ -453,6 +462,7 @@ class FlxGraphic implements IFlxDestroyable
 		bitmap = FlxDestroyUtil.dispose(bitmap);
 
 		shader = null;
+		_destroyed = true;
 
 		assetsClass = null;
 		imageFrame = FlxDestroyUtil.destroy(imageFrame);
@@ -501,7 +511,7 @@ class FlxGraphic implements IFlxDestroyable
 			FlxG.log.warn('Invalid call to getFramesCollections on a destroyed graphic');
 			return [];
 		}
-		
+
 		var collections:Array<Dynamic> = frameCollections.get(type);
 		if (collections == null)
 		{
@@ -541,7 +551,7 @@ class FlxGraphic implements IFlxDestroyable
 
 		if (newBitmap != null)
 			return FlxGraphic.getBitmap(newBitmap, unique);
-			
+
 		return null;
 	}
 
@@ -549,34 +559,34 @@ class FlxGraphic implements IFlxDestroyable
 	{
 		return bitmap != null && !bitmap.rect.isEmpty();
 	}
-	
+
 	inline function get_isDestroyed()
 	{
-		return shader == null;
+		return _destroyed;
 	}
 
 	inline function get_canBeRefreshed():Bool
 	{
 		return assetsClass != null || assetsKey != null;
 	}
-	
+
 	inline function get_canBeDumped():Bool
 	{
 		return canBeRefreshed;
 	}
-	
+
 	public function incrementUseCount()
 	{
 		useCount++;
 	}
-	
+
 	public function decrementUseCount()
 	{
 		useCount--;
-		
+
 		checkUseCount();
 	}
-	
+
 	function checkUseCount()
 	{
 		if (useCount <= 0 && destroyOnNoUse && !persist)
@@ -586,9 +596,9 @@ class FlxGraphic implements IFlxDestroyable
 	function set_destroyOnNoUse(value:Bool):Bool
 	{
 		this.destroyOnNoUse = value;
-		
+
 		checkUseCount();
-		
+
 		return value;
 	}
 
