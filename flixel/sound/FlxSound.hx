@@ -156,6 +156,11 @@ class FlxSound extends FlxBasic
 	 * Helper var to prevent the sound from playing after focus was regained when it was already paused.
 	 */
 	var _resumeOnFocus:Bool = false;
+
+	/**
+	 * If the sound's time is negative, how much milliseconds it needs to pass before the sound can play.
+	 */
+	var _queuedTime:Null<Float> = null;
 	
 	/**
 	 * The FlxSound constructor gets all the variables initialized, but NOT ready to play a sound yet.
@@ -226,6 +231,17 @@ class FlxSound extends FlxBasic
 	{
 		if (!playing)
 			return;
+
+		if (_queuedTime < 0)
+		{
+			_queuedTime += elapsed * 1000;
+			if (_queuedTime >= 0)
+			{
+				this.startSound(_queuedTime);
+			}
+
+			return;
+		}
 			
 		_volumeAdjust = 1.0;
 		
@@ -367,7 +383,7 @@ class FlxSound extends FlxBasic
 			return this;
 			
 		_paused = false;
-		_source.play();
+		if (_queuedTime == null) _source.play();
 		active = true;
 		
 		return this;
@@ -382,7 +398,7 @@ class FlxSound extends FlxBasic
 			return this;
 			
 		_paused = true;
-		_source.pause();
+		if (_queuedTime == null) _source.pause();
 		active = false;
 		
 		return this;
@@ -495,9 +511,16 @@ class FlxSound extends FlxBasic
 			
 		_paused = false;
 		
-		_source.currentTime = StartTime;
-		
-		_source.play();
+		if (StartTime >= 0)
+		{
+			_queuedTime = null;
+			_source.currentTime = StartTime;
+			_source.play();
+		}
+		else
+		{
+			_queuedTime = StartTime;
+		}
 		
 		active = true;
 	}
@@ -536,8 +559,9 @@ class FlxSound extends FlxBasic
 		
 		if (_source != null)
 			_source.stop();
-			
+		
 		active = false;
+		_queuedTime = null;
 		
 		if (resetPosition)
 			_paused = false;
@@ -580,7 +604,7 @@ class FlxSound extends FlxBasic
 	
 	inline function get_playing():Bool
 	{
-		return _source != null && _source.playing;
+		return (_source != null && _source.playing) || (_queuedTime != null && !_paused);
 	}
 	
 	inline function get_volume():Float
@@ -627,6 +651,14 @@ class FlxSound extends FlxBasic
 	
 	function set_time(time:Float):Float
 	{
+		if (time < 0)
+		{
+			_queuedTime = time;
+			_source.pause();
+			return _queuedTime;
+		}
+
+		_queuedTime = null;
 		if (_source != null)
 			_source.currentTime = time;
 			
