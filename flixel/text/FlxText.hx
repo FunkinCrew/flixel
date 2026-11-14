@@ -959,7 +959,7 @@ class FlxText extends FlxSprite
 			graphic.bitmap.fillRect(_flashRect, FlxColor.TRANSPARENT);
 		}
 
-		if (_hasBorderAlpha)
+		if (_hasBorderAlpha && borderStyle != NONE)
 		{
 			_borderPixels = new BitmapData(frameWidth, frameHeight, true, FlxColor.TRANSPARENT);
 		}
