@@ -30,7 +30,7 @@ class FlxActionInputDigitalMouseWheel extends FlxActionInputDigital
 {
 	var input:FlxInput<Int>;
 	var sign:Int = 0;
-
+	
 	/**
 	 * Action for mouse wheel events
 	 * @param	Positive	True: respond to mouse wheel values > 0; False: respond to mouse wheel values < 0
@@ -42,7 +42,7 @@ class FlxActionInputDigitalMouseWheel extends FlxActionInputDigital
 		input = new FlxInput<Int>(0);
 		sign = Positive ? 1 : -1;
 	}
-
+	
 	override public function check(Action:FlxAction):Bool
 	{
 		return switch (trigger)
@@ -56,7 +56,7 @@ class FlxActionInputDigitalMouseWheel extends FlxActionInputDigital
 			default: false;
 		}
 	}
-
+	
 	override public function update():Void
 	{
 		super.update();
@@ -79,7 +79,7 @@ class FlxActionInputDigitalMouseWheel extends FlxActionInputDigital
 class FlxActionInputDigitalGamepad extends FlxActionInputDigital
 {
 	var input:FlxInput<Int>;
-
+	
 	/**
 	 * Gamepad action input for digital (button-like) events
 	 * @param	InputID "universal" gamepad input ID (A, X, DPAD_LEFT, etc)
@@ -91,13 +91,13 @@ class FlxActionInputDigitalGamepad extends FlxActionInputDigital
 		super(FlxInputDevice.GAMEPAD, InputID, Trigger, GamepadID);
 		input = new FlxInput<Int>(InputID);
 	}
-
+	
 	public function toString():String
 	{
 		return "FlxActionInputDigitalGamepad{inputID:" + inputID + ",trigger:" + trigger + ",deviceID:" + deviceID + ",device:" + device + ",type:" + type
 			+ "}";
 	}
-
+	
 	override public function update():Void
 	{
 		super.update();
@@ -116,7 +116,7 @@ class FlxActionInputDigitalGamepad extends FlxActionInputDigital
 		else
 		{
 			var gamepad:FlxGamepad = null;
-
+			
 			if (deviceID == FlxInputDeviceID.FIRST_ACTIVE)
 			{
 				gamepad = FlxG.gamepads.getFirstActiveGamepad();
@@ -125,7 +125,7 @@ class FlxActionInputDigitalGamepad extends FlxActionInputDigital
 			{
 				gamepad = FlxG.gamepads.getByID(deviceID);
 			}
-
+			
 			if (gamepad != null)
 			{
 				if (inputID == ANY && trigger == RELEASED)
@@ -161,7 +161,7 @@ class FlxActionInputDigitalGamepad extends FlxActionInputDigital
 		}
 		#end
 	}
-
+	
 	override public function check(Action:FlxAction):Bool
 	{
 		return switch (trigger)
@@ -189,7 +189,7 @@ class FlxActionInputDigitalKeyboard extends FlxActionInputDigital
 	{
 		super(FlxInputDevice.KEYBOARD, Key, Trigger);
 	}
-
+	
 	override public function check(Action:FlxAction):Bool
 	{
 		return switch (trigger)
@@ -219,7 +219,7 @@ class FlxActionInputDigitalMouse extends FlxActionInputDigital
 	{
 		super(FlxInputDevice.MOUSE, ButtonID, Trigger);
 	}
-
+	
 	override public function check(Action:FlxAction):Bool
 	{
 		return switch (inputID)
@@ -258,7 +258,7 @@ class FlxActionInputDigitalMouse extends FlxActionInputDigital
 class FlxActionInputDigitalSteam extends FlxActionInputDigital
 {
 	var steamInput:FlxInput<Int>;
-
+	
 	/**
 	 * Steam Controller action input for digital (button-like) events
 	 * @param	ActionHandle handle received from FlxSteamController.getDigitalActionHandle()
@@ -275,7 +275,7 @@ class FlxActionInputDigitalSteam extends FlxActionInputDigital
 		FlxG.log.warn("steamwrap library not installed; steam inputs will be ignored.");
 		#end
 	}
-
+	
 	override public function check(Action:FlxAction):Bool
 	{
 		return switch (trigger)
@@ -286,7 +286,7 @@ class FlxActionInputDigitalSteam extends FlxActionInputDigital
 			case JUST_RELEASED: steamInput.justReleased;
 		}
 	}
-
+	
 	override public function update():Void
 	{
 		if (getSteamControllerData(deviceID))
@@ -294,16 +294,16 @@ class FlxActionInputDigitalSteam extends FlxActionInputDigital
 		else
 			steamInput.release();
 	}
-
+	
 	inline function getSteamControllerData(controllerHandle:Int):Bool
 	{
 		if (controllerHandle == FlxInputDeviceID.FIRST_ACTIVE)
 		{
 			controllerHandle = FlxSteamController.getFirstActiveHandle();
 		}
-
+		
 		var data = FlxSteamController.getDigitalActionData(controllerHandle, inputID);
-
+		
 		return (data.bActive && data.bState);
 	}
 }
@@ -323,7 +323,7 @@ class FlxActionInputDigitalAndroid extends FlxActionInputDigital
 	{
 		super(ANDROID, androidKeyID, Trigger);
 	}
-
+	
 	override public function check(Action:FlxAction):Bool
 	{
 		return switch (trigger)
@@ -332,7 +332,7 @@ class FlxActionInputDigitalAndroid extends FlxActionInputDigital
 			case RELEASED: FlxG.android.checkStatus(inputID, RELEASED) || FlxG.android.checkStatus(inputID, JUST_RELEASED);
 			case JUST_PRESSED: FlxG.android.checkStatus(inputID, JUST_PRESSED);
 			case JUST_RELEASED: FlxG.android.checkStatus(inputID, JUST_RELEASED);
-
+			
 			default: false;
 		}
 	}
@@ -345,7 +345,7 @@ class FlxActionInputDigitalAndroid extends FlxActionInputDigital
 class FlxActionInputDigitalIFlxInput extends FlxActionInputDigital
 {
 	var input:IFlxInput;
-
+	
 	/**
 	 * Generic IFlxInput action input
 	 *
@@ -363,7 +363,7 @@ class FlxActionInputDigitalIFlxInput extends FlxActionInputDigital
 		super(FlxInputDevice.IFLXINPUT_OBJECT, 0, Trigger);
 		input = Input;
 	}
-
+	
 	override public function check(action:FlxAction):Bool
 	{
 		return switch (trigger)
@@ -375,7 +375,7 @@ class FlxActionInputDigitalIFlxInput extends FlxActionInputDigital
 			default: false;
 		}
 	}
-
+	
 	override public function destroy():Void
 	{
 		super.destroy();

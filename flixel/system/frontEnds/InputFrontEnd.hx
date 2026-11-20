@@ -13,13 +13,13 @@ class InputFrontEnd
 	 * A read-only list of all inputs.
 	 */
 	public var list(default, null):Array<IFlxInputManager> = [];
-
+	
 	/**
 	 * Whether inputs are reset on state switches.
 	 * Disable if you need persistent input states across states.
 	 */
 	public var resetOnStateSwitch:Bool = true;
-
+	
 	/**
 	 * Add an input to the system
 	 */
@@ -38,10 +38,10 @@ class InputFrontEnd
 	{
 		if (!list.contains(input))
 			list.push(input);
-		
+			
 		return input;
 	}
-
+	
 	/**
 	 * Add an input to the system, unless the same type was already added
 	 */
@@ -60,7 +60,7 @@ class InputFrontEnd
 		list.push(input);
 		return input;
 	}
-
+	
 	/**
 	 * Removes an input from the system
 	 *
@@ -72,7 +72,7 @@ class InputFrontEnd
 	{
 		return list.remove(input);
 	}
-
+	
 	/**
 	 * Replace an existing input in the system with a new one
 	 *
@@ -87,14 +87,14 @@ class InputFrontEnd
 		final index = list.indexOf(oldInput);
 		if (index == -1)
 			return null;
-		
+			
 		if (destroyOld)
 			oldInput.destroy();
-		
+			
 		list[index] = newInput;
 		return newInput;
 	}
-
+	
 	public function reset():Void
 	{
 		for (input in list)
@@ -102,10 +102,10 @@ class InputFrontEnd
 			input.reset();
 		}
 	}
-
+	
 	@:allow(flixel.FlxG)
 	function new() {}
-
+	
 	@:allow(flixel.FlxGame)
 	inline function update():Void
 	{
@@ -114,7 +114,7 @@ class InputFrontEnd
 			input.update();
 		}
 	}
-
+	
 	@:allow(flixel.FlxGame)
 	inline function onFocus():Void
 	{
@@ -123,7 +123,7 @@ class InputFrontEnd
 			input.onFocus();
 		}
 	}
-
+	
 	@:allow(flixel.FlxGame)
 	inline function onFocusLost():Void
 	{
@@ -132,7 +132,7 @@ class InputFrontEnd
 			input.onFocusLost();
 		}
 	}
-
+	
 	@:allow(flixel.FlxGame)
 	@:allow(flixel.FlxState.resetSubState)
 	function onStateSwitch():Void
@@ -142,7 +142,7 @@ class InputFrontEnd
 			reset();
 		}
 	}
-
+	
 	function destroy():Void
 	{
 		for (input in list)

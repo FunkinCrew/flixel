@@ -33,7 +33,7 @@ class FlxCollision
 	static var boundsB:FlxRect = new FlxRect();
 	static var intersect:FlxRect = new FlxRect();
 	static var flashRect:Rectangle = new Rectangle();
-
+	
 	/**
 	 * A Pixel Perfect Collision check between two FlxSprites. It will do a bounds check first, and if that passes it will run a
 	 * pixel perfect match on the intersecting area. Works with rotated and animated sprites. May be slow, so use it sparingly.
@@ -47,94 +47,92 @@ class FlxCollision
 	public static function pixelPerfectCheck(contact:FlxSprite, target:FlxSprite, alphaTolerance:Int = 1, ?camera:FlxCamera):Bool
 	{
 		// if either of the angles are non-zero, consider the angles of the sprites in the pixel check
-		final advanced = contact.angle != 0 || target.angle != 0
-			|| contact.scale.x != 1 || contact.scale.y != 1
-			|| target.scale.x != 1 || target.scale.y != 1;
-
+		final advanced = contact.angle != 0 || target.angle != 0 || contact.scale.x != 1 || contact.scale.y != 1 || target.scale.x != 1 || target.scale.y != 1;
+		
 		contact.getScreenBounds(boundsA, camera);
 		target.getScreenBounds(boundsB, camera);
-
+		
 		boundsA.intersection(boundsB, intersect.set());
-
+		
 		if (intersect.isEmpty || intersect.width < 1 || intersect.height < 1)
 		{
 			return false;
 		}
-
+		
 		//	Thanks to Chris Underwood for helping with the translate logic :)
 		matrixA.identity();
 		matrixA.translate(-(intersect.x - boundsA.x), -(intersect.y - boundsA.y));
-
+		
 		matrixB.identity();
 		matrixB.translate(-(intersect.x - boundsB.x), -(intersect.y - boundsB.y));
-
+		
 		contact.drawFrame();
 		target.drawFrame();
-
+		
 		var testA:BitmapData = contact.framePixels;
 		var testB:BitmapData = target.framePixels;
-
+		
 		var overlapWidth:Int = Std.int(intersect.width);
 		var overlapHeight:Int = Std.int(intersect.height);
-
+		
 		// More complicated case, if either of the sprites is rotated
 		if (advanced)
 		{
 			testMatrix.identity();
-
+			
 			// translate the matrix to the center of the sprite
 			testMatrix.translate(-contact.origin.x, -contact.origin.y);
-
+			
 			// rotate the matrix according to angle
 			testMatrix.rotate(contact.angle * FlxAngle.TO_RAD);
 			testMatrix.scale(contact.scale.x, contact.scale.y);
-
+			
 			// translate it back!
 			testMatrix.translate(boundsA.width / 2, boundsA.height / 2);
-
+			
 			// prepare an empty canvas
 			var testA2:BitmapData = FlxBitmapDataPool.get(Math.floor(boundsA.width), Math.floor(boundsA.height), true, FlxColor.TRANSPARENT, false);
-
+			
 			// plot the sprite using the matrix
 			testA2.draw(testA, testMatrix, null, null, null, false);
 			testA = testA2;
-
+			
 			// (same as above)
 			testMatrix.identity();
 			testMatrix.translate(-target.origin.x, -target.origin.y);
 			testMatrix.rotate(target.angle * FlxAngle.TO_RAD);
 			testMatrix.scale(target.scale.x, target.scale.y);
 			testMatrix.translate(boundsB.width / 2, boundsB.height / 2);
-
+			
 			var testB2:BitmapData = FlxBitmapDataPool.get(Math.floor(boundsB.width), Math.floor(boundsB.height), true, FlxColor.TRANSPARENT, false);
 			testB2.draw(testB, testMatrix, null, null, null, false);
 			testB = testB2;
 		}
-
+		
 		boundsA.x = Std.int(-matrixA.tx);
 		boundsA.y = Std.int(-matrixA.ty);
 		boundsA.width = overlapWidth;
 		boundsA.height = overlapHeight;
-
+		
 		boundsB.x = Std.int(-matrixB.tx);
 		boundsB.y = Std.int(-matrixB.ty);
 		boundsB.width = overlapWidth;
 		boundsB.height = overlapHeight;
-
+		
 		boundsA.copyToFlash(flashRect);
 		var pixelsA = testA.getPixels(flashRect);
-
+		
 		boundsB.copyToFlash(flashRect);
 		var pixelsB = testB.getPixels(flashRect);
-
+		
 		var hit = false;
-
+		
 		// Analyze overlapping area of BitmapDatas to check for a collision (alpha values >= alphaTolerance)
 		var alphaA:Int = 0;
 		var alphaB:Int = 0;
 		var overlapPixels:Int = overlapWidth * overlapHeight;
 		var alphaIdx:Int = 0;
-
+		
 		// check even pixels
 		for (i in 0...Math.ceil(overlapPixels / 2))
 		{
@@ -142,14 +140,14 @@ class FlxCollision
 			pixelsA.position = pixelsB.position = alphaIdx;
 			alphaA = pixelsA.readUnsignedByte();
 			alphaB = pixelsB.readUnsignedByte();
-
+			
 			if (alphaA >= alphaTolerance && alphaB >= alphaTolerance)
 			{
 				hit = true;
 				break;
 			}
 		}
-
+		
 		if (!hit)
 		{
 			// check odd pixels
@@ -159,7 +157,7 @@ class FlxCollision
 				pixelsA.position = pixelsB.position = alphaIdx;
 				alphaA = pixelsA.readUnsignedByte();
 				alphaB = pixelsB.readUnsignedByte();
-
+				
 				if (alphaA >= alphaTolerance && alphaB >= alphaTolerance)
 				{
 					hit = true;
@@ -167,16 +165,16 @@ class FlxCollision
 				}
 			}
 		}
-
+		
 		if (advanced)
 		{
 			FlxBitmapDataPool.put(testA);
 			FlxBitmapDataPool.put(testB);
 		}
-
+		
 		return hit;
 	}
-
+	
 	/**
 	 * Creates a "wall" around the given camera which can be used for FlxSprite collision
 	 *
@@ -192,14 +190,14 @@ class FlxCollision
 		var right:FlxTileblock = null;
 		var top:FlxTileblock = null;
 		var bottom:FlxTileblock = null;
-
+		
 		if (placeOutside)
 		{
 			left = new FlxTileblock(Math.floor(camera.x - thickness), Math.floor(camera.y), thickness, camera.height);
 			right = new FlxTileblock(Math.floor(camera.x + camera.width), Math.floor(camera.y), thickness, camera.height);
 			top = new FlxTileblock(Math.floor(camera.x - thickness), Math.floor(camera.y - thickness), camera.width + thickness * 2, thickness);
 			bottom = new FlxTileblock(Math.floor(camera.x - thickness), camera.height, camera.width + thickness * 2, thickness);
-
+			
 			if (adjustWorldBounds)
 			{
 				FlxG.worldBounds.set(camera.x - thickness, camera.y - thickness, camera.width + thickness * 2, camera.height + thickness * 2);
@@ -212,23 +210,23 @@ class FlxCollision
 				camera.height - (thickness * 2));
 			top = new FlxTileblock(Math.floor(camera.x), Math.floor(camera.y), camera.width, thickness);
 			bottom = new FlxTileblock(Math.floor(camera.x), camera.height - thickness, camera.width, thickness);
-
+			
 			if (adjustWorldBounds)
 			{
 				FlxG.worldBounds.set(camera.x, camera.y, camera.width, camera.height);
 			}
 		}
-
+		
 		var result = new FlxGroup();
-
+		
 		result.add(left);
 		result.add(right);
 		result.add(top);
 		result.add(bottom);
-
+		
 		return result;
 	}
-
+	
 	/**
 	 * Calculates at which point where the given line, from start to end, first enters the rect.
 	 * If the line starts inside the rect, a copy of start is returned.
@@ -254,7 +252,7 @@ class FlxCollision
 			end.putWeak();
 			rect.putWeak();
 		}
-
+		
 		// helper to create a new instance if needed, when needed.
 		// this allows us to return a value at any point and still put weak refs.
 		// otherwise this would be a fragile mess of if-elses
@@ -264,40 +262,40 @@ class FlxCollision
 				result = FlxPoint.get(x, y);
 			else
 				result.set(x, y);
-
+				
 			putWeakRefs();
 			return result;
 		}
-
+		
 		function nullResult()
 		{
 			putWeakRefs();
 			return null;
 		}
-
+		
 		// does the ray start inside the bounds
 		if (rect.containsPoint(start))
 			return getResult(start.x, start.y);
-
+			
 		// are both points above, below, left or right of the bounds
-		if ((start.y < rect.top    && end.y < rect.top   )
-		||  (start.y > rect.bottom && end.y > rect.bottom)
-		||  (start.x > rect.right  && end.x > rect.right )
-		||  (start.x < rect.left   && end.x < rect.left) )
+		if ((start.y < rect.top && end.y < rect.top)
+			|| (start.y > rect.bottom && end.y > rect.bottom)
+			|| (start.x > rect.right && end.x > rect.right)
+			|| (start.x < rect.left && end.x < rect.left))
 		{
 			return nullResult();
 		}
-
+		
 		// check for purely vertical, i.e. has infinite slope
 		if (start.x == end.x)
 		{
 			// determine if it exits top or bottom
 			if (start.y < rect.top)
 				return getResult(start.x, rect.top);
-
+				
 			return getResult(start.x, rect.bottom);
 		}
-
+		
 		// Use y = mx + b formula to define out line, m = slope, b is y when x = 0
 		var m = (start.y - end.y) / (start.x - end.x);
 		// y - mx = b
@@ -305,11 +303,10 @@ class FlxCollision
 		// y = mx + b
 		var leftY = m * rect.left + b;
 		var rightY = m * rect.right + b;
-
+		
 		// if left and right intercepts are both above and below, there is no entry
 		if ((leftY < rect.top && rightY < rect.top) || (leftY > rect.bottom && rightY > rect.bottom))
 			return nullResult();
-
 		// if ray moves right
 		else if (start.x < end.x)
 		{
@@ -319,18 +316,18 @@ class FlxCollision
 				// x = (y - b)/m
 				return getResult((rect.top - b) / m, rect.top);
 			}
-
+			
 			if (leftY > rect.bottom)
 			{
 				// ray exits on bottom
 				// x = (y - b)/m
 				return getResult((rect.bottom - b) / m, rect.bottom);
 			}
-
+			
 			// ray exits to the left
 			return getResult(rect.left, leftY);
 		}
-
+		
 		// if ray moves left
 		if (rightY < rect.top)
 		{
@@ -338,18 +335,18 @@ class FlxCollision
 			// x = (y - b)/m
 			return getResult((rect.top - b) / m, rect.top);
 		}
-
+		
 		if (rightY > rect.bottom)
 		{
 			// ray exits on bottom
 			// x = (y - b)/m
 			return getResult((rect.bottom - b) / m, rect.bottom);
 		}
-
+		
 		// ray exits to the right
 		return getResult(rect.right, rightY);
 	}
-
+	
 	/**
 	 * Calculates at which point where the given line, from start to end, was last inside the rect.
 	 * If the line ends inside the rect, a copy of end is returned.

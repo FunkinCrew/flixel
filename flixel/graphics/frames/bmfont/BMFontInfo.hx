@@ -15,6 +15,7 @@ class BMFontInfo
 {
 	/** font name */
 	public var face:String;
+	
 	public var size:Int;
 	public var bold:Bool;
 	public var italic:Bool;
@@ -30,8 +31,7 @@ class BMFontInfo
 	
 	static function fromXml(infoNode:BMFontXml):BMFontInfo
 	{
-		final info:BMFontInfo =
-		{
+		final info:BMFontInfo = {
 			face: infoNode.att.string("face"),
 			size: infoNode.att.int("size"),
 			bold: infoNode.att.boolSafe("bold", false),
@@ -69,30 +69,40 @@ class BMFontInfo
 		var outline = 0;
 		var fixedHeight = false;
 		
-		BMFontUtil.forEachAttribute(infoText,
-			function(key:String, value:String)
-			{
-				switch key
-				{
-					case 'face': face = value;
-					case 'size': size = Std.parseInt(value);
-					case 'bold': bold = value != '0';
-					case 'italic': italic = value != '0';
-					case 'charset': charset = value;
-					case 'unicode': unicode = value != '0';
-					case 'stretchH': stretchH = Std.parseInt(value);
-					case 'smooth': smooth = value != '0';
-					case 'aa': aa = Std.parseInt(value);
-					case 'padding': padding = BMFontPadding.fromString(value);
-					case 'spacing': spacing = BMFontSpacing.fromString(value);
-					case 'outline': outline = Std.parseInt(value);
-					case 'fixedHeight': fixedHeight = value != '0';
-				}
-			}
-		);
-		
-		return
+		BMFontUtil.forEachAttribute(infoText, function(key:String, value:String)
 		{
+			switch key
+			{
+				case 'face':
+					face = value;
+				case 'size':
+					size = Std.parseInt(value);
+				case 'bold':
+					bold = value != '0';
+				case 'italic':
+					italic = value != '0';
+				case 'charset':
+					charset = value;
+				case 'unicode':
+					unicode = value != '0';
+				case 'stretchH':
+					stretchH = Std.parseInt(value);
+				case 'smooth':
+					smooth = value != '0';
+				case 'aa':
+					aa = Std.parseInt(value);
+				case 'padding':
+					padding = BMFontPadding.fromString(value);
+				case 'spacing':
+					spacing = BMFontSpacing.fromString(value);
+				case 'outline':
+					outline = Std.parseInt(value);
+				case 'fixedHeight':
+					fixedHeight = value != '0';
+			}
+		});
+		
+		return {
 			face: face,
 			size: size,
 			bold: bold,
@@ -115,8 +125,7 @@ class BMFontInfo
 		final size = bytes.readInt16();
 		final bitField = bytes.readByte();
 		final charsetByte = bytes.readByte();
-		final fontInfo:BMFontInfo =
-		{
+		final fontInfo:BMFontInfo = {
 			size: size,
 			smooth: (bitField & 0x80) != 0,
 			unicode: (bitField & (0x80 >> 1)) != 0,
@@ -155,8 +164,7 @@ class BMFontPadding
 	public static inline function fromString(data:String):BMFontPadding
 	{
 		final values = data.split(',');
-		return
-		{
+		return {
 			up: Std.parseInt(values[0]),
 			right: Std.parseInt(values[1]),
 			down: Std.parseInt(values[2]),
@@ -166,8 +174,7 @@ class BMFontPadding
 	
 	public static inline function fromBytes(bytes:BytesInput):BMFontPadding
 	{
-		return
-		{
+		return {
 			up: bytes.readByte(),
 			right: bytes.readByte(),
 			down: bytes.readByte(),
@@ -191,11 +198,11 @@ class BMFontSpacing
 	public static function fromString(data:String):BMFontSpacing
 	{
 		final values = data.split(',');
-		return { x: Std.parseInt(values[0]), y: Std.parseInt(values[1]) };
+		return {x: Std.parseInt(values[0]), y: Std.parseInt(values[1])};
 	}
 	
 	public static inline function fromBytes(bytes:BytesInput):BMFontSpacing
 	{
-		return { x: bytes.readByte(), y: bytes.readByte() };
+		return {x: bytes.readByte(), y: bytes.readByte()};
 	}
 }

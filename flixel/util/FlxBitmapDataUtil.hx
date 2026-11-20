@@ -15,7 +15,7 @@ import flixel.math.FlxRect;
 class FlxBitmapDataUtil
 {
 	static var matrix:FlxMatrix = new FlxMatrix();
-
+	
 	/**
 	 * Performs per-channel blending from a source image to a destination image.
 	 *
@@ -43,7 +43,7 @@ class FlxBitmapDataUtil
 		{
 			return;
 		}
-
+		
 		// need to cut off sourceRect if it too big...
 		while (sourceRect.x + sourceRect.width > sourceBitmapData.width
 			|| sourceRect.y + sourceRect.height > sourceBitmapData.height
@@ -56,31 +56,31 @@ class FlxBitmapDataUtil
 				sourceRect.width = sourceBitmapData.width - sourceRect.x;
 			if (sourceRect.y + sourceRect.height > sourceBitmapData.height)
 				sourceRect.height = sourceBitmapData.height - sourceRect.y;
-
+				
 			if (sourceRect.x < 0)
 			{
 				destPoint.x = destPoint.x - sourceRect.x;
 				sourceRect.width = sourceRect.width + sourceRect.x;
 				sourceRect.x = 0;
 			}
-
+			
 			if (sourceRect.y < 0)
 			{
 				destPoint.y = destPoint.y - sourceRect.y;
 				sourceRect.height = sourceRect.height + sourceRect.y;
 				sourceRect.y = 0;
 			}
-
+			
 			if (destPoint.x >= destBitmapData.width || destPoint.y >= destBitmapData.height)
 				return;
-
+				
 			if (destPoint.x < 0)
 			{
 				sourceRect.x = sourceRect.x - destPoint.x;
 				sourceRect.width = sourceRect.width + destPoint.x;
 				destPoint.x = 0;
 			}
-
+			
 			if (destPoint.y < 0)
 			{
 				sourceRect.y = sourceRect.y - destPoint.y;
@@ -88,33 +88,33 @@ class FlxBitmapDataUtil
 				destPoint.y = 0;
 			}
 		}
-
+		
 		if (sourceRect.width <= 0 || sourceRect.height <= 0)
 			return;
-
+			
 		var startSourceX:Int = Math.round(sourceRect.x);
 		var startSourceY:Int = Math.round(sourceRect.y);
-
+		
 		var width:Int = Math.round(sourceRect.width);
 		var height:Int = Math.round(sourceRect.height);
-
+		
 		var sourceX:Int = startSourceX;
 		var sourceY:Int = startSourceY;
-
+		
 		var destX:Int = Math.round(destPoint.x);
 		var destY:Int = Math.round(destPoint.y);
-
+		
 		var currX:Int = destX;
 		var currY:Int = destY;
-
+		
 		var sourceColor:FlxColor;
 		var destColor:FlxColor;
-
+		
 		var resultRed:Int;
 		var resultGreen:Int;
 		var resultBlue:Int;
 		var resultAlpha:Int;
-
+		
 		var resultColor:FlxColor = 0x0;
 		destBitmapData.lock();
 		// iterate through pixels using following rule:
@@ -125,22 +125,22 @@ class FlxBitmapDataUtil
 			{
 				sourceX = startSourceX + i;
 				sourceY = startSourceY + j;
-
+				
 				currX = destX + i;
 				currY = destY + j;
-
+				
 				sourceColor = sourceBitmapData.getPixel32(sourceX, sourceY);
 				destColor = destBitmapData.getPixel32(currX, currY);
-
+				
 				// calculate merged color components
 				resultRed = mergeColorComponent(sourceColor.red, destColor.red, redMultiplier);
 				resultGreen = mergeColorComponent(sourceColor.green, destColor.green, greenMultiplier);
 				resultBlue = mergeColorComponent(sourceColor.blue, destColor.blue, blueMultiplier);
 				resultAlpha = mergeColorComponent(sourceColor.alpha, destColor.alpha, alphaMultiplier);
-
+				
 				// calculate merged color
 				resultColor = FlxColor.fromRGB(resultRed, resultGreen, resultBlue, resultAlpha);
-
+				
 				// set merged color for current pixel
 				destBitmapData.setPixel32(currX, currY, resultColor);
 			}
@@ -148,12 +148,12 @@ class FlxBitmapDataUtil
 		destBitmapData.unlock();
 		#end
 	}
-
+	
 	static inline function mergeColorComponent(source:Int, dest:Int, multiplier:Int):Int
 	{
 		return Std.int(((source * multiplier) + (dest * (256 - multiplier))) / 256);
 	}
-
+	
 	/**
 	 * Compares two BitmapData objects.
 	 *
@@ -188,18 +188,18 @@ class FlxBitmapDataUtil
 			var height:Int = Bitmap1.height;
 			var result = new BitmapData(width, height, true, 0x0);
 			var identical:Bool = true;
-
+			
 			for (i in 0...width)
 			{
 				for (j in 0...height)
 				{
 					var pixel1:FlxColor = Bitmap1.getPixel32(i, j);
 					var pixel2:FlxColor = Bitmap2.getPixel32(i, j);
-
+					
 					if (pixel1 != pixel2)
 					{
 						identical = false;
-
+						
 						if (pixel1.rgb != pixel2.rgb)
 						{
 							result.setPixel32(i, j,
@@ -209,7 +209,7 @@ class FlxBitmapDataUtil
 						{
 							var alpha1 = pixel1.alpha;
 							var alpha2 = pixel2.alpha;
-
+							
 							if (alpha1 != alpha2)
 							{
 								result.setPixel32(i, j, FlxColor.fromRGB(0xFF, 0xFF, 0xFF, getDiff(alpha1, alpha2)));
@@ -218,23 +218,23 @@ class FlxBitmapDataUtil
 					}
 				}
 			}
-
+			
 			if (!identical)
 			{
 				return result;
 			}
 		}
-
+		
 		return 0;
 		#end
 	}
-
+	
 	static inline function getDiff(value1:Int, value2:Int):Int
 	{
 		var diff = value1 - value2;
 		return (diff >= 0) ? diff : (256 + diff);
 	}
-
+	
 	/**
 	 * Returns the amount of bytes a bitmapData occupies in memory.
 	 */
@@ -242,7 +242,7 @@ class FlxBitmapDataUtil
 	{
 		return bitmapData.width * bitmapData.height * 4;
 	}
-
+	
 	/**
 	 * Replaces all BitmapData's pixels with specified color with newColor pixels.
 	 * WARNING: very expensive (especially on big graphics) as it iterates over every single pixel.
@@ -261,12 +261,12 @@ class FlxBitmapDataUtil
 		{
 			positions = new Array<FlxPoint>();
 		}
-
+		
 		var startX:Int = 0;
 		var startY:Int = 0;
 		var columns:Int = bitmapData.width;
 		var rows:Int = bitmapData.height;
-
+		
 		if (rect != null)
 		{
 			startX = Std.int(rect.x);
@@ -274,14 +274,14 @@ class FlxBitmapDataUtil
 			columns = Std.int(rect.width);
 			rows = Std.int(rect.height);
 		}
-
+		
 		columns = Std.int(Math.max(columns, bitmapData.width));
 		rows = Std.int(Math.max(rows, bitmapData.height));
-
+		
 		var row:Int = 0;
 		var column:Int = 0;
 		var x:Int, y:Int;
-
+		
 		var changed:Bool = false;
 		bitmapData.lock();
 		while (row < rows)
@@ -305,15 +305,15 @@ class FlxBitmapDataUtil
 			row++;
 		}
 		bitmapData.unlock();
-
+		
 		if (changed && positions == null)
 		{
 			positions = new Array<FlxPoint>();
 		}
-
+		
 		return positions;
 	}
-
+	
 	/**
 	 * Gets image without spaces between tiles and generates new one with spaces and adds borders around them.
 	 * @param	bitmapData	original image without spaces between tiles.
@@ -329,50 +329,50 @@ class FlxBitmapDataUtil
 		{
 			region = FlxRect.get(0, 0, bitmapData.width, bitmapData.height);
 		}
-
+		
 		var frameWidth:Int = Std.int(region.width);
 		var frameHeight:Int = Std.int(region.height);
-
+		
 		if (frameSize != null)
 		{
 			frameWidth = Std.int(frameSize.x);
 			frameHeight = Std.int(frameSize.y);
 		}
-
+		
 		var numHorizontalFrames:Int = Std.int(region.width / frameWidth);
 		var numVerticalFrames:Int = Std.int(region.height / frameHeight);
-
+		
 		var spaceX:Int = 0;
 		var spaceY:Int = 0;
-
+		
 		if (spacing != null)
 		{
 			spaceX = Std.int(spacing.x);
 			spaceY = Std.int(spacing.y);
 		}
-
+		
 		var borderX:Int = 0;
 		var borderY:Int = 0;
-
+		
 		if (border != null)
 		{
 			borderX = Std.int(border.x);
 			borderY = Std.int(border.y);
 		}
-
+		
 		var result = new BitmapData(Std.int(region.width + (numHorizontalFrames - 1) * spaceX + 2 * numHorizontalFrames * borderX),
 			Std.int(region.height + (numVerticalFrames - 1) * spaceY + 2 * numVerticalFrames * borderY), true, FlxColor.TRANSPARENT);
-
+			
 		result.lock();
 		var tempRect:Rectangle = new Rectangle(0, 0, frameWidth, frameHeight);
 		var tempPoint:Point = new Point();
-
+		
 		// insert spaces
 		for (i in 0...numHorizontalFrames)
 		{
 			tempPoint.x = i * (frameWidth + spaceX + 2 * borderX) + borderX;
 			tempRect.x = i * frameWidth + region.x;
-
+			
 			for (j in 0...numVerticalFrames)
 			{
 				tempPoint.y = j * (frameHeight + spaceY + 2 * borderY) + borderY;
@@ -381,12 +381,12 @@ class FlxBitmapDataUtil
 			}
 		}
 		result.unlock();
-
+		
 		// copy borders
 		copyBorderPixels(result, frameWidth, frameHeight, spaceX, spaceY, borderX, borderY, numHorizontalFrames, numVerticalFrames);
 		return result;
 	}
-
+	
 	/**
 	 * Helper method for copying border pixels around tiles.
 	 * It modifies provided image, and assumes that there are spaces between tile images already.
@@ -410,51 +410,51 @@ class FlxBitmapDataUtil
 		var tempRect:Rectangle = new Rectangle(0, 0, 1, bitmapData.height);
 		var tempPoint:Point = new Point();
 		bitmapData.lock();
-
+		
 		for (i in 0...horizontalFrames)
 		{
 			tempRect.x = i * (frameWidth + 2 * borderX + spaceX) + borderX;
-
+			
 			for (j in 0...borderX)
 			{
 				tempPoint.x = tempRect.x - j - 1;
 				bitmapData.copyPixels(bitmapData, tempRect, tempPoint);
 			}
-
+			
 			tempRect.x += frameWidth - 1;
-
+			
 			for (j in 0...borderX)
 			{
 				tempPoint.x = tempRect.x + j + 1;
 				bitmapData.copyPixels(bitmapData, tempRect, tempPoint);
 			}
 		}
-
+		
 		tempPoint.setTo(0, 0);
 		tempRect.setTo(0, 0, bitmapData.width, 1);
 		for (i in 0...verticalFrames)
 		{
 			tempRect.y = i * (frameHeight + 2 * borderY + spaceY) + borderY;
-
+			
 			for (j in 0...borderY)
 			{
 				tempPoint.y = tempRect.y - j - 1;
 				bitmapData.copyPixels(bitmapData, tempRect, tempPoint);
 			}
-
+			
 			tempRect.y += frameHeight - 1;
-
+			
 			for (j in 0...borderY)
 			{
 				tempPoint.y = tempRect.y + j + 1;
 				bitmapData.copyPixels(bitmapData, tempRect, tempPoint);
 			}
 		}
-
+		
 		bitmapData.unlock();
 		return bitmapData;
 	}
-
+	
 	/**
 	 * Generates BitmapData with prerotated brush stamped on it
 	 *
@@ -470,16 +470,16 @@ class FlxBitmapDataUtil
 		var brushHeight:Int = brush.height;
 		var max:Int = (brushHeight > brushWidth) ? brushHeight : brushWidth;
 		max = autoBuffer ? Std.int(max * 1.5) : max;
-
+		
 		var rows:Int = Std.int(Math.sqrt(rotations));
 		var columns:Int = Math.ceil(rotations / rows);
 		var bakedRotationAngle:Float = 360 / rotations;
-
+		
 		var width:Int = max * columns;
 		var height:Int = max * rows;
-
+		
 		var result:BitmapData = new BitmapData(width, height, true, FlxColor.TRANSPARENT);
-
+		
 		var row:Int = 0;
 		var column:Int = 0;
 		var bakedAngle:Float = 0;
@@ -487,7 +487,7 @@ class FlxBitmapDataUtil
 		var halfBrushHeight:Int = Std.int(brushHeight * 0.5);
 		var midpointX:Int = Std.int(max * 0.5);
 		var midpointY:Int = Std.int(max * 0.5);
-
+		
 		while (row < rows)
 		{
 			column = 0;
@@ -504,7 +504,7 @@ class FlxBitmapDataUtil
 			midpointY += max;
 			row++;
 		}
-
+		
 		return result;
 	}
 }

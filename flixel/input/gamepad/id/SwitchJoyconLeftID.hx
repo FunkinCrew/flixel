@@ -3,21 +3,21 @@ package flixel.input.gamepad.id;
 import flixel.input.gamepad.FlxGamepadAnalogStick;
 
 /**
- * IDs for Switch's Left JoyCon controllers
- *
- *-------
- * NOTES
- *-------
- *
- * WINDOWS: untested.
- *
- * LINUX: untested.
- *
- * MAC: Worked on html out of box for me when connected via microUSB cable or Bluetooth.
- * Flash and neko couldn't detect the controller via bluetooth,
- * which is weird because The pro worked wirelessly.
- * 
- * @since 4.8.0
+	* IDs for Switch's Left JoyCon controllers
+	*
+	*-------
+	* NOTES
+	*-------
+	*
+	* WINDOWS: untested.
+	*
+	* LINUX: untested.
+	*
+	* MAC: Worked on html out of box for me when connected via microUSB cable or Bluetooth.
+	* Flash and neko couldn't detect the controller via bluetooth,
+	* which is weird because The pro worked wirelessly.
+	* 
+	* @since 4.8.0
  */
 enum abstract SwitchJoyconLeftID(Int) to Int
 {
@@ -62,5 +62,4 @@ enum abstract SwitchJoyconLeftID(Int) to Int
 		left: LEFT_STICK_LEFT,
 		right: LEFT_STICK_RIGHT
 	});
-	
 }

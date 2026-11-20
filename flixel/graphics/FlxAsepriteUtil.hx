@@ -191,18 +191,16 @@ class FlxAsepriteUtil
 	
 	static function setFramesDirection(frames:Array<Int>, direction:AseAtlasTagDirection)
 	{
-		switch(direction)
+		switch (direction)
 		{
-			case FORWARD:// do nothing
+			case FORWARD: // do nothing
 			case REVERSE:
-				
 				frames.reverse();
 			case PINGPONG | PINGPONG_REVERSE:
-				
 				if (direction == PINGPONG_REVERSE)
 					frames.reverse();
-				
-				var i = frames.length - 1;// skip last frame
+					
+				var i = frames.length - 1; // skip last frame
 				while (i-- > 1) // skip first frame too
 					frames.push(frames[i]);
 		}

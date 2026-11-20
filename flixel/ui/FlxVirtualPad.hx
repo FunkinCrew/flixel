@@ -35,40 +35,58 @@ class FlxVirtualPad extends FlxSpriteContainer
 	
 	@:deprecated("buttonA is deprecated, use getButton(A), instead")
 	public var buttonA(get, never):Null<FlxVirtualPadButton>;
-	inline function get_buttonA() return actions.getButton(A);
 	
+	inline function get_buttonA()
+		return actions.getButton(A);
+		
 	@:deprecated("buttonB is deprecated, use getButton(B), instead")
 	public var buttonB(get, never):Null<FlxVirtualPadButton>;
-	inline function get_buttonB() return actions.getButton(B);
 	
+	inline function get_buttonB()
+		return actions.getButton(B);
+		
 	@:deprecated("buttonC is deprecated, use getButton(C), instead")
 	public var buttonC(get, never):Null<FlxVirtualPadButton>;
-	inline function get_buttonC() return actions.getButton(C);
 	
+	inline function get_buttonC()
+		return actions.getButton(C);
+		
 	@:deprecated("buttonY is deprecated, use getButton(Y), instead")
 	public var buttonY(get, never):Null<FlxVirtualPadButton>;
-	inline function get_buttonY() return actions.getButton(Y);
 	
+	inline function get_buttonY()
+		return actions.getButton(Y);
+		
 	@:deprecated("buttonX is deprecated, use getButton(X), instead")
 	public var buttonX(get, never):Null<FlxVirtualPadButton>;
-	inline function get_buttonX() return actions.getButton(X);
 	
+	inline function get_buttonX()
+		return actions.getButton(X);
+		
 	@:deprecated("buttonLeft is deprecated, use getButton(LEFT), instead")
 	public var buttonLeft(get, never):Null<FlxVirtualPadButton>;
-	inline function get_buttonLeft() return dPad.getButton(LEFT);
 	
+	inline function get_buttonLeft()
+		return dPad.getButton(LEFT);
+		
 	@:deprecated("buttonUp is deprecated, use getButton(UP), instead")
 	public var buttonUp(get, never):Null<FlxVirtualPadButton>;
-	inline function get_buttonUp() return dPad.getButton(UP);
 	
+	inline function get_buttonUp()
+		return dPad.getButton(UP);
+		
 	@:deprecated("buttonRight is deprecated, use getButton(RIGHT), instead")
 	public var buttonRight(get, never):Null<FlxVirtualPadButton>;
-	inline function get_buttonRight() return dPad.getButton(RIGHT);
 	
+	inline function get_buttonRight()
+		return dPad.getButton(RIGHT);
+		
 	@:deprecated("buttonDown is deprecated, use getButton(DOWN), instead")
 	public var buttonDown(get, never):Null<FlxVirtualPadButton>;
-	inline function get_buttonDown() return dPad.getButton(DOWN);
 	
+	inline function get_buttonDown()
+		return dPad.getButton(DOWN);
+		
 	/**
 	 * Create a gamepad which contains 4 directional buttons and 4 action buttons.
 	 *
@@ -117,7 +135,7 @@ class FlxVirtualPadButtons extends FlxTypedSpriteContainer<FlxVirtualPadButton>
 {
 	final buttons = new Map<FlxVirtualInputID, FlxVirtualPadButton>();
 	
-	public function new (x = 0.0, y = 0.0)
+	public function new(x = 0.0, y = 0.0)
 	{
 		super(x, y);
 		scrollFactor.set();
@@ -147,27 +165,28 @@ class FlxVirtualPadButtons extends FlxTypedSpriteContainer<FlxVirtualPadButton>
 
 class FlxVirtualDPadButtons extends FlxVirtualPadButtons
 {
-	public function new (x = 0.0, y = 0.0, mode:FlxDPadMode)
+	public function new(x = 0.0, y = 0.0, mode:FlxDPadMode)
 	{
 		super(x, y);
 		switch (mode)
 		{
 			case UP_DOWN:
-				addButton( 0,  0, UP   );
-				addButton( 0, 40, DOWN );
+				addButton(0, 0, UP);
+				addButton(0, 40, DOWN);
 			case LEFT_RIGHT:
-				addButton( 0,  0, LEFT );
-				addButton(42,  0, RIGHT);
+				addButton(0, 0, LEFT);
+				addButton(42, 0, RIGHT);
 			case UP_LEFT_RIGHT:
-				addButton(35,  0, UP   );
-				addButton( 0, 36, LEFT );
+				addButton(35, 0, UP);
+				addButton(0, 36, LEFT);
 				addButton(69, 36, RIGHT);
 			case FULL:
-				addButton(35,  0, UP   );
-				addButton( 0, 35, LEFT );
+				addButton(35, 0, UP);
+				addButton(0, 35, LEFT);
 				addButton(69, 35, RIGHT);
-				addButton(35, 71, DOWN );
-			case ANALOG: throw "Unexpected mode: ANALOG";
+				addButton(35, 71, DOWN);
+			case ANALOG:
+				throw "Unexpected mode: ANALOG";
 			case NONE: // do nothing
 		}
 	}
@@ -175,24 +194,24 @@ class FlxVirtualDPadButtons extends FlxVirtualPadButtons
 
 class FlxVirtualActionButtons extends FlxVirtualPadButtons
 {
-	public function new (x = 0.0, y = 0.0, mode:FlxActionMode)
+	public function new(x = 0.0, y = 0.0, mode:FlxActionMode)
 	{
 		super(x, y);
 		switch (mode)
 		{
 			case A:
-				addButton( 0,  0, A);
+				addButton(0, 0, A);
 			case A_B:
-				addButton(42,  0, A);
-				addButton( 0,  0, B);
+				addButton(42, 0, A);
+				addButton(0, 0, B);
 			case A_B_C:
-				addButton( 0,  0, A);
-				addButton(42,  0, B);
-				addButton(84,  0, C);
+				addButton(0, 0, A);
+				addButton(42, 0, B);
+				addButton(84, 0, C);
 			case A_B_X_Y:
-				addButton( 0,  0, Y);
-				addButton(42,  0, X);
-				addButton( 0, 40, B);
+				addButton(0, 0, Y);
+				addButton(42, 0, X);
+				addButton(0, 40, B);
 				addButton(42, 40, A);
 			case NONE: // do nothing
 		}
@@ -208,7 +227,7 @@ abstract FlxVirtualPadButton(FlxButton) to FlxButton
 		this.frames = id.getFrames();
 		this.resetSizeFromFrame();
 		this.moves = true;
-
+		
 		#if FLX_DEBUG
 		this.ignoreDrawDebug = true;
 		#end
@@ -237,16 +256,16 @@ enum FlxActionMode
 @:using(flixel.ui.FlxVirtualPad.FlxVirtualInputIDTools)
 enum FlxVirtualInputID
 {
-    UP;
-    DOWN;
-    LEFT;
-    RIGHT;
-    A;
-    B;
-    C;
-    X;
-    Y;
-    STICK;
+	UP;
+	DOWN;
+	LEFT;
+	RIGHT;
+	A;
+	B;
+	C;
+	X;
+	Y;
+	STICK;
 }
 
 private class FlxVirtualInputIDTools

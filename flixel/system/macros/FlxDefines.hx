@@ -6,11 +6,10 @@ import haxe.macro.Context;
 import haxe.macro.Expr.Position;
 
 using StringTools;
+
 #if (flixel_addons >= "3.2.2")
 import flixel.addons.system.macros.FlxAddonDefines;
 #end
-
-
 
 private enum UserDefines
 {
@@ -42,10 +41,13 @@ private enum UserDefines
 	/* Simplifies FlxPoint but can increase GC frequency */
 	FLX_NO_POINT_POOL;
 	FLX_NO_SAVE;
+	
 	/** Adds trackers to FlxPool instances, only available on debug */
 	FLX_TRACK_POOLS;
+	
 	/** Adds `creationInfo` to FlxGraphic instances, automatically defined with FLX_DEBUG */
 	FLX_TRACK_GRAPHICS;
+	
 	/**
 	 * Loads from the specified relative or absolute directory. Unlike other boolean flags,
 	 * this flag should contain a string value.
@@ -54,6 +56,7 @@ private enum UserDefines
 	 * any `</asset>` tags in your project.xml, to reduce your total memory
 	 */
 	FLX_CUSTOM_ASSETS_DIRECTORY;
+	
 	/**
 	 * Allows you to use sound paths with no extension, and the default sound type for that
 	 * target will be used. If enabled it will use ogg on all targets except flash, which uses mp3.
@@ -82,7 +85,7 @@ private enum HelperDefines
 	FLX_FOCUS_LOST_SCREEN;
 	FLX_DEBUG;
 	FLX_STEAMWRAP;
-
+	
 	FLX_MOUSE_ADVANCED;
 	FLX_NATIVE_CURSOR;
 	FLX_SOUND_TRAY;
@@ -104,15 +107,20 @@ private enum HelperDefines
 	/* Used in HaxeFlixel CI, should have no effect on personal projects */
 	FLX_NO_CI;
 	FLX_SAVE;
+	
 	/** Neither FLX_HEALTH not FLX_NO_HEALTH was defined */
 	FLX_HEALTH_NOT_DEFINED;
+	
 	FLX_NO_TRACK_POOLS;
 	FLX_NO_TRACK_GRAPHICS;
 	FLX_OPENGL_AVAILABLE;
+	
 	/** Defined to `1`(or `true`) if `FLX_CUSTOM_ASSETS_DIRECTORY` is not defined */
 	FLX_STANDARD_ASSETS_DIRECTORY;
+	
 	/** The normalized, absolute path of `FLX_CUSTOM_ASSETS_DIRECTORY`, used internally */
 	FLX_CUSTOM_ASSETS_DIRECTORY_ABS;
+	
 	FLX_NO_DEFAULT_SOUND_EXT;
 }
 
@@ -137,13 +145,13 @@ class FlxDefines
 		flixel.addons.ui.system.macros.FlxUIDefines.run();
 		#end
 	}
-
+	
 	static function checkCompatibility()
 	{
 		#if (haxe < version("4.2.5"))
 		abortVersion("Haxe", "4.2.5 or newer", "haxe_ver", (macro null).pos);
 		#end
-
+		
 		#if !nme
 		checkOpenFLVersions();
 		#end
@@ -155,28 +163,28 @@ class FlxDefines
 		abortVersion("Flixel UI", "2.6.2 or newer", "flixel_ui", (macro null).pos);
 		#end
 	}
-
+	
 	static function checkOpenFLVersions()
 	{
 		#if (lime < version("8.0.2"))
 		abortVersion("Lime", "8.0.2 or newer", "lime", (macro null).pos);
 		#end
-
+		
 		#if (openfl < version("9.2.2"))
 		abortVersion("OpenFL", "9.2.2 or newer", "openfl", (macro null).pos);
 		#end
 	}
-
+	
 	static function abortVersion(dependency:String, supported:String, found:String, pos:Position)
 	{
 		abort('Unsupported $dependency version! Supported versions are $supported (found ${Context.definedValue(found)}).', pos);
 	}
-
+	
 	static function checkDefines()
 	{
 		for (define in HelperDefines.getConstructors())
 			abortIfDefined(define);
-
+			
 		for (define in Context.getDefines().keys())
 		{
 			if (isValidUserDefine(define))
@@ -187,18 +195,19 @@ class FlxDefines
 	}
 	
 	static var userDefinable = UserDefines.getConstructors();
+	
 	static function isValidUserDefine(define:String)
 	{
-		return (define.startsWith("FLX_") && userDefinable.indexOf(define) == -1)
-			#if (flixel_addons >= version("3.2.2")) || FlxAddonDefines.isValidUserDefine(define) #end;
+		return (define.startsWith("FLX_") && userDefinable.indexOf(define) == -1) #if (flixel_addons >= version("3.2.2"))
+			|| FlxAddonDefines.isValidUserDefine(define) #end;
 	}
-
+	
 	static function abortIfDefined(define:String)
 	{
 		if (defined(define))
 			abort('$define can only be defined by flixel.', (macro null).pos);
 	}
-
+	
 	static function defineInversions()
 	{
 		defineInversion(FLX_NO_GAMEPAD, FLX_GAMEPAD);
@@ -222,47 +231,47 @@ class FlxDefines
 			define(FLX_HEALTH);
 		}
 	}
-
+	
 	static function defineHelperDefines()
 	{
 		if (defined(FLX_UNIT_TEST) || defined(FLX_COVERAGE_TEST) || defined(FLX_SWF_VERSION_TEST))
 			define(FLX_CI);
 		else
 			define(FLX_NO_CI);
-		
+			
 		if (!defined(FLX_NO_MOUSE) && !defined(FLX_NO_MOUSE_ADVANCED) && (!defined("flash") || defined("flash11_2")))
 			define(FLX_MOUSE_ADVANCED);
-
+			
 		if (!defined(FLX_NO_MOUSE) && !defined(FLX_NO_NATIVE_CURSOR) && defined("flash10_2"))
 			define(FLX_NATIVE_CURSOR);
-
+			
 		if (!defined(FLX_NO_SOUND_SYSTEM) && !defined(FLX_NO_SOUND_TRAY))
 			define(FLX_SOUND_TRAY);
-		
+			
 		if (!defined(FLX_NO_SAVE))
 			define(FLX_SAVE);
-		
+			
 		if (!defined("flash") || defined("flash11_8"))
 			define(FLX_GAMEINPUT_API);
 		else if (!defined("openfl_next") && (defined("cpp") || defined("neko")))
 			define(FLX_JOYSTICK_API);
-
+			
 		#if nme
 		define(FLX_JOYSTICK_API);
 		#end
-
+		
 		if (!defined(FLX_NO_TOUCH) || !defined(FLX_NO_MOUSE))
 			define(FLX_POINTER_INPUT);
-
+			
 		if (defined("cpp") && defined("steamwrap"))
 			define(FLX_STEAMWRAP);
-
+			
 		if (defined("mobile") || defined("js"))
 			define(FLX_ACCELEROMETER);
-
+			
 		if (defined("mobile") || defined("js"))
 			define(FLX_GYROSCOPE);
-
+			
 		// #if (openfl >= "8.0.0")
 		// should always be defined as of 5.5.1 and, therefore, deprecated
 		define(FLX_DRAW_QUADS);
@@ -270,10 +279,10 @@ class FlxDefines
 		
 		if (defined(FLX_TRACK_POOLS) && !defined("debug"))
 			abort("Can only define FLX_TRACK_POOLS on debug mode", (macro null).pos);
-		
+			
 		if (defined(FLX_DEBUG))
 			define(FLX_TRACK_GRAPHICS);
-
+			
 		#if (lime_opengl || lime_opengles || lime_webgl)
 		// FlxG.stage.window.context.attributes.hardware is not always defined during unit tests
 		if (defined(FLX_NO_UNIT_TEST))
@@ -296,8 +305,7 @@ class FlxDefines
 				final absPath = sys.FileSystem.absolutePath(directory);
 				if (!sys.FileSystem.isDirectory(directory) || directory == "1")
 				{
-					abort('FLX_CUSTOM_ASSETS_DIRECTORY must be a path to a directory, got "$rawDirectory"'
-						+ '\nabsolute path: $absPath', (macro null).pos);
+					abort('FLX_CUSTOM_ASSETS_DIRECTORY must be a path to a directory, got "$rawDirectory"' + '\nabsolute path: $absPath', (macro null).pos);
 				}
 				define(FLX_CUSTOM_ASSETS_DIRECTORY_ABS, absPath);
 			}
@@ -305,32 +313,32 @@ class FlxDefines
 		else // define boolean inversion
 			define(FLX_STANDARD_ASSETS_DIRECTORY);
 	}
-
+	
 	static function defineInversion(userDefine:UserDefines, invertedDefine:HelperDefines)
 	{
 		if (!defined(userDefine))
 			define(invertedDefine);
 	}
-
+	
 	static function checkSwfVersion()
 	{
 		if (!defined("flash11"))
 			abort("The minimum required Flash Player version for HaxeFlixel is 11." + " Please specify a newer version in your Project.xml file.",
 				(macro null).pos);
-
+				
 		swfVersionError("Middle and right mouse button events are", "11.2", FLX_NO_MOUSE_ADVANCED);
 		swfVersionError("Gamepad input is", "11.8", FLX_NO_GAMEPAD);
 	}
-
+	
 	static function swfVersionError(feature:String, version:String, define:UserDefines)
 	{
 		var errorMessage = '$feature only supported in Flash Player version $version or higher. '
 			+ 'Define ${define.getName()} to disable this feature or add <set name="SWF_VERSION" value="$version" /> to your Project.xml.';
-
+			
 		if (!defined("flash" + version.replace(".", "_")) && !defined(define))
 			abort(errorMessage, (macro null).pos);
 	}
-
+	
 	static inline function definedValue(define:Dynamic):String
 	{
 		return Context.definedValue(Std.string(define));
@@ -340,12 +348,12 @@ class FlxDefines
 	{
 		return Context.defined(Std.string(define));
 	}
-
+	
 	static inline function define(define:Dynamic, ?value:String)
 	{
 		Compiler.define(Std.string(define), value);
 	}
-
+	
 	static function abort(message:String, pos:Position)
 	{
 		Context.fatalError(message, pos);

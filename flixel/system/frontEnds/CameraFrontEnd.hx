@@ -22,36 +22,36 @@ class CameraFrontEnd
 	public var list(default, null):Array<FlxCamera> = [];
 	
 	/**
-	 * Array listing all cameras marked as default draw targets, `FlxBasics` with no
-	 *`cameras` set will render to them.
+		* Array listing all cameras marked as default draw targets, `FlxBasics` with no
+		*`cameras` set will render to them.
 	 */
 	var defaults:Array<FlxCamera> = [];
-
+	
 	/**
 	 * The current (global, applies to all cameras) bgColor.
 	 */
 	public var bgColor(get, set):FlxColor;
-
+	
 	/** @since 4.2.0 */
 	public var cameraAdded(default, null):FlxTypedSignal<FlxCamera->Void> = new FlxTypedSignal<FlxCamera->Void>();
-
+	
 	/** @since 4.2.0 */
 	public var cameraRemoved(default, null):FlxTypedSignal<FlxCamera->Void> = new FlxTypedSignal<FlxCamera->Void>();
-
+	
 	/** @since 4.2.0 */
 	public var cameraResized(default, null):FlxTypedSignal<FlxCamera->Void> = new FlxTypedSignal<FlxCamera->Void>();
-
+	
 	/**
 	 * Allows you to possibly slightly optimize the rendering process IF
 	 * you are not doing any pre-processing in your game state's draw() call.
 	 */
 	public var useBufferLocking:Bool = false;
-
+	
 	/**
 	 * Internal helper variable for clearing the cameras each frame.
 	 */
 	var _cameraRect:Rectangle = new Rectangle();
-
+	
 	/**
 	 * Add a new camera object to the game.
 	 * Handy for PiP, split-screen, etc.
@@ -148,7 +148,7 @@ class CameraFrontEnd
 		
 		if (Destroy)
 			Camera.destroy();
-
+			
 		cameraRemoved.dispatch(Camera);
 	}
 	
@@ -176,7 +176,7 @@ class CameraFrontEnd
 		else if (!value)
 			defaults.splice(index, 1);
 	}
-
+	
 	/**
 	 * Dumps all the current cameras and resets to just one camera.
 	 * Handy for doing split-screen especially.
@@ -193,13 +193,13 @@ class CameraFrontEnd
 			
 		if (NewCamera == null)
 			NewCamera = new FlxCamera();
-
+			
 		FlxG.camera = add(NewCamera);
 		NewCamera.ID = 0;
-
+		
 		FlxCamera._defaultCameras = defaults;
 	}
-
+	
 	/**
 	 * All screens are filled with this color and gradually return to normal.
 	 *
@@ -215,7 +215,7 @@ class CameraFrontEnd
 			camera.flash(Color, Duration, OnComplete, Force);
 		}
 	}
-
+	
 	/**
 	 * The screen is gradually filled with this color.
 	 *
@@ -232,7 +232,7 @@ class CameraFrontEnd
 			camera.fade(Color, Duration, FadeIn, OnComplete, Force);
 		}
 	}
-
+	
 	/**
 	 * A simple screen-shake effect.
 	 *
@@ -249,13 +249,13 @@ class CameraFrontEnd
 			camera.shake(Intensity, Duration, OnComplete, Force, Axes);
 		}
 	}
-
+	
 	@:allow(flixel.FlxG)
 	function new()
 	{
 		FlxCamera._defaultCameras = defaults;
 	}
-
+	
 	/**
 	 * Called by the game object to lock all the camera buffers and clear them for the next draw pass.
 	 */
@@ -268,17 +268,17 @@ class CameraFrontEnd
 			{
 				continue;
 			}
-
+			
 			if (FlxG.renderBlit)
 			{
 				camera.checkResize();
-
+				
 				if (useBufferLocking)
 				{
 					camera.buffer.lock();
 				}
 			}
-
+			
 			if (FlxG.renderTile)
 			{
 				camera.clearDrawStack();
@@ -288,7 +288,7 @@ class CameraFrontEnd
 				camera.debugLayer.graphics.clear();
 				#end
 			}
-
+			
 			if (FlxG.renderBlit)
 			{
 				camera.fill(camera.bgColor, camera.useBgAlphaBlending);
@@ -300,7 +300,7 @@ class CameraFrontEnd
 			}
 		}
 	}
-
+	
 	@:allow(flixel.FlxGame)
 	inline function render():Void
 	{
@@ -315,7 +315,7 @@ class CameraFrontEnd
 			}
 		}
 	}
-
+	
 	/**
 	 * Called by the game object to draw the special FX and unlock all the camera buffers.
 	 */
@@ -328,21 +328,21 @@ class CameraFrontEnd
 			{
 				continue;
 			}
-
+			
 			camera.drawFX();
-
+			
 			if (FlxG.renderBlit)
 			{
 				if (useBufferLocking)
 				{
 					camera.buffer.unlock();
 				}
-
+				
 				camera.screen.dirty = true;
 			}
 		}
 	}
-
+	
 	/**
 	 * Called by the game object to update the cameras and their tracking/special effects logic.
 	 */
@@ -357,7 +357,7 @@ class CameraFrontEnd
 			}
 		}
 	}
-
+	
 	/**
 	 * Resizes and moves cameras when the game resizes (onResize signal).
 	 */
@@ -369,19 +369,19 @@ class CameraFrontEnd
 			camera.onResize();
 		}
 	}
-
+	
 	function get_bgColor():FlxColor
 	{
 		return (FlxG.camera == null) ? FlxColor.BLACK : FlxG.camera.bgColor;
 	}
-
+	
 	function set_bgColor(Color:FlxColor):FlxColor
 	{
 		for (camera in list)
 		{
 			camera.bgColor = Color;
 		}
-
+		
 		return Color;
 	}
 	

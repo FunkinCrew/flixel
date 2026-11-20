@@ -17,39 +17,39 @@ class FlxDrawBaseItem<T>
 	 * Tracks the total number of draw calls made each frame.
 	 */
 	public static var drawCalls:Int = 0;
-
+	
 	@:noCompletion
 	@:deprecated("blendToInt() is deprecated, remove all references to it")
 	public static function blendToInt(blend:BlendMode):Int
 	{
 		return 0; // no blend mode support in drawQuads()
 	}
-
+	
 	public var nextTyped:T;
-
+	
 	public var next:FlxDrawBaseItem<T>;
-
+	
 	public var graphics:FlxGraphic;
 	public var antialiasing:Bool = false;
 	public var colored:Bool = false;
 	public var hasColorOffsets:Bool = false;
 	public var blend:BlendMode;
 	public var blendTarget:Context3DBlendTarget = Context3DBlendTarget.BlendRenderTarget;
-
+	
 	@:noCompletion
 	@:deprecated("blending is deprecated, remove all references to it")
 	public var blending:Int = 0;
-
+	
 	public var type:FlxDrawItemType;
-
+	
 	public var shader:FlxShader;
-
+	
 	public var numVertices(get, never):Int;
-
+	
 	public var numTriangles(get, never):Int;
-
+	
 	public function new() {}
-
+	
 	public function reset():Void
 	{
 		graphics = null;
@@ -57,7 +57,7 @@ class FlxDrawBaseItem<T>
 		nextTyped = null;
 		next = null;
 	}
-
+	
 	public function dispose():Void
 	{
 		graphics = null;
@@ -65,19 +65,19 @@ class FlxDrawBaseItem<T>
 		type = null;
 		nextTyped = null;
 	}
-
+	
 	public function render(camera:FlxCamera):Void
 	{
 		drawCalls++;
 	}
-
+	
 	public function addQuad(frame:FlxFrame, matrix:FlxMatrix, ?transform:ColorTransform):Void {}
-
+	
 	function get_numVertices():Int
 	{
 		return 0;
 	}
-
+	
 	function get_numTriangles():Int
 	{
 		return 0;

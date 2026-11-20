@@ -9,17 +9,17 @@ class OUYAMapping extends FlxTypedGamepadMapping<OUYAID>
 	#if FLX_JOYSTICK_API
 	static inline var LEFT_ANALOG_STICK_FAKE_X:Int = 19;
 	static inline var LEFT_ANALOG_STICK_FAKE_Y:Int = 20;
-
+	
 	static inline var RIGHT_ANALOG_STICK_FAKE_X:Int = 21;
 	static inline var RIGHT_ANALOG_STICK_FAKE_Y:Int = 22;
 	#end
-
+	
 	override function initValues():Void
 	{
 		leftStick = OUYAID.LEFT_ANALOG_STICK;
 		rightStick = OUYAID.RIGHT_ANALOG_STICK;
 	}
-
+	
 	override function getID(rawID:OUYAID):FlxGamepadInputID
 	{
 		return switch (rawID)
@@ -50,7 +50,7 @@ class OUYAMapping extends FlxTypedGamepadMapping<OUYAID>
 			case _: NONE;
 		}
 	}
-
+	
 	override function getRawID(ID:FlxGamepadInputID):OUYAID
 	{
 		return switch (ID)
@@ -104,11 +104,7 @@ class OUYAMapping extends FlxTypedGamepadMapping<OUYAID>
 	override function axisIndexToRawID(axisID:OUYAID):Int
 	{
 		return if (axisID == leftStick.x) LEFT_ANALOG_STICK_FAKE_X; else if (axisID == leftStick.y) LEFT_ANALOG_STICK_FAKE_Y; else if (axisID == rightStick.x)
-			RIGHT_ANALOG_STICK_FAKE_X;
-		else if (axisID == rightStick.y)
-			RIGHT_ANALOG_STICK_FAKE_Y;
-		else
-			axisID;
+			RIGHT_ANALOG_STICK_FAKE_X; else if (axisID == rightStick.y) RIGHT_ANALOG_STICK_FAKE_Y; else axisID;
 	}
 	#end
 }

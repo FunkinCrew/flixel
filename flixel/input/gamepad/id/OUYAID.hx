@@ -15,10 +15,10 @@ enum abstract OUYAID(Int) to Int
 	var RB = 16;
 	var LEFT_STICK_CLICK = 13;
 	var RIGHT_STICK_CLICK = 14;
-	var HOME = 0x01000012;	// Not sure if press HOME is taken in account on OUYA
+	var HOME = 0x01000012; // Not sure if press HOME is taken in account on OUYA
 	var LEFT_TRIGGER = 4;
 	var RIGHT_TRIGGER = 5;
-
+	
 	// "fake" IDs, we manually watch for hat axis changes and then send events using these otherwise unused joystick button codes
 	var DPAD_LEFT = 19;
 	var DPAD_RIGHT = 20;

@@ -16,65 +16,65 @@ class CompletionHandler
 {
 	static inline var ENTRY_VALUE = "Entry Value";
 	static inline var ENTRY_TYPE = "Entry Type";
-
+	
 	var completionList:CompletionList;
 	var input:TextField;
 	var watchingSelection:Bool = false;
-
+	
 	public function new(completionList:CompletionList, input:TextField)
 	{
 		this.completionList = completionList;
 		this.input = input;
-
+		
 		completionList.completed = completed;
 		completionList.selectionChanged = selectionChanged;
 		completionList.closed = completionClosed;
-
+		
 		input.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 	}
-
+	
 	function getTextUntilCaret():String
 	{
 		return input.text.substring(0, getCaretIndex());
 	}
-
+	
 	function getCaretIndex():Int
 	{
 		return input.caretIndex;
 	}
-
+	
 	function onKeyUp(e:KeyboardEvent)
 	{
 		var text = getTextUntilCaret();
-
+		
 		// close completion so that enter works
 		if (text.endsWith(")") || text.endsWith("\"") || text.endsWith("'") || text.endsWith(";"))
 		{
 			completionList.close();
 			return;
 		}
-
+		
 		switch (e.keyCode)
 		{
 			case Keyboard.LEFT, Keyboard.RIGHT:
 				completionList.close();
-
+				
 			case Keyboard.ENTER, Keyboard.ESCAPE, Keyboard.UP, Keyboard.DOWN, Keyboard.TAB:
-			// do nothing
-
+				// do nothing
+				
 			case _:
 				invokeCompletion(getPathBeforeDot(text), e.keyCode == Keyboard.PERIOD);
-
+				
 				if (completionList.visible)
 					completionList.filter = getWordAfterDot(text);
 		}
 	}
-
+	
 	function invokeCompletion(path:String, isPeriod:Bool)
 	{
 		#if (polymod || hscript)
 		var items:Array<String> = null;
-
+		
 		try
 		{
 			if (path.length != 0)
@@ -91,17 +91,17 @@ class CompletionHandler
 				return;
 			}
 		}
-
+		
 		if (items == null)
 			items = getGlobals();
-
+			
 		if (items.length > 0)
 			completionList.show(getCharXPosition(), items);
 		else
 			completionList.close();
 		#end
 	}
-
+	
 	function getGlobals():Array<String>
 	{
 		#if (polymod || hscript)
@@ -110,7 +110,7 @@ class CompletionHandler
 		return [];
 		#end
 	}
-
+	
 	function getCharXPosition():Float
 	{
 		var pos = 0.0;
@@ -118,13 +118,13 @@ class CompletionHandler
 			pos += #if flash input.getCharBoundaries(i).width #else 6 #end;
 		return pos;
 	}
-
+	
 	function getCompletedText(text:String, selectedItem:String):String
 	{
 		// replace the last occurrence with the selected item
 		return new EReg(getWordAfterDot(text) + "$", "g").replace(text, selectedItem);
 	}
-
+	
 	function completed(selectedItem:String)
 	{
 		var textUntilCaret = getTextUntilCaret();
@@ -132,7 +132,7 @@ class CompletionHandler
 		input.text = insert + input.text.substr(getCaretIndex());
 		input.setSelection(insert.length, insert.length);
 	}
-
+	
 	function selectionChanged(selectedItem:String)
 	{
 		#if (polymod || hscript)
@@ -141,7 +141,7 @@ class CompletionHandler
 			var lastWord = getLastWord(input.text);
 			var command = getCompletedText(lastWord, selectedItem);
 			var output = ConsoleUtil.runCommand(command);
-
+			
 			watchingSelection = true;
 			FlxG.watch.addQuick(ENTRY_VALUE, output);
 			FlxG.watch.addQuick(ENTRY_TYPE, getReadableType(output));
@@ -149,7 +149,7 @@ class CompletionHandler
 		catch (e:Dynamic) {}
 		#end
 	}
-
+	
 	function getReadableType(v:Dynamic):String
 	{
 		return switch (Type.typeof(v))
@@ -166,38 +166,38 @@ class CompletionHandler
 			case TUnknown: "Unknown";
 		}
 	}
-
+	
 	function completionClosed()
 	{
 		if (!watchingSelection)
 			return;
-
+			
 		FlxG.watch.removeQuick(ENTRY_VALUE);
 		FlxG.watch.removeQuick(ENTRY_TYPE);
 		watchingSelection = false;
 	}
-
+	
 	function getPathBeforeDot(text:String):String
 	{
 		var lastWord = getLastWord(text);
 		var dotIndex = lastWord.lastIndexOf(".");
 		return lastWord.substr(0, dotIndex);
 	}
-
+	
 	function getWordAfterDot(text:String):String
 	{
 		var lastWord = getLastWord(text);
-
+		
 		var index = lastWord.lastIndexOf(".");
 		if (index < 0)
 			index = 0;
 		else
 			index++;
-
+			
 		var word = lastWord.substr(index);
 		return (word == null) ? "" : word;
 	}
-
+	
 	function getLastWord(text:String):String
 	{
 		return ~/([^.a-zA-Z0-9_\[\]"']+)/g.split(text).last();

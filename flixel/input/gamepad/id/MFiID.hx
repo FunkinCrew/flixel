@@ -26,12 +26,12 @@ enum abstract MFiID(Int) to Int
 	var DPAD_DOWN = 18;
 	var DPAD_LEFT = 19;
 	var DPAD_RIGHT = 20;
-
+	
 	var LEFT_STICK_UP = 21;
 	var LEFT_STICK_DOWN = 22;
 	var LEFT_STICK_LEFT = 23;
 	var LEFT_STICK_RIGHT = 24;
-		
+	
 	var RIGHT_STICK_UP = 25;
 	var RIGHT_STICK_DOWN = 26;
 	var RIGHT_STICK_LEFT = 27;

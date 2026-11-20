@@ -19,17 +19,17 @@ class FlxBitmapDataPool
 	 * Maximum number of BitmapData to hold in the pool.
 	 */
 	public static var maxLength(default, set):Int = 8;
-
+	
 	/** 
 	 * Current number of BitmapData present in the pool.
 	 */
 	public static var length(default, null):Int = 0;
-
+	
 	static var _head:FlxBitmapDataPoolNode = null;
 	static var _tail:FlxBitmapDataPoolNode = null;
-
+	
 	static var _rect:Rectangle = new Rectangle();
-
+	
 	/** 
 	 * Returns a BitmapData with the specified parameters.
 	 * If a suitable BitmapData cannot be found in the pool a new one will be created.
@@ -40,7 +40,7 @@ class FlxBitmapDataPool
 	public static function get(w:Int, h:Int, transparent:Bool = true, ?fillColor:FlxColor, ?exactSize:Bool = false):BitmapData
 	{
 		var res:BitmapData = null;
-
+		
 		// search the pool
 		var node = _head;
 		while (node != null)
@@ -50,7 +50,7 @@ class FlxBitmapDataPool
 				&& (!exactSize || (exactSize && bmd.width == w && bmd.height == h)))
 			{
 				res = bmd;
-
+				
 				// remove it from pool
 				if (node.prev != null)
 					node.prev.next = node.next;
@@ -66,7 +66,7 @@ class FlxBitmapDataPool
 			}
 			node = node.next;
 		}
-
+		
 		if (res != null) // suitable BitmapData found in the pool
 		{
 			if (fillColor != null)
@@ -82,10 +82,10 @@ class FlxBitmapDataPool
 		{
 			res = new BitmapData(w, h, transparent, fillColor != null ? fillColor : FlxColor.WHITE);
 		}
-
+		
 		return res;
 	}
-
+	
 	/** 
 	 * Adds bmd to the pool for future use.
 	 */
@@ -103,7 +103,7 @@ class FlxBitmapDataPool
 			last = null;
 			length--;
 		}
-
+		
 		var node = new FlxBitmapDataPoolNode(bmd);
 		node.next = _head;
 		if (_head == null)
@@ -117,7 +117,7 @@ class FlxBitmapDataPool
 		}
 		length++;
 	}
-
+	
 	/**
 	 * Disposes of all the BitmapData in the pool.
 	 */
@@ -134,7 +134,7 @@ class FlxBitmapDataPool
 		length = 0;
 		_head = _tail = null;
 	}
-
+	
 	static function set_maxLength(value:Int):Int
 	{
 		if (maxLength != value)
@@ -158,7 +158,7 @@ private class FlxBitmapDataPoolNode
 	public var bmd:BitmapData;
 	public var prev:FlxBitmapDataPoolNode;
 	public var next:FlxBitmapDataPoolNode;
-
+	
 	public function new(?bmd:BitmapData, ?prev:FlxBitmapDataPoolNode, ?next:FlxBitmapDataPoolNode):Void
 	{
 		this.bmd = bmd;

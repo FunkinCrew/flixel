@@ -18,13 +18,13 @@ class FlxTile extends FlxObject
 	 * This function should take the form myFunction(Tile:FlxTile,Object:FlxObject):void.
 	 * Defaults to null, set through FlxTilemap.setTileProperties().
 	 */
-	public var callbackFunction:(FlxObject, FlxObject)->Void = null;
+	public var callbackFunction:(FlxObject, FlxObject) -> Void = null;
 	
 	/**
 	 * Dispatched whenever FlxG.collide resolves a collision with a tile of this type
 	 * @since 5.9.0
 	 */
-	public var onCollide = new FlxTypedSignal<(FlxTile, FlxObject)->Void>();
+	public var onCollide = new FlxTypedSignal<(FlxTile, FlxObject) -> Void>();
 	
 	/**
 	 * Each tile can store its own filter class for their callback functions.
@@ -33,31 +33,31 @@ class FlxTile extends FlxObject
 	 * Defaults to null, set through FlxTilemap.setTileProperties().
 	 */
 	public var filter:Class<FlxObject>;
-
+	
 	/**
 	 * A reference to the tilemap this tile object belongs to.
 	 */
 	public var tilemap:FlxTypedTilemap<FlxTile>;
-
+	
 	/**
 	 * The index of this tile type in the core map data.
 	 * For example, if your map only has 16 kinds of tiles in it,
 	 * this number is usually between 0 and 15.
 	 */
 	public var index:Int;
-
+	
 	/**
 	 * The current map index of this tile object at this moment.
 	 * You can think of tile objects as moving around the tilemap helping with collisions.
 	 * This value is only reliable and useful if used from the callback function.
 	 */
 	public var mapIndex:Int = 0;
-
+	
 	/**
 	 * Frame graphic for this tile.
 	 */
 	public var frame:FlxFrame;
-
+	
 	/**
 	 * Instantiate this new tile object.  This is usually called from FlxTilemap.loadMap().
 	 *
@@ -71,10 +71,10 @@ class FlxTile extends FlxObject
 	public function new(tilemap:FlxTypedTilemap<FlxTile>, index:Int, width:Float, height:Float, visible:Bool, allowCollisions:FlxDirectionFlags)
 	{
 		super(0, 0, width, height);
-
+		
 		immovable = true;
 		moves = false;
-
+		
 		this.tilemap = tilemap;
 		this.index = index;
 		this.visible = visible;
@@ -87,7 +87,7 @@ class FlxTile extends FlxObject
 	override public function destroy():Void
 	{
 		super.destroy();
-
+		
 		callbackFunction = null;
 		tilemap = null;
 		frame = null;

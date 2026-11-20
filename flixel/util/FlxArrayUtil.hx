@@ -16,10 +16,10 @@ class FlxArrayUtil
 	{
 		if (newLength > 0 && newLength < array.length)
 			array.resize(newLength);
-		
+			
 		return array;
 	}
-
+	
 	/**
 	 * Safely removes an element from an array by swapping it with the last element and calling `pop()`
 	 * (won't do anything if the element is not in the array). This is a lot faster than regular `splice()`,
@@ -37,7 +37,7 @@ class FlxArrayUtil
 			return swapAndPop(array, index);
 		return array;
 	}
-
+	
 	/**
 	 * Removes an element from an array by swapping it with the last element and calling `pop()`.
 	 * This is a lot faster than regular `splice()`, but it can only be used on arrays where order doesn't matter.
@@ -68,7 +68,7 @@ class FlxArrayUtil
 		array.pop();
 		return array;
 	}
-
+	
 	/**
 	 * Swaps two elements of an array, which are located at indices `index1` and `index2`
 	 * @param array The array whose elements need to be swapped
@@ -83,7 +83,7 @@ class FlxArrayUtil
 		array[index2] = temp;
 		return array;
 	}
-
+	
 	/**
 	 * Swaps two elements of an array, which are located at indices `index1` and `index2` and also checks if the indices are valid before swapping
 	 * @param array The array whose elements need to be swapped
@@ -93,13 +93,13 @@ class FlxArrayUtil
 	 */
 	public static inline function safeSwapByIndex<T>(array:Array<T>, index1:Int, index2:Int):Array<T>
 	{
-		if(index1 >= 0 && index1 < array.length && index2 >= 0 && index2 < array.length)
+		if (index1 >= 0 && index1 < array.length && index2 >= 0 && index2 < array.length)
 		{
 			swapByIndex(array, index1, index2);
 		}
 		return array;
 	}
-
+	
 	/**
 	 * Swaps two items, `item1` and `item2` which are in the array
 	 * @param array The array whose elements need to be swapped
@@ -111,7 +111,7 @@ class FlxArrayUtil
 	{
 		return swapByIndex(array, array.indexOf(item1), array.indexOf(item2));
 	}
-
+	
 	/**
 	 * Swaps two items, `item1` and `item2` which are in the array, but only if both elements are present in the array
 	 * @param array The array whose elements need to be swapped
@@ -123,7 +123,7 @@ class FlxArrayUtil
 	{
 		return safeSwapByIndex(array, array.indexOf(item1), array.indexOf(item2));
 	}
-
+	
 	/**
 	 * Clears an array structure, but leaves the object data untouched
 	 * Useful for cleaning up temporary references to data you want to preserve.
@@ -136,7 +136,7 @@ class FlxArrayUtil
 	{
 		if (array == null)
 			return array;
-
+			
 		if (recursive)
 		{
 			while (array.length > 0)
@@ -151,10 +151,10 @@ class FlxArrayUtil
 			while (array.length > 0)
 				array.pop();
 		}
-
+		
 		return array;
 	}
-
+	
 	/**
 	 * Flattens 2D arrays into 1D arrays.
 	 * Example: `[[1, 2], [3, 2], [1, 1]]` -> `[1, 2, 3, 2, 1, 1]`
@@ -168,7 +168,7 @@ class FlxArrayUtil
 				result.push(element);
 		return result;
 	}
-
+	
 	/**
 	 * Compares the contents with `==` to see if the two arrays are the same.
 	 * Also takes null arrays and the length of the arrays into account.
@@ -183,14 +183,14 @@ class FlxArrayUtil
 			return false;
 		if (array1.length != array2.length)
 			return false;
-
+			
 		for (i in 0...array1.length)
 			if (array1[i] != array2[i])
 				return false;
-
+				
 		return true;
 	}
-
+	
 	/**
 	 * Returns the last element of an array or `null` if the array is `null` / empty.
 	 */
@@ -200,7 +200,7 @@ class FlxArrayUtil
 			return null;
 		return array[array.length - 1];
 	}
-
+	
 	/**
 	 * Pushes the element into the array (and if the array is null, creates it first) and returns the array.
 	 * @since 4.6.0
@@ -209,16 +209,16 @@ class FlxArrayUtil
 	{
 		if (array == null)
 			array = [];
-		
+			
 		array.push(element);
 		return array;
 	}
-
+	
 	public static inline function contains<T>(array:Array<T>, element:T):Bool
 	{
 		return array.indexOf(element) != -1;
 	}
-
+	
 	/**
 	 * Returns true if the array is not null and contains the element.
 	 * @since 5.0.0

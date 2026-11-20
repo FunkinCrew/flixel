@@ -9,12 +9,14 @@ class FlxPointer
 {
 	/** The position in the world */
 	public var x(default, null):Int = 0;
+	
 	/** The position in the world */
 	public var y(default, null):Int = 0;
 	
 	/** The world position relative to the main camera's scroll position */
 	@:deprecated("screenX is deprecated, use viewX, instead")
 	public var screenX(default, never):Int = 0;
+	
 	/** The world position relative to the main camera's scroll position */
 	@:deprecated("screenY is deprecated, use viewY, instead")
 	public var screenY(default, never):Int = 0;
@@ -26,6 +28,7 @@ class FlxPointer
 	 * @since 5.9.0
 	 */
 	public var viewX(default, null):Int = 0;
+	
 	/**
 	 * The world position relative to the main camera's scroll position, `cam.viewMarginY` or
 	 * `cam.viewMarginTop` is the top edge of the camera and `cam.viewMarginBottom` is the bottom
@@ -41,6 +44,7 @@ class FlxPointer
 	 * @since 5.9.0
 	 */
 	public var gameX(default, null):Int = 0;
+	
 	/**
 	 * The position relative to the `FlxGame`'s position in the window,
 	 * where `0` is the top edge of the game and `FlxG.height` is the bottom
@@ -48,7 +52,7 @@ class FlxPointer
 	 * @since 5.9.0
 	 */
 	public var gameY(default, null):Int = 0;
-
+	
 	@:deprecated("_globalScreenX is deprecated, use gameX, instead") // 5.9.0
 	var _globalScreenX(get, set):Int;
 	@:deprecated("_globalScreenY is deprecated, use gameY, instead") // 5.9.0
@@ -56,11 +60,11 @@ class FlxPointer
 	
 	var _rawX(default, null):Float = 0;
 	var _rawY(default, null):Float = 0;
-
+	
 	static var _cachedPoint:FlxPoint = new FlxPoint();
-
+	
 	public function new() {}
-
+	
 	/**
 	 * Fetch the world position of the pointer on any given camera
 	 * 
@@ -73,7 +77,7 @@ class FlxPointer
 	{
 		if (camera == null)
 			camera = FlxG.camera;
-		
+			
 		result = getViewPosition(camera, result);
 		
 		if (camera != null)
@@ -95,7 +99,7 @@ class FlxPointer
 	{
 		if (result == null)
 			return FlxPoint.get();
-		
+			
 		return result.set(Std.int(_rawX), Std.int(_rawY));
 	}
 	
@@ -113,10 +117,10 @@ class FlxPointer
 	{
 		if (camera == null)
 			camera = FlxG.camera;
-		
+			
 		if (result == null)
 			result = FlxPoint.get();
-		
+			
 		result.x = camera != null ? Std.int((gameX - camera.x) / camera.zoom + camera.viewMarginX) : gameX;
 		result.y = camera != null ? Std.int((gameY - camera.y) / camera.zoom + camera.viewMarginY) : gameY;
 		
@@ -138,10 +142,10 @@ class FlxPointer
 	{
 		if (camera == null)
 			camera = FlxG.camera;
-		
+			
 		if (result == null)
 			result = FlxPoint.get();
-		
+			
 		result.x = camera != null ? ((gameX - camera.x + 0.5 * camera.width * (camera.zoom - camera.initialZoom)) / camera.zoom) : gameX;
 		result.y = camera != null ? ((gameY - camera.y + 0.5 * camera.height * (camera.zoom - camera.initialZoom)) / camera.zoom) : gameY;
 		
@@ -164,10 +168,10 @@ class FlxPointer
 	{
 		if (camera == null)
 			camera = FlxG.camera;
-		
+			
 		if (result == null)
 			result = FlxPoint.get();
-		
+			
 		result.x = camera != null ? ((gameX - camera.x) / camera.zoom + camera.viewMarginX) : gameX;
 		result.y = camera != null ? ((gameY - camera.y) / camera.zoom + camera.viewMarginY) : gameY;
 		
@@ -181,7 +185,7 @@ class FlxPointer
 	{
 		if (result == null)
 			return FlxPoint.get(x, y);
-		
+			
 		return result.set(x, y);
 	}
 	
@@ -209,7 +213,7 @@ class FlxPointer
 		}
 		// check object
 		getWorldPosition(camera, _cachedPoint);
-		final object = cast (objectOrGroup, FlxObject);
+		final object = cast(objectOrGroup, FlxObject);
 		return object.overlapsPoint(_cachedPoint, true, camera);
 	}
 	

@@ -68,13 +68,18 @@ class BMFont
 			final blockAttrs = line.substring(line.indexOf(' ') + 1);
 			switch blockType
 			{
-				case 'info': info = BMFontInfo.fromText(blockAttrs);
-				case 'common': common = BMFontCommon.fromText(blockAttrs);
-				case 'page': pages.push(BMFontPage.fromText(blockAttrs));
+				case 'info':
+					info = BMFontInfo.fromText(blockAttrs);
+				case 'common':
+					common = BMFontCommon.fromText(blockAttrs);
+				case 'page':
+					pages.push(BMFontPage.fromText(blockAttrs));
 				// case 'chars': charCount = Std.parseInt(blockAttrs.split("=").pop());
-				case 'char': chars.push(BMFontChar.fromText(blockAttrs));
+				case 'char':
+					chars.push(BMFontChar.fromText(blockAttrs));
 				// case 'kernings': kerningCount = Std.parseInt(blockAttrs.split("=").pop());
-				case 'kerning': kernings.push(BMFontKerning.fromText(blockAttrs));
+				case 'kerning':
+					kernings.push(BMFontKerning.fromText(blockAttrs));
 			}
 		}
 		
@@ -112,11 +117,16 @@ class BMFont
 			final blockId:BMFontBlockId = bytes.readByte();
 			switch blockId
 			{
-				case INFO: info = BMFontInfo.fromBytes(bytes);
-				case COMMON: common = BMFontCommon.fromBytes(bytes);
-				case PAGES: pages = BMFontPage.listFromBytes(bytes);
-				case CHARS: chars = BMFontChar.listFromBytes(bytes);
-				case KERNING: kerning = BMFontKerning.listFromBytes(bytes);
+				case INFO:
+					info = BMFontInfo.fromBytes(bytes);
+				case COMMON:
+					common = BMFontCommon.fromBytes(bytes);
+				case PAGES:
+					pages = BMFontPage.listFromBytes(bytes);
+				case CHARS:
+					chars = BMFontChar.listFromBytes(bytes);
+				case KERNING:
+					kerning = BMFontKerning.listFromBytes(bytes);
 			}
 		}
 		return new BMFont(info, common, pages, chars, kerning);
@@ -196,7 +206,7 @@ class BMFont
 			final bytes:Bytes = cast data;
 			if (isValidBytes(bytes))
 				return BINARY(bytes);
-			
+				
 			return detectFromText(bytes.toString());
 		}
 		
@@ -207,12 +217,12 @@ class BMFont
 			{
 				// dataStr is a file path
 				final bytes = Assets.getBytes(dataStr);
-				if(bytes == null)
+				if (bytes == null)
 					return detectFromText(Assets.getText(dataStr));
-				
+					
 				if (isValidBytes(bytes))
 					return BINARY(bytes);
-				
+					
 				return detectFromText(bytes.toString());
 			}
 			else
@@ -239,7 +249,7 @@ class BMFont
 			return null;
 		}
 	}
-
+	
 	static function detectFromText(text:String):BMFontFileType
 	{
 		final xml = safeParseXML(text);

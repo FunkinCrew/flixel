@@ -9,14 +9,14 @@ class PS4Mapping extends FlxTypedGamepadMapping<PS4ID>
 	#if FLX_JOYSTICK_API
 	static inline var LEFT_ANALOG_STICK_FAKE_X:Int = 21;
 	static inline var LEFT_ANALOG_STICK_FAKE_Y:Int = 22;
-
+	
 	static inline var RIGHT_ANALOG_STICK_FAKE_X:Int = 23;
 	static inline var RIGHT_ANALOG_STICK_FAKE_Y:Int = 24;
-
+	
 	static inline var LEFT_TRIGGER_FAKE:Int = 25;
 	static inline var RIGHT_TRIGGER_FAKE:Int = 26;
 	#end
-
+	
 	override function initValues():Void
 	{
 		leftStick = PS4ID.LEFT_ANALOG_STICK;
@@ -24,7 +24,7 @@ class PS4Mapping extends FlxTypedGamepadMapping<PS4ID>
 		supportsMotion = true;
 		supportsPointer = true;
 	}
-
+	
 	override function getID(rawID:PS4ID):FlxGamepadInputID
 	{
 		return switch (rawID)
@@ -59,7 +59,7 @@ class PS4Mapping extends FlxTypedGamepadMapping<PS4ID>
 			case _: NONE;
 		}
 	}
-
+	
 	override function getRawID(ID:FlxGamepadInputID):PS4ID
 	{
 		return switch (ID)
@@ -130,15 +130,8 @@ class PS4Mapping extends FlxTypedGamepadMapping<PS4ID>
 	{
 		// Analog stick and trigger values overlap with regular buttons so we remap to "fake" button ID's
 		return if (axisID == leftStick.x) LEFT_ANALOG_STICK_FAKE_X; else if (axisID == leftStick.y) LEFT_ANALOG_STICK_FAKE_Y; else if (axisID == rightStick.x)
-			RIGHT_ANALOG_STICK_FAKE_X;
-		else if (axisID == rightStick.y)
-			RIGHT_ANALOG_STICK_FAKE_Y;
-		else if (axisID == PS4ID.L2)
-			LEFT_TRIGGER_FAKE;
-		else if (axisID == PS4ID.R2)
-			RIGHT_TRIGGER_FAKE;
-		else
-			axisID;
+			RIGHT_ANALOG_STICK_FAKE_X; else if (axisID == rightStick.y) RIGHT_ANALOG_STICK_FAKE_Y; else if (axisID == PS4ID.L2) LEFT_TRIGGER_FAKE; else
+			if (axisID == PS4ID.R2) RIGHT_TRIGGER_FAKE; else axisID;
 	}
 	#end
 }

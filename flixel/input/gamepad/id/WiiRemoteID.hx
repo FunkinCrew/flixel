@@ -30,7 +30,7 @@ enum abstract WiiRemoteID(Int) to Int
 	var REMOTE_PLUS = 4;
 	var REMOTE_MINUS = 5;
 	var REMOTE_HOME = 6;
-
+	
 	// Nunchuk attachment:
 	var NUNCHUK_A = 0;
 	var NUNCHUK_B = 1;
@@ -41,7 +41,7 @@ enum abstract WiiRemoteID(Int) to Int
 	var NUNCHUK_PLUS = 6;
 	var NUNCHUK_MINUS = 7;
 	var NUNCHUK_HOME = 8;
-
+	
 	// classic controller attachment:
 	var CLASSIC_A = 0;
 	var CLASSIC_B = 1;
@@ -56,16 +56,16 @@ enum abstract WiiRemoteID(Int) to Int
 	var CLASSIC_HOME = 10;
 	var CLASSIC_ONE = 11;
 	var CLASSIC_TWO = 12;
-
+	
 	var REMOTE_TILT_PITCH = 2;
 	var REMOTE_TILT_ROLL = 3;
-
+	
 	var NUNCHUK_TILT_PITCH = 3;
 	var NUNCHUK_TILT_ROLL = 2;
-
+	
 	var REMOTE_NULL_AXIS = 4;
 	var NUNCHUK_NULL_AXIS = 4;
-
+	
 	var LEFT_STICK_UP = 32;
 	var LEFT_STICK_DOWN = 33;
 	var LEFT_STICK_LEFT = 34;
@@ -79,21 +79,21 @@ enum abstract WiiRemoteID(Int) to Int
 	// these aren't real axes, they're simulated when the right digital buttons are pushed
 	var LEFT_TRIGGER_FAKE = 4;
 	var RIGHT_TRIGGER_FAKE = 5;
-
+	
 	// "fake" ID's
 	var REMOTE_DPAD_UP = 14;
 	var REMOTE_DPAD_DOWN = 15;
 	var REMOTE_DPAD_LEFT = 16;
 	var REMOTE_DPAD_RIGHT = 17;
-
+	
 	var REMOTE_DPAD_X = 18;
 	var REMOTE_DPAD_Y = 19;
-
+	
 	var CLASSIC_DPAD_DOWN = 24;
 	var CLASSIC_DPAD_UP = 25;
 	var CLASSIC_DPAD_LEFT = 26;
 	var CLASSIC_DPAD_RIGHT = 27;
-
+	
 	var NUNCHUK_DPAD_DOWN = 28;
 	var NUNCHUK_DPAD_UP = 29;
 	var NUNCHUK_DPAD_LEFT = 30;
@@ -107,7 +107,7 @@ enum abstract WiiRemoteID(Int) to Int
 	var REMOTE_PLUS = 13;
 	var REMOTE_MINUS = 14;
 	var REMOTE_HOME = 15;
-
+	
 	// Nunchuk attachment:
 	var NUNCHUK_A = 9;
 	var NUNCHUK_B = 10;
@@ -118,12 +118,12 @@ enum abstract WiiRemoteID(Int) to Int
 	var NUNCHUK_PLUS = 15;
 	var NUNCHUK_MINUS = 16;
 	var NUNCHUK_HOME = 17;
-
+	
 	var NUNCHUK_DPAD_UP = 5;
 	var NUNCHUK_DPAD_DOWN = 6;
 	var NUNCHUK_DPAD_LEFT = 7;
 	var NUNCHUK_DPAD_RIGHT = 8;
-
+	
 	// classic controller attachment:
 	var CLASSIC_A = 9;
 	var CLASSIC_B = 10;
@@ -138,21 +138,21 @@ enum abstract WiiRemoteID(Int) to Int
 	var CLASSIC_HOME = 19;
 	var CLASSIC_ONE = 20;
 	var CLASSIC_TWO = 21;
-
+	
 	var CLASSIC_DPAD_UP = 5;
 	var CLASSIC_DPAD_DOWN = 6;
 	var CLASSIC_DPAD_LEFT = 7;
 	var CLASSIC_DPAD_RIGHT = 8;
-
+	
 	var REMOTE_TILT_PITCH = 2;
 	var REMOTE_TILT_ROLL = 3;
-
+	
 	var NUNCHUK_TILT_PITCH = 3;
 	var NUNCHUK_TILT_ROLL = 2;
-
+	
 	var REMOTE_NULL_AXIS = 4;
 	var NUNCHUK_NULL_AXIS = 4;
-
+	
 	var LEFT_STICK_UP = 28;
 	var LEFT_STICK_DOWN = 29;
 	var LEFT_STICK_LEFT = 30;
@@ -166,13 +166,13 @@ enum abstract WiiRemoteID(Int) to Int
 	// these aren't real axes, they're simulated when the right digital buttons are pushed
 	var LEFT_TRIGGER_FAKE = 4;
 	var RIGHT_TRIGGER_FAKE = 5;
-
+	
 	// "fake" ID's
 	var REMOTE_DPAD_UP = 22;
 	var REMOTE_DPAD_DOWN = 23;
 	var REMOTE_DPAD_LEFT = 24;
 	var REMOTE_DPAD_RIGHT = 25;
-
+	
 	var REMOTE_DPAD_X = 26;
 	var REMOTE_DPAD_Y = 27;
 	#end
@@ -197,7 +197,7 @@ enum abstract WiiRemoteID(Int) to Int
 		left: LEFT_STICK_LEFT,
 		right: LEFT_STICK_RIGHT
 	});
-
+	
 	/**
 	 * the classic controller has both the "left" and "right" analog sticks
 	 */
@@ -207,5 +207,4 @@ enum abstract WiiRemoteID(Int) to Int
 		left: RIGHT_STICK_LEFT,
 		right: RIGHT_STICK_RIGHT
 	});
-
 }

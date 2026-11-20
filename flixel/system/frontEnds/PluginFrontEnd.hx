@@ -17,13 +17,13 @@ class PluginFrontEnd
 	 * An array container for plugins.
 	 */
 	public var list(default, null):Array<FlxBasic> = [];
-
+	
 	/**
 	 * If `true`, then plugins will be drawn over the current state instead of under it.
 	 * @since 5.7.0
 	 */
 	public var drawOnTop:Bool = false;
-
+	
 	/**
 	 * Adds a new plugin to the global plugin array.
 	 * **DEPRECATED:** In a later version this will be changed to behave like `addPlugin`.
@@ -72,7 +72,7 @@ class PluginFrontEnd
 		list.push(plugin);
 		return plugin;
 	}
-
+	
 	/**
 	 * Retrieves the first plugin found that matches the specified type.
 	 *
@@ -89,10 +89,10 @@ class PluginFrontEnd
 				return cast plugin;
 			}
 		}
-
+		
 		return null;
 	}
-
+	
 	/**
 	 * Removes an instance of a plugin from the global plugin array.
 	 *
@@ -104,7 +104,7 @@ class PluginFrontEnd
 		list.remove(plugin);
 		return plugin;
 	}
-
+	
 	/**
 	 * Removes all instances of a plugin from the global plugin array.
 	 *
@@ -120,7 +120,7 @@ class PluginFrontEnd
 	public function removeAllByType(type:Class<FlxBasic>):Bool
 	{
 		var results:Bool = false;
-
+		
 		var i = list.length;
 		while (i-- > 0)
 		{
@@ -130,10 +130,10 @@ class PluginFrontEnd
 				results = true;
 			}
 		}
-
+		
 		return results;
 	}
-
+	
 	@:allow(flixel.FlxG)
 	function new()
 	{
@@ -142,7 +142,7 @@ class PluginFrontEnd
 		addPlugin(FlxMouseEvent.globalManager = new FlxMouseEventManager());
 		addPlugin(FlxInputText.globalManager = new FlxInputTextManager());
 	}
-
+	
 	/**
 	 * Used by the game object to call update() on all the plugins.
 	 */
@@ -157,7 +157,7 @@ class PluginFrontEnd
 			}
 		}
 	}
-
+	
 	/**
 	 * Used by the game object to call draw() on all the plugins.
 	 */

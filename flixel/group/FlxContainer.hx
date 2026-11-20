@@ -36,8 +36,8 @@ class FlxTypedContainer<T:FlxBasic> extends FlxTypedGroup<T>
 		// remove from previous container
 		if (member.container != null)
 			member.container.remove(member);
-		
-		member.container = (cast this:FlxContainer);
+			
+		member.container = (cast this : FlxContainer);
 		super.onMemberAdd(member);
 	}
 	

@@ -8,7 +8,7 @@ import flixel.util.typeLimit.OneOfTwo;
  * Helper type that allows the `FlxPool` constructor to take the new function param and the old,
  * deprecated `Class<T>` param. This will be removed, soon anf FlxPool will only take a function.
  */
-abstract PoolFactory<T:IFlxDestroyable>(()->T)
+abstract PoolFactory<T:IFlxDestroyable>(() -> T)
 {
 	@:from
 	#if FLX_NO_UNIT_TEST
@@ -16,17 +16,17 @@ abstract PoolFactory<T:IFlxDestroyable>(()->T)
 	#end
 	public static inline function fromClass<T:IFlxDestroyable>(classRef:Class<T>):PoolFactory<T>
 	{
-		return fromFunction(()->Type.createInstance(classRef, []));
+		return fromFunction(() -> Type.createInstance(classRef, []));
 	}
-
+	
 	@:from
-	public static inline function fromFunction<T:IFlxDestroyable>(func:()->T):PoolFactory<T>
+	public static inline function fromFunction<T:IFlxDestroyable>(func:() -> T):PoolFactory<T>
 	{
 		return cast func;
 	}
 	
 	@:allow(flixel.util.FlxPool)
-	inline function getFunction():()->T
+	inline function getFunction():() -> T
 	{
 		return this;
 	}
@@ -39,10 +39,10 @@ abstract PoolFactory<T:IFlxDestroyable>(()->T)
 class FlxPool<T:IFlxDestroyable> implements IFlxPool<T>
 {
 	public var length(get, never):Int;
-
+	
 	var _pool:Array<T> = [];
-	var _constructor:()->T;
-
+	var _constructor:() -> T;
+	
 	/**
 	 * Objects aren't actually removed from the array in order to improve performance.
 	 * _count keeps track of the valid, accessible pool objects.
@@ -54,24 +54,22 @@ class FlxPool<T:IFlxDestroyable> implements IFlxPool<T>
 	public var autoLog = true;
 	
 	// For some reason, this causes CI errors: `final _tracked = new Map<T, String>();`
-	
 	final _tracked:Map<T, String> = [];
 	final _leakCount:Map<String, Int> = [];
 	var _totalCreated = 0;
 	var _autoLogInitted = false;
 	#end
-
+	
 	/**
 	 * Creates a pool of the specified type
 	 * @param   constructor  A function that takes no args and creates an instance,
 	 *                       example: `FlxRect.new.bind(0, 0, 0, 0)`
 	 */
-	
 	public function new(constructor:PoolFactory<T>)
 	{
 		_constructor = constructor.getFunction();
 	}
-
+	
 	public function get():T
 	{
 		final obj:T = if (_count == 0)
@@ -81,8 +79,7 @@ class FlxPool<T:IFlxDestroyable> implements IFlxPool<T>
 			#end
 			_constructor();
 		}
-		else
-			_pool[--_count];
+		else _pool[--_count];
 		
 		#if FLX_TRACK_POOLS
 		trackGet(obj);
@@ -90,7 +87,7 @@ class FlxPool<T:IFlxDestroyable> implements IFlxPool<T>
 		
 		return obj;
 	}
-
+	
 	public function put(obj:T):Void
 	{
 		// we don't want to have the same object in the accessible pool twice (ok to have multiple in the inaccessible zone)
@@ -102,7 +99,7 @@ class FlxPool<T:IFlxDestroyable> implements IFlxPool<T>
 				putHelper(obj);
 		}
 	}
-
+	
 	public function putUnsafe(obj:T):Void
 	{
 		// TODO: remove null check and make private?
@@ -119,7 +116,7 @@ class FlxPool<T:IFlxDestroyable> implements IFlxPool<T>
 		trackPut(obj);
 		#end
 	}
-
+	
 	public function preAllocate(numObjects:Int):Void
 	{
 		while (numObjects-- > 0)
@@ -127,7 +124,7 @@ class FlxPool<T:IFlxDestroyable> implements IFlxPool<T>
 			_pool[_count++] = _constructor();
 		}
 	}
-
+	
 	public function clear():Array<T>
 	{
 		_count = 0;
@@ -135,7 +132,7 @@ class FlxPool<T:IFlxDestroyable> implements IFlxPool<T>
 		_pool = [];
 		return oldPool;
 	}
-
+	
 	inline function get_length():Int
 	{
 		return _count;
@@ -148,8 +145,14 @@ class FlxPool<T:IFlxDestroyable> implements IFlxPool<T>
 		{
 			if (_pool.length == 0)
 				preAllocate(1);
-			
-			id = Type.getClassName(Type.getClass(_pool[0])).split(".").pop().split("FlxBase").pop().split("Flx").pop();
+				
+			id = Type.getClassName(Type.getClass(_pool[0]))
+				.split(".")
+				.pop()
+				.split("FlxBase")
+				.pop()
+				.split("Flx")
+				.pop();
 		}
 		
 		FlxG.watch.addFunction(id + "-pool", function()
@@ -179,11 +182,11 @@ class FlxPool<T:IFlxDestroyable> implements IFlxPool<T>
 		final stack = stackToString(callStack[2]);
 		if (stack == null)
 			return;
-		
+			
 		if (autoLog && !_autoLogInitted && FlxG.signals != null)
 		{
 			_autoLogInitted = true;
-			FlxG.signals.postStateSwitch.add(()->addLogs());
+			FlxG.signals.postStateSwitch.add(() -> addLogs());
 			if (FlxG.game != null && FlxG.state != null)
 				addLogs();
 		}
@@ -191,7 +194,7 @@ class FlxPool<T:IFlxDestroyable> implements IFlxPool<T>
 		_tracked[obj] = stack;
 		if (_leakCount.exists(stack) == false)
 			_leakCount[stack] = 0;
-		
+			
 		_leakCount[stack]++;
 	}
 	

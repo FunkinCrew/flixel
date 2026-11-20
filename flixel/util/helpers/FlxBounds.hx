@@ -11,17 +11,17 @@ class FlxBounds<T>
 	 * The minimum value of this property.
 	 */
 	public var min:T;
-
+	
 	/**
 	 * The maximum value of this property.
 	 */
 	public var max:T;
-
+	
 	/**
 	 * A flag that can be used to toggle the use of this property.
 	 */
 	public var active:Bool = true;
-
+	
 	/**
 	 * Create a new Bounds object. Must be typed, e.g. `var bounds = new FlxBounds<Float>(0, 0)`;
 	 *
@@ -33,7 +33,7 @@ class FlxBounds<T>
 		this.min = min;
 		this.max = max == null ? min : max;
 	}
-
+	
 	/**
 	 * Handy function to set the minimum and maximum values of this Bounds object in one line.
 	 *
@@ -47,7 +47,7 @@ class FlxBounds<T>
 		this.max = max == null ? min : max;
 		return this;
 	}
-
+	
 	/**
 	 * Function to compare this FlxBounds to another.
 	 *
@@ -58,7 +58,7 @@ class FlxBounds<T>
 	{
 		return min == otherBounds.min && max == otherBounds.max;
 	}
-
+	
 	/**
 	 * Convert object to readable string name. Useful for debugging, save games, etc.
 	 */

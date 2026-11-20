@@ -48,7 +48,7 @@ class BMFontChar
 	static function listFromXml(charsNode:BMFontXml):Array<BMFontChar>
 	{
 		final chars = charsNode.nodes("char");
-		return [ for (char in chars) fromXml(char) ];
+		return [for (char in chars) fromXml(char)];
 	}
 	
 	static function fromText(kerningText:String):BMFontChar
@@ -65,29 +65,38 @@ class BMFontChar
 		var chnl:Int = -1;
 		var letter:String = null;
 		
-		BMFontUtil.forEachAttribute(kerningText, 
-			function(key:String, value:UnicodeString)
-			{
-				switch key
-				{
-					case 'id': id = Std.parseInt(value);
-					case 'x': x = Std.parseInt(value);
-					case 'y': y = Std.parseInt(value);
-					case 'width': width = Std.parseInt(value);
-					case 'height': height = Std.parseInt(value);
-					case 'xoffset': xoffset = Std.parseInt(value);
-					case 'yoffset': yoffset = Std.parseInt(value);
-					case 'xadvance': xadvance = Std.parseInt(value);
-					case 'page': page = Std.parseInt(value);
-					case 'chnl': chnl = Std.parseInt(value);
-					case 'letter': letter = value;
-					default: FlxG.log.warn('Unexpected font char attribute: $key=$value');
-				}
-			}
-		);
-		
-		return
+		BMFontUtil.forEachAttribute(kerningText, function(key:String, value:UnicodeString)
 		{
+			switch key
+			{
+				case 'id':
+					id = Std.parseInt(value);
+				case 'x':
+					x = Std.parseInt(value);
+				case 'y':
+					y = Std.parseInt(value);
+				case 'width':
+					width = Std.parseInt(value);
+				case 'height':
+					height = Std.parseInt(value);
+				case 'xoffset':
+					xoffset = Std.parseInt(value);
+				case 'yoffset':
+					yoffset = Std.parseInt(value);
+				case 'xadvance':
+					xadvance = Std.parseInt(value);
+				case 'page':
+					page = Std.parseInt(value);
+				case 'chnl':
+					chnl = Std.parseInt(value);
+				case 'letter':
+					letter = value;
+				default:
+					FlxG.log.warn('Unexpected font char attribute: $key=$value');
+			}
+		});
+		
+		return {
 			id: id,
 			x: x,
 			y: y,

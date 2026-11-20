@@ -17,43 +17,43 @@ class Tool extends Sprite implements IFlxDestroyable
 	public var button(default, null):FlxSystemButton;
 	public var cursor(default, null):BitmapData;
 	public var cursorInUse(default, null):String = "";
-
+	
 	var _name:String = "(Unknown tool)";
 	var _shortcut:String;
 	var _brain:Interaction;
-
+	
 	public function init(brain:Interaction):Tool
 	{
 		_brain = brain;
 		return this;
 	}
-
+	
 	public function update():Void {}
-
+	
 	public function draw():Void {}
-
+	
 	public function activate():Void {}
-
+	
 	public function deactivate():Void {}
-
+	
 	public function destroy():Void {}
-
+	
 	public function isActive():Bool
 	{
 		return _brain.activeTool == this && _brain.visible;
 	}
-
+	
 	function setButton(icon:FlxGraphicSource):Void
 	{
 		button = new FlxSystemButton(icon.resolveBitmapData(), onButtonClicked, true);
 		button.toggled = true;
-
+		
 		var tooltipName = _name;
 		if (_shortcut != null)
 			tooltipName += ' ($_shortcut)';
 		Tooltip.add(button, tooltipName);
 	}
-
+	
 	/**
 	 * Set the default icon for the tool. The default icon is used when
 	 * the tool is selected in the interaction window toolbar. Tools
@@ -66,7 +66,7 @@ class Tool extends Sprite implements IFlxDestroyable
 		cursor = Icon;
 		_brain.registerCustomCursor(_name, cursor, offsetX, offsetY);
 	}
-
+	
 	/**
 	 * Make the tool use a custom cursor that it is not its default one.
 	 * This is  particularly useful to indicate to users that a particular
@@ -80,7 +80,7 @@ class Tool extends Sprite implements IFlxDestroyable
 	{
 		cursorInUse = customCursorName;
 	}
-
+	
 	/**
 	 * Make the tool use its default cursor, which was informed via `setCursor()`.
 	 */
@@ -89,12 +89,12 @@ class Tool extends Sprite implements IFlxDestroyable
 		if (cursorInUse != "")
 			cursorInUse = "";
 	}
-
+	
 	function onButtonClicked():Void
 	{
 		_brain.setActiveTool(this);
 	}
-
+	
 	public function getName():String
 	{
 		return _name;

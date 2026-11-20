@@ -11,17 +11,17 @@ class FlxRange<T>
 	 * The beginning value of this property.
 	 */
 	public var start:T;
-
+	
 	/**
 	 * The ending value of this property.
 	 */
 	public var end:T;
-
+	
 	/**
 	 * A flag that can be used to toggle the use of this property.
 	 */
 	public var active:Bool = true;
-
+	
 	/**
 	 * Create a new Range object. Must be typed, e.g. var myRange = new Range<Float>(0, 0);
 	 *
@@ -33,7 +33,7 @@ class FlxRange<T>
 		this.start = start;
 		this.end = end == null ? start : end;
 	}
-
+	
 	/**
 	 * Handy function to set the initial and final values of this Range object in one line.
 	 *
@@ -45,10 +45,10 @@ class FlxRange<T>
 	{
 		this.start = start;
 		this.end = end == null ? start : end;
-
+		
 		return this;
 	}
-
+	
 	/**
 	 * Function to compare this FlxRange to another.
 	 *
@@ -59,7 +59,7 @@ class FlxRange<T>
 	{
 		return start == OtherFlxRange.start && end == OtherFlxRange.end;
 	}
-
+	
 	/**
 	 * Convert object to readable string name. Useful for debugging, save games, etc.
 	 */

@@ -14,7 +14,7 @@ class FlxBGSprite extends FlxSprite
 		makeGraphic(1, 1, FlxColor.WHITE, true, FlxG.bitmap.getUniqueKey("bg_graphic_"));
 		scrollFactor.set();
 	}
-
+	
 	/**
 	 * Called by game loop, updates then blits or renders current frame of animation to the screen
 	 */
@@ -27,12 +27,12 @@ class FlxBGSprite extends FlxSprite
 			{
 				continue;
 			}
-
+			
 			_matrix.identity();
 			_matrix.scale(camera.viewWidth + 1, camera.viewHeight + 1);
 			_matrix.translate(camera.viewMarginLeft, camera.viewMarginTop);
 			camera.drawPixels(frame, _matrix, colorTransform);
-
+			
 			#if FLX_DEBUG
 			FlxBasic.visibleCount++;
 			#end

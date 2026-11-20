@@ -10,7 +10,7 @@ class BMFontUtil
 {
 	static var attFinder = ~/(\w+?)=("?)(.*?)\2(?=\s|$)/;
 	
-	public static function forEachAttribute(text:UnicodeString, callback:(key:String, value:UnicodeString)->Void)
+	public static function forEachAttribute(text:UnicodeString, callback:(key:String, value:UnicodeString) -> Void)
 	{
 		var index = 0;
 		while (attFinder.match(text.substr(index)))

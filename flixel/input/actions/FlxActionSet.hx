@@ -29,29 +29,29 @@ class FlxActionSet implements IFlxDestroyable
 	 * Name of the action set
 	 */
 	public var name(default, null):String = "";
-
+	
 	#if FLX_STEAMWRAP
 	/**
 	 * This action set's numeric handle for the Steam API (ignored if not using Steam)
 	 */
 	public var steamHandle(default, null):Int = -1;
 	#end
-
+	
 	/**
 	 * Digital actions in this set
 	 */
 	public var digitalActions(default, null):Array<FlxActionDigital>;
-
+	
 	/**
 	 * Analog actions in this set
 	 */
 	public var analogActions(default, null):Array<FlxActionAnalog>;
-
+	
 	/**
 	 * Whether this action set runs when update() is called
 	 */
 	public var active:Bool = true;
-
+	
 	#if FLX_STEAMWRAP
 	/**
 	 * Create an action set from a steamwrap configuration file.
@@ -73,10 +73,10 @@ class FlxActionSet implements IFlxDestroyable
 	{
 		if (SteamSet == null)
 			return null;
-
+			
 		var digitalActions:Array<FlxActionDigital> = [];
 		var analogActions:Array<FlxActionAnalog> = [];
-
+		
 		if (SteamSet.button != null)
 		{
 			for (b in SteamSet.button)
@@ -110,14 +110,14 @@ class FlxActionSet implements IFlxDestroyable
 			action.steamHandle = aHandle;
 			analogActions.push(action);
 		}
-
+		
 		var set = new FlxActionSet(SteamSet.name, digitalActions, analogActions);
 		set.steamHandle = FlxSteamController.getActionSetHandle(SteamSet.name);
-
+		
 		return set;
 	}
 	#end
-
+	
 	/**
 	 * Create an action set from a parsed Json object
 	 *
@@ -131,10 +131,10 @@ class FlxActionSet implements IFlxDestroyable
 	{
 		var digitalActions:Array<FlxActionDigital> = [];
 		var analogActions:Array<FlxActionAnalog> = [];
-
+		
 		if (Data == null)
 			return null;
-
+			
 		if (Data.digitalActions != null)
 		{
 			var arrD:Array<Dynamic> = Data.digitalActions;
@@ -145,7 +145,7 @@ class FlxActionSet implements IFlxDestroyable
 				digitalActions.push(action);
 			}
 		}
-
+		
 		if (Data.analogActions != null)
 		{
 			var arrA:Array<Dynamic> = Data.analogActions;
@@ -156,17 +156,17 @@ class FlxActionSet implements IFlxDestroyable
 				analogActions.push(action);
 			}
 		}
-
+		
 		if (Data.name != null)
 		{
 			var name:String = Data.name;
 			var set = new FlxActionSet(name, digitalActions, analogActions);
 			return set;
 		}
-
+		
 		return null;
 	}
-
+	
 	public function toJson():String
 	{
 		var space:String = "\t";
@@ -184,7 +184,7 @@ class FlxActionSet implements IFlxDestroyable
 			return value;
 		}, space);
 	}
-
+	
 	public function new(Name:String, ?DigitalActions:Array<FlxActionDigital>, ?AnalogActions:Array<FlxActionAnalog>)
 	{
 		name = Name;
@@ -195,7 +195,7 @@ class FlxActionSet implements IFlxDestroyable
 		digitalActions = DigitalActions;
 		analogActions = AnalogActions;
 	}
-
+	
 	/**
 	 * Automatically adds or removes inputs for a steam controller
 	 * to any steam-affiliated actions
@@ -207,7 +207,7 @@ class FlxActionSet implements IFlxDestroyable
 		attachSteamControllerSub(Handle, Attach, FlxInputType.DIGITAL, digitalActions, null);
 		attachSteamControllerSub(Handle, Attach, FlxInputType.ANALOG, null, analogActions);
 	}
-
+	
 	public function add(Action:FlxAction):Bool
 	{
 		if (Action.type == DIGITAL)
@@ -228,13 +228,13 @@ class FlxActionSet implements IFlxDestroyable
 		}
 		return false;
 	}
-
+	
 	public function destroy():Void
 	{
 		digitalActions = FlxDestroyUtil.destroyArray(digitalActions);
 		analogActions = FlxDestroyUtil.destroyArray(analogActions);
 	}
-
+	
 	/**
 	 * Remove an action from this set
 	 * @param	Action a FlxAction
@@ -262,7 +262,7 @@ class FlxActionSet implements IFlxDestroyable
 		}
 		return result;
 	}
-
+	
 	/**
 	 * Update all the actions in this set (each will check inputs & potentially trigger)
 	 */
@@ -279,21 +279,21 @@ class FlxActionSet implements IFlxDestroyable
 			analogAction.update();
 		}
 	}
-
+	
 	function attachSteamControllerSub(Handle:Int, Attach:Bool, InputType:FlxInputType, DigitalActions:Array<FlxActionDigital>,
 			AnalogActions:Array<FlxActionAnalog>)
 	{
 		var length = InputType == FlxInputType.DIGITAL ? DigitalActions.length : AnalogActions.length;
-
+		
 		for (i in 0...length)
 		{
 			var action = InputType == FlxInputType.DIGITAL ? DigitalActions[i] : AnalogActions[i];
-
+			
 			if (action.steamHandle != -1) // all steam-affiliated actions will have this numeric ID assigned
 			{
 				var inputExists = false;
 				var theInput:FlxActionInput = null;
-
+				
 				// check if any of the steam controller inputs match this handle
 				if (action.inputs != null)
 				{
@@ -306,11 +306,11 @@ class FlxActionSet implements IFlxDestroyable
 						}
 					}
 				}
-
+				
 				if (Attach)
 				{
 					// attaching: add inputs for this controller if they don't exist
-
+					
 					if (!inputExists)
 					{
 						if (InputType == FlxInputType.DIGITAL)

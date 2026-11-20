@@ -2,9 +2,9 @@ package flixel.util;
 
 enum abstract FlxAxes(Int)
 {
-	var X    = 0x01;
-	var Y    = 0x10;
-	var XY   = 0x11;
+	var X = 0x01;
+	var Y = 0x10;
+	var XY = 0x11;
 	var NONE = 0x00;
 	
 	/**
@@ -50,7 +50,7 @@ enum abstract FlxAxes(Int)
 	
 	public static function fromBools(x:Bool, y:Bool):FlxAxes
 	{
-		return cast (x ? (cast X:Int) : 0) | (y ? (cast Y:Int) : 0);
+		return cast(x ? (cast X : Int) : 0) | (y ? (cast Y : Int) : 0);
 	}
 	
 	public static function fromString(axes:String):FlxAxes
@@ -60,8 +60,8 @@ enum abstract FlxAxes(Int)
 			case "x": X;
 			case "y": Y;
 			case "xy" | "yx" | "both": XY;
-			case "none" | "" | null : NONE;
-			default : throw "Invalid axes value: " + axes;
+			case "none" | "" | null: NONE;
+			default: throw "Invalid axes value: " + axes;
 		}
 	}
 }

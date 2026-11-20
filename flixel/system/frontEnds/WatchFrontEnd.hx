@@ -12,7 +12,9 @@ class WatchFrontEnd
 {
 	#if FLX_DEBUG
 	public var window(get, never):flixel.system.debug.watch.Watch;
-	inline function get_window() return FlxG.game.debugger.watch;
+	
+	inline function get_window()
+		return FlxG.game.debugger.watch;
 	#end
 	
 	public function new() {}
@@ -31,7 +33,7 @@ class WatchFrontEnd
 		window.add(displayName, FIELD(object, field));
 		#end
 	}
-
+	
 	/**
 	 * Remove a variable from the watch list in the debugger.
 	 *
@@ -44,7 +46,7 @@ class WatchFrontEnd
 		window.remove(null, FIELD(object, field));
 		#end
 	}
-
+	
 	/**
 	 * Add or update a quickWatch entry to the watch list in the debugger.
 	 * Extremely useful when called in update() functions when there
@@ -59,7 +61,7 @@ class WatchFrontEnd
 		window.add(displayName, QUICK(Std.string(value)));
 		#end
 	}
-
+	
 	/**
 	 * Remove a quickWatch entry from the watch list of the debugger.
 	 *
@@ -71,7 +73,7 @@ class WatchFrontEnd
 		window.remove(displayName, QUICK(null));
 		#end
 	}
-
+	
 	/**
 	 * Add an expression to the watch list in the debugger.
 	 * The expression gets evaluated with hscript, and you can see its current value all the time.
@@ -90,7 +92,7 @@ class WatchFrontEnd
 		window.add(displayName == null ? expression : displayName, EXPRESSION(expression, parsedExpr));
 		#end
 	}
-
+	
 	/**
 	 * Remove an expression from the watch list in the debugger.
 	 *
@@ -104,7 +106,7 @@ class WatchFrontEnd
 		#end
 	}
 	
-	public function addFunction(displayName:String, func:()->Dynamic):Void
+	public function addFunction(displayName:String, func:() -> Dynamic):Void
 	{
 		#if FLX_DEBUG
 		window.add(displayName, FUNCTION(func));
@@ -117,7 +119,7 @@ class WatchFrontEnd
 		window.remove(displayName, null);
 		#end
 	}
-
+	
 	/**
 	 * Add the mouse coords to the watch window. Useful for quickly
 	 * getting coordinates for object placement during prototyping!
@@ -128,7 +130,7 @@ class WatchFrontEnd
 		add(FlxG, "mouse", "Mouse Position");
 		#end
 	}
-
+	
 	/**
 	 * Removes the mouse coords from the watch window.
 	 */

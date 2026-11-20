@@ -16,33 +16,33 @@ class LogStyle
 	public static var ERROR:LogStyle = new LogStyle("[ERROR] ", "FF8888", 12, false, false, false, "flixel/sounds/beep", true);
 	public static var NOTICE:LogStyle = new LogStyle("[NOTICE] ", "5CF878", 12, false);
 	public static var CONSOLE:LogStyle = new LogStyle("> ", "5A96FA", 12, false);
-
+	
 	/**
 	 * A prefix which is always attached to the start of the logged data
 	 */
 	public var prefix:String;
-
+	
 	public var color:String;
 	public var size:Int;
 	public var bold:Bool;
 	public var italic:Bool;
 	public var underlined:Bool;
-
+	
 	/**
 	 * A sound to be played when this LogStyle is used
 	 */
 	public var errorSound:String;
-
+	
 	/**
 	 * Whether the console should be forced to open when this LogStyle is used
 	 */
 	public var openConsole:Bool;
-
+	
 	/**
 	 * A callback function that is called when this LogStyle is used
 	 */
 	@:deprecated("callbackFunction is deprecated, use callback, instead")
-	public var callbackFunction:()->Void;
+	public var callbackFunction:() -> Void;
 	
 	/**
 	 * A callback function that is called when this LogStyle is used
@@ -73,9 +73,9 @@ class LogStyle
 	 * @param   callback          A callback function that is called when this LogStyle is used
 	 * @param   throwError        Whether an error is thrown when this LogStyle is used
 	 */
-	 @:haxe.warning("-WDeprecated")
-	public function new(prefix = "", color = "FFFFFF", size = 12, bold = false, italic = false, underlined = false,
-			?errorSound:String, openConsole = false, ?callbackFunction:()->Void, ?callback:(Any, ?PosInfos)->Void, throwException = false)
+	@:haxe.warning("-WDeprecated")
+	public function new(prefix = "", color = "FFFFFF", size = 12, bold = false, italic = false, underlined = false, ?errorSound:String, openConsole = false,
+			?callbackFunction:() -> Void, ?callback:(Any, ?PosInfos) -> Void, throwException = false)
 	{
 		this.prefix = prefix;
 		this.color = color;

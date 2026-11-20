@@ -16,38 +16,38 @@ class FlxReplay
 	 * The random number generator seed value for this recording.
 	 */
 	public var seed:Int;
-
+	
 	/**
 	 * The current frame for this recording.
 	 */
 	public var frame:Int;
-
+	
 	/**
 	 * The number of frames in this recording.
 	 * **Note:** This doesn't include empty records, unlike `getDuration()`
 	 */
 	public var frameCount:Int;
-
+	
 	/**
 	 * Whether the replay has finished playing or not.
 	 */
 	public var finished:Bool;
-
+	
 	/**
 	 * Internal container for all the frames in this replay.
 	 */
 	var _frames:Array<FrameRecord>;
-
+	
 	/**
 	 * Internal tracker for max number of frames we can fit before growing the _frames again.
 	 */
 	var _capacity:Int;
-
+	
 	/**
 	 * Internal helper variable for keeping track of where we are in _frames during recording or replay.
 	 */
 	var _marker:Int;
-
+	
 	/**
 	 * Instantiate a new replay object.  Doesn't actually do much until you call create() or load().
 	 */
@@ -61,7 +61,7 @@ class FlxReplay
 		_capacity = 0;
 		_marker = 0;
 	}
-
+	
 	/**
 	 * Clean up memory.
 	 */
@@ -78,7 +78,7 @@ class FlxReplay
 		}
 		_frames = null;
 	}
-
+	
 	/**
 	 * Create a new gameplay recording.  Requires the current random number generator seed.
 	 *
@@ -91,7 +91,7 @@ class FlxReplay
 		seed = Seed;
 		rewind();
 	}
-
+	
 	/**
 	 * Load replay data from a String object.
 	 * Strings can come from embedded assets or external
@@ -101,11 +101,11 @@ class FlxReplay
 	public function load(FileContents:String):Void
 	{
 		init();
-
+		
 		var lines:Array<String> = FileContents.split("\n");
-
+		
 		seed = Std.parseInt(lines[0]);
-
+		
 		var line:String;
 		var i:Int = 1;
 		var l:Int = lines.length;
@@ -122,10 +122,10 @@ class FlxReplay
 				}
 			}
 		}
-
+		
 		rewind();
 	}
-
+	
 	/**
 	 * Save the current recording data off to a String object.
 	 * Basically goes through and calls FrameRecord.save() on each frame in the replay.
@@ -145,32 +145,32 @@ class FlxReplay
 		}
 		return output;
 	}
-
+	
 	/**
 	 * Get the current input data from the input managers and store it in a new frame record.
 	 */
 	public function recordFrame():Void
 	{
 		var continueFrame = true;
-
+		
 		#if FLX_KEYBOARD
 		var keysRecord:Array<CodeValuePair> = FlxG.keys.record();
 		if (keysRecord != null)
 			continueFrame = false;
 		#end
-
+		
 		#if FLX_MOUSE
 		var mouseRecord:MouseRecord = FlxG.mouse.record();
 		if (mouseRecord != null)
 			continueFrame = false;
 		#end
-
+		
 		if (continueFrame)
 		{
 			frame++;
 			return;
 		}
-
+		
 		var frameRecorded = new FrameRecord().create(frame++);
 		#if FLX_MOUSE
 		frameRecorded.mouse = mouseRecord;
@@ -178,23 +178,23 @@ class FlxReplay
 		#if FLX_KEYBOARD
 		frameRecorded.keys = keysRecord;
 		#end
-
+		
 		_frames[frameCount++] = frameRecorded;
-
+		
 		if (frameCount >= _capacity)
 		{
 			_capacity *= 2;
 			_frames.resize(_capacity);
 		}
 	}
-
+	
 	/**
 	 * Get the current frame record data and load it into the input managers.
 	 */
 	public function playNextFrame():Void
 	{
 		FlxG.inputs.reset();
-
+		
 		if (_marker >= frameCount)
 		{
 			finished = true;
@@ -204,16 +204,16 @@ class FlxReplay
 		{
 			return;
 		}
-
+		
 		var fr:FrameRecord = _frames[_marker++];
-
+		
 		#if FLX_KEYBOARD
 		if (fr.keys != null)
 		{
 			FlxG.keys.playback(fr.keys);
 		}
 		#end
-
+		
 		#if FLX_MOUSE
 		if (fr.mouse != null)
 		{
@@ -221,7 +221,7 @@ class FlxReplay
 		}
 		#end
 	}
-
+	
 	/**
 	 * Reset the replay back to the first frame.
 	 */
@@ -231,7 +231,7 @@ class FlxReplay
 		frame = 0;
 		finished = false;
 	}
-
+	
 	/**
 	 * Common initialization terms used by both create() and load() to set up the replay object.
 	 */

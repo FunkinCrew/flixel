@@ -16,10 +16,10 @@ class FlxMacroUtil
 	{
 		var type = Context.getType(typePath);
 		var values = [];
-
+		
 		if (exclude == null)
 			exclude = ["NONE"];
-
+			
 		switch (type.follow())
 		{
 			case TAbstract(_.get() => ab, _):
@@ -44,13 +44,13 @@ class FlxMacroUtil
 				}
 			default:
 		}
-
+		
 		var finalExpr;
 		if (invert)
 			finalExpr = values.map(function(v) return macro $v{v.value} => $v{v.name});
 		else
 			finalExpr = values.map(function(v) return macro $v{v.name} => $v{v.value});
-
+			
 		return macro $a{finalExpr};
 	}
 	
@@ -71,7 +71,7 @@ class FlxMacroUtil
 		{
 			if (msg == null)
 				msg = '$fieldName is deprecated';
-			
+				
 			Context.warning(msg, pos);
 		}
 		return null;

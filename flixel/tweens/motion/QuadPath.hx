@@ -18,26 +18,26 @@ class QuadPath extends Motion
 	var _speed:Float = 0;
 	var _index:Int = 0;
 	var _numSegs:Int = 0;
-
+	
 	// Curve information.
 	var _updateCurve:Bool = true;
 	var _curveT:Array<Float>;
 	var _curveD:Array<Float>;
-
+	
 	// Curve points.
 	var _a:FlxPoint;
 	var _b:FlxPoint;
 	var _c:FlxPoint;
-
+	
 	function new(Options:TweenOptions, ?manager:FlxTweenManager)
 	{
 		super(Options, manager);
-
+		
 		_points = [];
 		_curveT = [];
 		_curveD = [];
 	}
-
+	
 	override public function destroy():Void
 	{
 		super.destroy();
@@ -50,7 +50,7 @@ class QuadPath extends Motion
 		_b = FlxDestroyUtil.put(_b);
 		_c = FlxDestroyUtil.put(_c);
 	}
-
+	
 	/**
 	 * Starts moving along the path.
 	 *
@@ -60,7 +60,7 @@ class QuadPath extends Motion
 	public function setMotion(DurationOrSpeed:Float, UseDuration:Bool = true):QuadPath
 	{
 		updatePath();
-
+		
 		if (UseDuration)
 		{
 			duration = DurationOrSpeed;
@@ -71,11 +71,11 @@ class QuadPath extends Motion
 			duration = _distance / DurationOrSpeed;
 			_speed = DurationOrSpeed;
 		}
-
+		
 		start();
 		return this;
 	}
-
+	
 	/**
 	 * Adds the point to the path.
 	 */
@@ -85,7 +85,7 @@ class QuadPath extends Motion
 		_points.push(FlxPoint.get(x, y));
 		return this;
 	}
-
+	
 	/**
 	 * Gets the point on the path.
 	 */
@@ -97,20 +97,20 @@ class QuadPath extends Motion
 		}
 		return _points[index % _points.length];
 	}
-
+	
 	override public function start():QuadPath
 	{
 		_index = (backward) ? (_numSegs - 1) : 0;
 		super.start();
 		return this;
 	}
-
+	
 	override function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
 		var td:Float;
 		var tt:Float;
-
+		
 		if (!backward && (_points != null))
 		{
 			if (_index < _numSegs - 1)
@@ -130,7 +130,7 @@ class QuadPath extends Motion
 			_a = _points[_index * 2];
 			_b = _points[_index * 2 + 1];
 			_c = _points[_index * 2 + 2];
-
+			
 			x = _a.x * (1 - td) * (1 - td) + _b.x * 2 * (1 - td) * td + _c.x * td * td;
 			y = _a.y * (1 - td) * (1 - td) + _b.y * 2 * (1 - td) * td + _c.y * td * td;
 		}
@@ -147,20 +147,20 @@ class QuadPath extends Motion
 					}
 				}
 			}
-
+			
 			td = _curveT[_index + 1];
 			tt = _curveT[_index] - td;
 			td = (scale - td) / tt;
 			_a = _points[_index * 2 + 2];
 			_b = _points[_index * 2 + 1];
 			_c = _points[_index * 2];
-
+			
 			x = _a.x * (1 - td) * (1 - td) + _b.x * 2 * (1 - td) * td + _c.x * td * td;
 			y = _a.y * (1 - td) * (1 - td) + _b.y * 2 * (1 - td) * td + _c.y * td * td;
 		}
 		super.postUpdate();
 	}
-
+	
 	// [from, control, to, control, to, control, to, control, to ...]
 	function updatePath():Void
 	{
@@ -173,7 +173,7 @@ class QuadPath extends Motion
 			return;
 		}
 		_updateCurve = false;
-
+		
 		// find the total distance of the path
 		var i:Int = 0;
 		var j:Int = 0;
@@ -185,7 +185,7 @@ class QuadPath extends Motion
 			_curveD[i] = getCurveLength(_points[j], _points[j + 1], _points[j + 2]);
 			_distance += _curveD[i++];
 		}
-
+		
 		// find t for each point on the curve
 		i = 0;
 		var d:Float = 0;
@@ -197,13 +197,13 @@ class QuadPath extends Motion
 		_curveT[_numSegs - 1] = 1;
 		_curveT.unshift(0);
 	}
-
+	
 	function getCurveLength(start:FlxPoint, control:FlxPoint, finish:FlxPoint):Float
 	{
 		var safeControl = control.clone();
 		var p1 = FlxPoint.get();
 		var p2 = FlxPoint.get();
-
+		
 		// we add a small quantity if two consecutive points are equal
 		// otherwise the final equation will have a division by zero
 		if (safeControl.equals(start))
@@ -224,11 +224,11 @@ class QuadPath extends Motion
 			a32:Float = 2 * a * a2,
 			c2:Float = 2 * Math.sqrt(c),
 			ba:Float = b / a2;
-
+			
 		p1.put();
 		p2.put();
 		safeControl.put();
-
+		
 		return (a32 * abc + a2 * b * (abc - c2) + (4 * c * a - b * b) * Math.log((2 * a2 + ba + abc) / (ba + c2))) / (4 * a32);
 	}
 }

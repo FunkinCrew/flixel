@@ -11,16 +11,23 @@ import openfl.geom.Rectangle;
 class ScrollSprite extends Sprite
 {
 	public var maxScrollY(get, never):Float;
-	inline function get_maxScrollY():Float return this.height - scroll.height;
 	
+	inline function get_maxScrollY():Float
+		return this.height - scroll.height;
+		
 	public var viewHeight(get, never):Float;
-	inline function get_viewHeight():Float return scroll.height;
 	
+	inline function get_viewHeight():Float
+		return scroll.height;
+		
 	/**
 	 * The current amount of scrolling
 	 */
 	public var scrollY(get, set):Float;
-	inline function get_scrollY():Float return scroll.y;
+	
+	inline function get_scrollY():Float
+		return scroll.y;
+		
 	inline function set_scrollY(value):Float
 	{
 		scroll.y = value;
@@ -31,15 +38,15 @@ class ScrollSprite extends Sprite
 	var scroll = new Rectangle();
 	var scrollBar:ScrollBar = null;
 	
-	public function new ()
+	public function new()
 	{
 		super();
 		
-		addEventListener(Event.ADDED_TO_STAGE, function (e)
+		addEventListener(Event.ADDED_TO_STAGE, function(e)
 		{
 			final stage = this.stage;
 			stage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseScroll);
-			addEventListener(Event.REMOVED_FROM_STAGE, (_)->stage.removeEventListener(MouseEvent.MOUSE_WHEEL, onMouseScroll));
+			addEventListener(Event.REMOVED_FROM_STAGE, (_) -> stage.removeEventListener(MouseEvent.MOUSE_WHEEL, onMouseScroll));
 		});
 	}
 	
@@ -71,10 +78,10 @@ class ScrollSprite extends Sprite
 		
 		if (scroll.bottom > this.height)
 			scroll.y = height - scroll.height;
-		
+			
 		if (scroll.y < 0)
 			scroll.y = 0;
-		
+			
 		scrollRect = scroll;
 		
 		if (scrollBar != null)
@@ -92,7 +99,7 @@ class ScrollSprite extends Sprite
 	{
 		if (getChildIndex(child) == -1)
 			throw "Invalid child, not a child of this container";
-		
+			
 		return child.y < scroll.bottom && child.y + child.height > scroll.y;
 	}
 }
@@ -109,7 +116,7 @@ class ScrollBar extends Sprite
 	
 	var state:ScrollState = IDLE;
 	
-	public function new (target:ScrollSprite)
+	public function new(target:ScrollSprite)
 	{
 		this.target = target;
 		super();
@@ -157,7 +164,7 @@ class ScrollBar extends Sprite
 	{
 		if (state != IDLE)
 			throw "expected state: IDLE";
-		
+			
 		state = DRAG_BG;
 		mouseMoveHelper(e.stageY);
 	}
@@ -168,7 +175,7 @@ class ScrollBar extends Sprite
 		{
 			if (state != IDLE)
 				throw "expected state: IDLE";
-			
+				
 			state = DRAG_HANDLE(getLocalY(e.stageY) - handle.y);
 		}
 		else
@@ -182,7 +189,7 @@ class ScrollBar extends Sprite
 	
 	function getLocalY(stageY:Float)
 	{
-		return globalToLocal(new Point (0, stageY)).y;
+		return globalToLocal(new Point(0, stageY)).y;
 	}
 	
 	function mouseMoveHelper(stageY:Float)
@@ -204,10 +211,10 @@ class ScrollBar extends Sprite
 	{
 		if (handle.y < 0)
 			handle.y = 0;
-		
+			
 		if (handle.y > bg.height - handle.height)
 			handle.y = bg.height - handle.height;
-		
+			
 		target.scrollY = handle.y / (bg.height - handle.height) * target.maxScrollY;
 	}
 	

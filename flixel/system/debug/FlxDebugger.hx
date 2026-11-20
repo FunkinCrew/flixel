@@ -33,30 +33,28 @@ using flixel.util.FlxArrayUtil;
 class FlxDebugger extends openfl.display.Sprite
 {
 	#if FLX_DEBUG
-	
-	
 	/**
 	 * The scale of the debug windows must be set before the `FlxGame` is made.
 	 * Can also use the compile flag `-DFLX_DEBUGGER_SCALE=2`
 	 */
 	public static var defaultScale:Int
+	
 	#if FLX_DEBUGGER_SCALE
 	= Std.parseInt('${haxe.macro.Compiler.getDefine("FLX_DEBUGGER_SCALE")}');
 	#else
 	= 1;
 	#end
 	
-	
 	/**
 	 * Internal, used to space out windows from the edges.
 	 */
 	public static inline var GUTTER:Int = 2;
-
+	
 	/**
 	 * Internal, used to space out windows from the edges.
 	 */
 	public static inline var TOP_HEIGHT:Int = 20;
-
+	
 	public var stats:Stats;
 	public var log:Log;
 	public var watch:Watch;
@@ -65,37 +63,37 @@ class FlxDebugger extends openfl.display.Sprite
 	public var console:Console;
 	public var interaction:Interaction;
 	public var scale:Int;
-
+	
 	var completionList:CompletionList;
-
+	
 	/**
 	 * Internal, tracks what debugger window layout user has currently selected.
 	 */
 	var _layout:FlxDebuggerLayout = FlxDebuggerLayout.STANDARD;
-
+	
 	/**
 	 * Internal, stores width and height of the game.
 	 */
 	var _screen:Point = new Point();
-
+	
 	/**
 	 * Stores the bounds in which the windows can move.
 	 */
 	var _screenBounds:Rectangle;
-
+	
 	var _buttons:Map<FlxHorizontalAlign, Array<FlxSystemButton>> = [LEFT => [], CENTER => [], RIGHT => []];
-
+	
 	/**
 	 * The flash Sprite used for the top bar of the debugger ui
 	**/
 	var _topBar:Sprite;
-
+	
 	var _windows:Array<Window> = [];
-
+	
 	var _usingSystemCursor = false;
 	var _wasMouseVisible:Bool = true;
 	var _wasUsingSystemCursor:Bool = false;
-
+	
 	/**
 	 * Instantiates the debugger overlay.
 	 *
@@ -111,18 +109,18 @@ class FlxDebugger extends openfl.display.Sprite
 			scale = defaultScale;
 		scaleX = scale;
 		scaleY = scale;
-
+		
 		visible = false;
 		tabChildren = false;
-
+		
 		Tooltip.init(this);
-
+		
 		_topBar = new Sprite();
 		_topBar.graphics.beginFill(0x000000, 0xAA / 255);
 		_topBar.graphics.drawRect(0, 0, FlxG.stage.stageWidth / scaleX, TOP_HEIGHT);
 		_topBar.graphics.endFill();
 		addChild(_topBar);
-
+		
 		var txt = new TextField();
 		txt.height = 20;
 		txt.selectable = false;
@@ -133,7 +131,7 @@ class FlxDebugger extends openfl.display.Sprite
 		txt.defaultTextFormat = format;
 		txt.autoSize = TextFieldAutoSize.LEFT;
 		txt.text = Std.string(FlxG.VERSION);
-
+		
 		addWindow(log = new Log());
 		addWindow(bitmapLog = new BitmapLog());
 		addWindow(watch = new Watch());
@@ -141,41 +139,41 @@ class FlxDebugger extends openfl.display.Sprite
 		addWindow(console = new Console(completionList));
 		addWindow(stats = new Stats());
 		addWindow(interaction = new Interaction(this));
-
+		
 		vcr = new VCR(this);
-
+		
 		addButton(LEFT, Icon.flixel, openHomepage);
 		addButton(LEFT, null, openGitHub).addChild(txt);
-
+		
 		addWindowToggleButton(interaction, Icon.interactive);
 		addWindowToggleButton(bitmapLog, Icon.bitmapLog);
 		addWindowToggleButton(log, Icon.log);
-
+		
 		addWindowToggleButton(watch, Icon.watch);
 		addWindowToggleButton(console, Icon.console);
 		addWindowToggleButton(stats, Icon.stats);
-
+		
 		var drawDebugButton = addButton(RIGHT, Icon.drawDebug, toggleDrawDebug, true);
 		drawDebugButton.toggled = !FlxG.debugger.drawDebug;
 		FlxG.debugger.drawDebugChanged.add(function()
 		{
 			drawDebugButton.toggled = !FlxG.debugger.drawDebug;
 		});
-
+		
 		#if FLX_RECORD
 		addButton(CENTER).addChild(vcr.runtimeDisplay);
 		#end
-
+		
 		addChild(completionList);
-
+		
 		onResize(width, height);
-
+		
 		addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
 		addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
-
+		
 		FlxG.signals.preStateSwitch.add(Tracker.onStateSwitch);
 	}
-
+	
 	/**
 	 * Clean up memory.
 	 */
@@ -183,10 +181,10 @@ class FlxDebugger extends openfl.display.Sprite
 	{
 		_screen = null;
 		_buttons = null;
-
+		
 		removeChild(_topBar);
 		_topBar = null;
-
+		
 		if (log != null)
 		{
 			removeChild(log);
@@ -217,19 +215,19 @@ class FlxDebugger extends openfl.display.Sprite
 			console.destroy();
 			console = null;
 		}
-
+		
 		_windows = null;
-
+		
 		removeEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
 		removeEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
 	}
-
+	
 	public function update():Void
 	{
 		for (window in _windows)
 			window.update();
 	}
-
+	
 	/**
 	 * Change the way the debugger's windows are laid out.
 	 *
@@ -240,7 +238,7 @@ class FlxDebugger extends openfl.display.Sprite
 		_layout = Layout;
 		resetLayout();
 	}
-
+	
 	/**
 	 * Forces the debugger windows to reset to the last specified layout.
 	 * The default layout is STANDARD.
@@ -313,7 +311,7 @@ class FlxDebugger extends openfl.display.Sprite
 				bitmapLog.reposition(0, log.y - GUTTER - bitmapLog.height);
 		}
 	}
-
+	
 	public function onResize(width:Float, height:Float, scale = 0):Void
 	{
 		if (scale == 0)
@@ -321,7 +319,7 @@ class FlxDebugger extends openfl.display.Sprite
 		this.scale = scale;
 		_screen.x = width / scale;
 		_screen.y = height / scale;
-
+		
 		updateBounds();
 		_topBar.width = FlxG.stage.stageWidth / scaleX;
 		resetButtonLayout();
@@ -330,7 +328,7 @@ class FlxDebugger extends openfl.display.Sprite
 		x = -FlxG.scaleMode.offset.x;
 		y = -FlxG.scaleMode.offset.y;
 	}
-
+	
 	function updateBounds():Void
 	{
 		_screenBounds = new Rectangle(GUTTER, TOP_HEIGHT + GUTTER / 2, _screen.x - GUTTER * 2, _screen.y - GUTTER * 2 - TOP_HEIGHT);
@@ -339,7 +337,7 @@ class FlxDebugger extends openfl.display.Sprite
 			window.updateBounds(_screenBounds);
 		}
 	}
-
+	
 	/**
 	 * Align an array of debugger buttons, used for the middle and right layouts
 	 */
@@ -347,7 +345,7 @@ class FlxDebugger extends openfl.display.Sprite
 	{
 		var width:Float = 0;
 		var last:Float = LeftOffset;
-
+		
 		for (i in 0...Sprites.length)
 		{
 			var o:Sprite = Sprites[i];
@@ -356,24 +354,24 @@ class FlxDebugger extends openfl.display.Sprite
 				o.x = last;
 			last = o.x + o.width + Padding;
 		}
-
+		
 		return width;
 	}
-
+	
 	/**
 	 * Position the debugger buttons
 	 */
 	function resetButtonLayout():Void
 	{
 		hAlignButtons(_buttons[FlxHorizontalAlign.LEFT], 10, true, 10);
-
+		
 		var offset = FlxG.stage.stageWidth / scaleX * 0.5 - hAlignButtons(_buttons[FlxHorizontalAlign.CENTER], 10, false) * 0.5;
 		hAlignButtons(_buttons[FlxHorizontalAlign.CENTER], 10, true, offset);
-
+		
 		var offset = FlxG.stage.stageWidth / scaleX - hAlignButtons(_buttons[FlxHorizontalAlign.RIGHT], 10, false);
 		hAlignButtons(_buttons[FlxHorizontalAlign.RIGHT], 10, true, offset);
 	}
-
+	
 	/**
 	 * Create and add a new debugger button.
 	 *
@@ -391,13 +389,13 @@ class FlxDebugger extends openfl.display.Sprite
 		button.y = (TOP_HEIGHT / 2) - (button.height / 2);
 		_buttons[Position].push(button);
 		addChild(button);
-
+		
 		if (UpdateLayout)
 			resetButtonLayout();
-
+			
 		return button;
 	}
-
+	
 	/**
 	 * Removes and destroys a button from the debugger.
 	 *
@@ -408,22 +406,22 @@ class FlxDebugger extends openfl.display.Sprite
 	{
 		removeChild(Button);
 		Button.destroy();
-
+		
 		_buttons[FlxHorizontalAlign.LEFT].remove(Button);
 		_buttons[FlxHorizontalAlign.CENTER].remove(Button);
 		_buttons[FlxHorizontalAlign.RIGHT].remove(Button);
-
+		
 		if (UpdateLayout)
 			resetButtonLayout();
 	}
-
+	
 	public function addWindowToggleButton(window:Window, icon:FlxGraphicSource):Void
 	{
 		var button = addButton(RIGHT, icon.resolveBitmapData(), window.toggleVisible, true, true);
 		window.toggleButton = button;
 		button.toggled = !window.visible;
 	}
-
+	
 	public inline function addWindow(window:Window):Window
 	{
 		_windows.push(window);
@@ -435,14 +433,14 @@ class FlxDebugger extends openfl.display.Sprite
 		}
 		return window;
 	}
-
+	
 	public inline function removeWindow(window:Window):Void
 	{
 		if (contains(window))
 			removeChild(window);
 		_windows.fastSplice(window);
 	}
-
+	
 	override public function addChild(child:DisplayObject):DisplayObject
 	{
 		var result = super.addChild(child);
@@ -451,7 +449,7 @@ class FlxDebugger extends openfl.display.Sprite
 			super.addChild(completionList);
 		return result;
 	}
-
+	
 	/**
 	 * Mouse handler that helps with fake "mouse focus" type behavior.
 	 */
@@ -459,7 +457,7 @@ class FlxDebugger extends openfl.display.Sprite
 	{
 		onMouseFocus();
 	}
-
+	
 	/**
 	 * Mouse handler that helps with fake "mouse focus" type behavior.
 	 */
@@ -467,7 +465,7 @@ class FlxDebugger extends openfl.display.Sprite
 	{
 		onMouseFocusLost();
 	}
-
+	
 	function onMouseFocus():Void
 	{
 		#if FLX_MOUSE
@@ -478,7 +476,7 @@ class FlxDebugger extends openfl.display.Sprite
 		_usingSystemCursor = true;
 		#end
 	}
-
+	
 	@:allow(flixel.system.debug)
 	function onMouseFocusLost():Void
 	{
@@ -486,7 +484,7 @@ class FlxDebugger extends openfl.display.Sprite
 		// Disable mouse input if the interaction tool is in use,
 		// so users can select interactable elements, e.g. buttons.
 		FlxG.mouse.enabled = !interaction.isInUse();
-
+		
 		if (_usingSystemCursor)
 		{
 			FlxG.mouse.useSystemCursor = _wasUsingSystemCursor;
@@ -494,17 +492,17 @@ class FlxDebugger extends openfl.display.Sprite
 		}
 		#end
 	}
-
+	
 	inline function toggleDrawDebug():Void
 	{
 		FlxG.debugger.drawDebug = !FlxG.debugger.drawDebug;
 	}
-
+	
 	inline function openHomepage():Void
 	{
 		FlxG.openURL("http://haxeflixel.com");
 	}
-
+	
 	inline function openGitHub():Void
 	{
 		var url = "https://github.com/HaxeFlixel/flixel";

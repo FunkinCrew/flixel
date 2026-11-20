@@ -28,18 +28,18 @@ class FlxBasePreloader extends DefaultPreloader
 	 * Add this string to allowedURLs array if you want to be able to test game with enabled site-locking on local machine
 	 */
 	public static inline var LOCAL:String = "localhost";
-
+	
 	/**
 	 * Change this if you want the flixel logo to show for more or less time.  Default value is 0 seconds (no delay).
 	 */
 	public var minDisplayTime:Float = 0;
-
+	
 	/**
 	 * List of allowed URLs for built-in site-locking.
 	 * Set it in FlxPreloader's constructor as: `['http://adamatomic.com/canabalt/', FlxPreloader.LOCAL]`;
 	 */
 	public var allowedURLs:Array<String>;
-
+	
 	/**
 	 * The index of which URL in allowedURLs will be triggered when a user clicks on the Site-lock Message.
 	 * For example, if allowedURLs is `['mysite.com', 'othersite.com']`, and `siteLockURLIndex = 1`, then
@@ -47,7 +47,7 @@ class FlxBasePreloader extends DefaultPreloader
 	 * Defaults to 0.
 	 */
 	public var siteLockURLIndex:Int = 0;
-
+	
 	/**
 	 * The title text to display on the sitelock failure screen.
 	 * NOTE: This string should be reviewed for accuracy and may need to be localized.
@@ -69,7 +69,7 @@ class FlxBasePreloader extends DefaultPreloader
 	 * @since 4.3.0
 	 */
 	public var siteLockTitleText:String = "Sorry.";
-
+	
 	/**
 	 * The body text to display on the sitelock failure screen.
 	 * NOTE: This string should be reviewed for accuracy and may need to be localized.
@@ -83,7 +83,7 @@ class FlxBasePreloader extends DefaultPreloader
 		+ "developer or other copyright holder, is prohibited under copyright law.\n\n"
 		+ "Thank you for your interest in this game! Please support the developer by "
 		+ "visiting the following website to play the game:";
-
+		
 	var _percent:Float = 0;
 	var _width:Int;
 	var _height:Int;
@@ -91,7 +91,7 @@ class FlxBasePreloader extends DefaultPreloader
 	var _urlChecked:Bool = false;
 	var _destroyed:Bool = false;
 	var _startTime:Float;
-
+	
 	/**
 	 * FlxBasePreloader Constructor.
 	 * @param	MinDisplayTime	Minimum time (in seconds) the preloader should be shown. (Default = 0)
@@ -100,40 +100,40 @@ class FlxBasePreloader extends DefaultPreloader
 	public function new(MinDisplayTime:Float = 0, ?AllowedURLs:Array<String>)
 	{
 		super();
-
+		
 		minDisplayTime = MinDisplayTime;
 		if (AllowedURLs != null)
 			allowedURLs = AllowedURLs;
 		else
 			allowedURLs = [];
-
+			
 		_startTime = Date.now().getTime();
-
+		
 		#if !web
 		// just skip the preloader on native targets
 		onLoaded();
 		#end
 	}
-
+	
 	/**
 	 * Override this to create your own preloader objects.
 	 */
 	function create():Void {}
-
+	
 	/**
 	 * This function is called externally to initialize the Preloader.
 	 */
 	override public function onInit()
 	{
 		super.onInit();
-
+		
 		Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
 		Lib.current.stage.align = StageAlign.TOP_LEFT;
 		create();
 		addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		checkSiteLock();
 	}
-
+	
 	/**
 	 * This function is called each update to check the load status of the project.
 	 * It is highly recommended that you do NOT override this.
@@ -144,14 +144,14 @@ class FlxBasePreloader extends DefaultPreloader
 		if (root.loaderInfo.bytesTotal == 0)
 			bytesTotal = 50000;
 		#end
-
+		
 		#if web
 		_percent = (bytesTotal != 0) ? bytesLoaded / bytesTotal : 0;
 		#else
 		super.onUpdate(bytesLoaded, bytesTotal);
 		#end
 	}
-
+	
 	/**
 	 * This function is triggered on each 'frame'.
 	 * It is highly recommended that you do NOT override this.
@@ -165,7 +165,7 @@ class FlxBasePreloader extends DefaultPreloader
 			percent = time / min;
 		if (!_destroyed)
 			update(percent);
-
+			
 		if (_loaded && (min <= 0 || time / min >= 1))
 		{
 			removeEventListener(Event.ENTER_FRAME, onEnterFrame);
@@ -174,20 +174,20 @@ class FlxBasePreloader extends DefaultPreloader
 			_destroyed = true;
 		}
 	}
-
+	
 	/**
 	 * This function is called when the project has finished loading.
 	 * Override it to remove all of your objects.
 	 */
 	function destroy():Void {}
-
+	
 	/**
 	 * Override to draw your preloader objects in response to the Percent
 	 *
 	 * @param	Percent		How much of the program has loaded.
 	 */
 	function update(Percent:Float):Void {}
-
+	
 	/**
 	 * This function is called EXTERNALLY once the movie has actually finished being loaded.
 	 * Highly recommended you DO NOT override.
@@ -197,7 +197,7 @@ class FlxBasePreloader extends DefaultPreloader
 		_loaded = true;
 		_percent = 1;
 	}
-
+	
 	/**
 	 * This should be used whenever you want to create a Bitmap that uses BitmapData embedded with the
 	 * @:bitmap metadata, if you want to support both Flash and HTML5. Because the embedded data is loaded
@@ -220,7 +220,7 @@ class FlxBasePreloader extends DefaultPreloader
 		return bmp;
 		#end
 	}
-
+	
 	/**
 	 * This should be used whenever you want to create a BitmapData object from a class containing data embedded with
 	 * the @:bitmap metadata. Often, you'll want to use the BitmapData in a Bitmap object; in this case, createBitmap()
@@ -242,7 +242,7 @@ class FlxBasePreloader extends DefaultPreloader
 		return bmpData;
 		#end
 	}
-
+	
 	/**
 	 * Site-locking Functionality
 	 */
@@ -251,12 +251,12 @@ class FlxBasePreloader extends DefaultPreloader
 		#if web
 		if (_urlChecked)
 			return;
-
+			
 		if (!isHostUrlAllowed())
 		{
 			removeChildren();
 			removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-
+			
 			createSiteLockFailureScreen();
 		}
 		else
@@ -265,7 +265,7 @@ class FlxBasePreloader extends DefaultPreloader
 		}
 		#end
 	}
-
+	
 	#if web
 	/**
 	 * When overridden, allows the customized creation of the sitelock failure screen.
@@ -277,31 +277,31 @@ class FlxBasePreloader extends DefaultPreloader
 		addChild(createSiteLockFailureIcon(0xe5e5e5, 0.9));
 		addChild(createSiteLockFailureText(30));
 	}
-
+	
 	function createSiteLockFailureBackground(innerColor:FlxColor, outerColor:FlxColor):Shape
 	{
 		var shape = new Shape();
 		var graphics = shape.graphics;
 		graphics.clear();
-
+		
 		var fillMatrix = new Matrix();
 		fillMatrix.createGradientBox(1, 1, 0, -0.5, -0.5);
 		var scaling = Math.max(stage.stageWidth, stage.stageHeight);
 		fillMatrix.scale(scaling, scaling);
 		fillMatrix.translate(0.5 * stage.stageWidth, 0.5 * stage.stageHeight);
-
+		
 		graphics.beginGradientFill(GradientType.RADIAL, [innerColor, outerColor], [1, 1], [0, 255], fillMatrix);
 		graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
 		graphics.endFill();
 		return shape;
 	}
-
+	
 	function createSiteLockFailureIcon(color:FlxColor, scale:Float):Shape
 	{
 		var shape = new Shape();
 		var graphics = shape.graphics;
 		graphics.clear();
-
+		
 		graphics.beginFill(color);
 		graphics.drawPath(Vector.ofArray([1, 6, 2, 2, 2, 6, 6, 2, 2, 2, 6, 1, 6, 2, 6, 2, 6, 2, 6, 1, 6, 6, 2, 2, 2, 6, 6]), Vector.ofArray([
 			120.0, 0, 164, 0, 200, 35, 200, 79, 200, 130, 160, 130, 160, 79, 160, 57, 142, 40, 120, 40, 97, 40, 79, 57, 79, 79, 80, 130, 40, 130, 40, 79, 40,
@@ -310,7 +310,7 @@ class FlxBasePreloader extends DefaultPreloader
 			210, 140, 198, 131, 190, 120, 190
 		]), GraphicsPathWinding.NON_ZERO);
 		graphics.endFill();
-
+		
 		var transformMatrix = new Matrix();
 		transformMatrix.translate(-0.5 * shape.width, -0.5 * shape.height);
 		var scaling = scale * Math.min(stage.stageWidth / shape.width, stage.stageHeight / shape.height);
@@ -319,13 +319,13 @@ class FlxBasePreloader extends DefaultPreloader
 		shape.transform.matrix = transformMatrix;
 		return shape;
 	}
-
+	
 	function createSiteLockFailureText(margin:Float):Sprite
 	{
 		var sprite = new Sprite();
 		var bounds = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
 		bounds.inflate(-margin, -margin);
-
+		
 		var titleText = new TextField();
 		var titleTextFormat = new TextFormat("_sans", 33, 0x333333, true);
 		titleTextFormat.align = TextFormatAlign.LEFT;
@@ -333,7 +333,7 @@ class FlxBasePreloader extends DefaultPreloader
 		titleText.selectable = false;
 		titleText.width = bounds.width;
 		titleText.text = siteLockTitleText;
-
+		
 		var bodyText = new TextField();
 		var bodyTextFormat = new TextFormat("_sans", 22, 0x333333);
 		bodyTextFormat.align = TextFormatAlign.JUSTIFY;
@@ -343,7 +343,7 @@ class FlxBasePreloader extends DefaultPreloader
 		bodyText.selectable = false;
 		bodyText.width = bounds.width;
 		bodyText.text = siteLockBodyText;
-
+		
 		var hyperlinkText = new TextField();
 		var hyperlinkTextFormat = new TextFormat("_sans", 22, 0x6e97cc, true, false, true);
 		hyperlinkTextFormat.align = TextFormatAlign.CENTER;
@@ -352,10 +352,10 @@ class FlxBasePreloader extends DefaultPreloader
 		hyperlinkText.selectable = true;
 		hyperlinkText.width = bounds.width;
 		hyperlinkText.text = allowedURLs[siteLockURLIndex];
-
+		
 		// Do customization before final layout.
 		adjustSiteLockTextFields(titleText, bodyText, hyperlinkText);
-
+		
 		var gutterSize = 4;
 		titleText.height = titleText.textHeight + gutterSize;
 		bodyText.height = bodyText.textHeight + gutterSize;
@@ -364,19 +364,19 @@ class FlxBasePreloader extends DefaultPreloader
 		titleText.y = bounds.top;
 		bodyText.y = titleText.y + 2.0 * titleText.height;
 		hyperlinkText.y = bodyText.y + bodyText.height + hyperlinkText.height;
-
+		
 		sprite.addChild(titleText);
 		sprite.addChild(bodyText);
 		sprite.addChild(hyperlinkText);
 		return sprite;
 	}
-
+	
 	/**
 	 * When overridden, allows the customization of the text fields in the sitelock failure screen.
 	 * @since 4.3.0
 	 */
 	function adjustSiteLockTextFields(titleText:TextField, bodyText:TextField, hyperlinkText:TextField):Void {}
-
+	
 	function goToMyURL(?e:MouseEvent):Void
 	{
 		// if the chosen URL isn't "local", use FlxG's openURL() function.
@@ -385,12 +385,12 @@ class FlxBasePreloader extends DefaultPreloader
 		else
 			Lib.getURL(new URLRequest(allowedURLs[siteLockURLIndex]));
 	}
-
+	
 	function isHostUrlAllowed():Bool
 	{
 		if (allowedURLs.length == 0)
 			return true;
-
+			
 		var homeURL:String = #if flash loaderInfo.loaderURL #elseif js js.Browser.location.href #else "" #end;
 		var homeDomain:String = FlxStringUtil.getDomain(homeURL);
 		for (allowedURL in allowedURLs)
@@ -412,40 +412,40 @@ private class DefaultPreloader extends Sprite
 		super();
 		addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 	}
-
+	
 	public function onAddedToStage(_)
 	{
 		removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-
+		
 		onInit();
 		onUpdate(loaderInfo.bytesLoaded, loaderInfo.bytesTotal);
-
+		
 		addEventListener(ProgressEvent.PROGRESS, onProgress);
 		addEventListener(Event.COMPLETE, onComplete);
 	}
-
+	
 	function onComplete(event:Event):Void
 	{
 		event.preventDefault();
-
+		
 		removeEventListener(ProgressEvent.PROGRESS, onProgress);
 		removeEventListener(Event.COMPLETE, onComplete);
-
+		
 		onLoaded();
 	}
-
+	
 	public function onProgress(event:ProgressEvent):Void
 	{
 		onUpdate(Std.int(event.bytesLoaded), Std.int(event.bytesTotal));
 	}
-
+	
 	public function onInit() {}
-
+	
 	public function onLoaded()
 	{
 		dispatchEvent(new Event(Event.UNLOAD));
 	}
-
+	
 	public function onUpdate(bytesLoaded:Int, bytesTotal:Int):Void
 	{
 		var percentLoaded = 0.0;

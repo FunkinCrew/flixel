@@ -60,7 +60,7 @@ class Transform extends Tool
 	{
 		if (_brain.selectedItems.length == 0)
 			return;
-		
+			
 		for (member in _brain.selectedItems)
 		{
 			if (member != null && member.scrollFactor != null && member.isOnScreen())
@@ -72,7 +72,7 @@ class Transform extends Tool
 				
 				for (marker in markers)
 					marker.reposition(target);
-				
+					
 				break;
 			}
 		}
@@ -98,7 +98,7 @@ class Transform extends Tool
 			case found: throw 'Unexpected state: $found';
 		}
 		
-		final action = switch(type)
+		final action = switch (type)
 		{
 			case ROTATE: SET_ANGLE(target.angle);
 			case SCALE_X: SET_SCALE_X(target.scale.x);
@@ -144,21 +144,22 @@ class Transform extends Tool
 	{
 		if (!isActive())
 			return;
-		
+			
 		switch state
 		{
 			case IDLE:
 			case SELECTED(target):
 				checkMarkers();
 			case TRANSFORM(target, type, mouseStartX, mouseStartY):
-				final mouseStart = FlxPoint.get(mouseStartX, mouseStartY)
-					.subtract(target.x + target.origin.x, target.y + target.origin.y);
-				final mouse = _brain.flixelPointer.copyTo()
-					.subtract(target.x + target.origin.x, target.y + target.origin.y);
+				final mouseStart = FlxPoint.get(mouseStartX, mouseStartY).subtract(target.x + target.origin.x, target.y + target.origin.y);
+				final mouse = _brain.flixelPointer.copyTo().subtract(target.x + target.origin.x, target.y + target.origin.y);
 				
-				inline function cos(degrees:Float) return Math.cos(FlxAngle.TO_RAD * degrees);
-				inline function sin(degrees:Float) return Math.sin(FlxAngle.TO_RAD * degrees);
-				inline function int(num:Float) return Std.int(num);
+				inline function cos(degrees:Float)
+					return Math.cos(FlxAngle.TO_RAD * degrees);
+				inline function sin(degrees:Float)
+					return Math.sin(FlxAngle.TO_RAD * degrees);
+				inline function int(num:Float)
+					return Std.int(num);
 				function dec(num:Float, dec = 2)
 				{
 					final prefix = (num > 0 ? "" : "-") + (num < 1.0 ? "0" : "");
@@ -209,7 +210,7 @@ class Transform extends Tool
 				
 				for (marker in markers)
 					marker.reposition(target);
-				
+					
 				if (_brain.pointerJustReleased)
 				{
 					state = SELECTED(target);
@@ -222,7 +223,7 @@ class Transform extends Tool
 	{
 		if (!isActive())
 			return;
-		
+			
 		final target = switch state
 		{
 			case IDLE:
@@ -236,7 +237,7 @@ class Transform extends Tool
 		final gfx = _brain.getDebugGraphics();
 		if (gfx == null)
 			return;
-		
+			
 		drawSelection(gfx, target.getDefaultCamera());
 		Marker.draw(target.x + target.origin.x, target.y + target.origin.y, false, gfx);
 		
@@ -253,7 +254,7 @@ class Transform extends Tool
 		gfx.moveTo(markers[3].x, markers[3].y);
 		for (marker in markers)
 			gfx.lineTo(marker.x, marker.y);
-		
+			
 		// draw markers
 		for (marker in markers)
 		{
@@ -279,7 +280,7 @@ private class Marker
 	public final left:Bool;
 	public final up:Bool;
 	
-	public function new (type:TransformType, left:Bool, up:Bool)
+	public function new(type:TransformType, left:Bool, up:Bool)
 	{
 		this.type = type;
 		this.left = left;
@@ -312,7 +313,7 @@ private class Marker
 @:forward(setText)
 private abstract TransformTooltip(TooltipOverlay) to TooltipOverlay
 {
-	public inline function new ()
+	public inline function new()
 	{
 		this = Tooltip.add(null, "");
 		this.textField.wordWrap = false;

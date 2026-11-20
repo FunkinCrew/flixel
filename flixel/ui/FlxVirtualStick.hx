@@ -23,10 +23,10 @@ class FlxVirtualStick extends FlxSpriteContainer
 {
 	/** The current state of the button */
 	public final value:FlxReadOnlyPoint = FlxPoint.get();
-
+	
 	/** The top of the joystick, the part that moves */
 	public final thumb:CircleSprite;
-
+	
 	/** The background of the joystick, also known as the base */
 	public final base:CircleSprite;
 	
@@ -82,9 +82,9 @@ class FlxVirtualStick extends FlxSpriteContainer
 		moves = false;
 		solid = false;
 		
-		FlxG.watch.addFunction("stick.state", ()->button.status.toString());
-		FlxG.watch.addFunction("base.x|y", ()->'${base.x} | ${base.y}');
-		FlxG.watch.addFunction("thumb.x|y", ()->'${thumb.x} | ${thumb.y}');
+		FlxG.watch.addFunction("stick.state", () -> button.status.toString());
+		FlxG.watch.addFunction("base.x|y", () -> '${base.x} | ${base.y}');
+		FlxG.watch.addFunction("thumb.x|y", () -> '${thumb.x} | ${thumb.y}');
 	}
 	
 	override function destroy()
@@ -121,7 +121,7 @@ class FlxVirtualStick extends FlxSpriteContainer
 			dragging = true;
 		else if (button.released && dragging)
 			dragging = false;
-		
+			
 		final pos:FlxPoint = cast value;
 		if (dragging)
 		{
@@ -129,16 +129,16 @@ class FlxVirtualStick extends FlxSpriteContainer
 			pos.scale(1 / radius);
 			if (pos.lengthSquared > 1.0)
 				pos.normalize();
-			
+				
 			if (pos.x < deadzone && pos.x > -deadzone)
 				pos.x = 0;
-			
+				
 			if (pos.y < deadzone && pos.y > -deadzone)
 				pos.y = 0;
 		}
 		else
 			pos.zero();
-		
+			
 		xStatus = getStatus(oldX, value.x);
 		yStatus = getStatus(oldY, value.y);
 		
@@ -166,16 +166,8 @@ class FlxVirtualStick extends FlxSpriteContainer
 	
 	function getStatus(prev:Float, curr:Float)
 	{
-		return if (prev == 0 && curr != 0)
-			JUST_MOVED;
-		else if (prev != 0 && curr != 0)
-			MOVED;
-		else if (prev != 0 && curr == 0)
-			JUST_STOPPED;
-		else if (prev == 0 && curr == 0)
-			STOPPED;
-		else
-			throw 'Unexpected case - prev: $prev, curr:$curr';// not possible
+		return if (prev == 0 && curr != 0) JUST_MOVED; else if (prev != 0 && curr != 0) MOVED; else if (prev != 0 && curr == 0) JUST_STOPPED; else if (prev == 0
+			&& curr == 0) STOPPED; else throw 'Unexpected case - prev: $prev, curr:$curr'; // not possible
 	}
 }
 
@@ -186,7 +178,7 @@ abstract CircleSprite(FlxSprite) to FlxSprite
 	public var radius(get, never):Float;
 	public var radiusSquared(get, never):Float;
 	
-	public function new (centerX = 0.0, centerY = 0.0, graphic, ?backupId:String)
+	public function new(centerX = 0.0, centerY = 0.0, graphic, ?backupId:String)
 	{
 		this = new FlxSprite(centerX, centerY, graphic);
 		if (graphic == null)
@@ -204,8 +196,11 @@ abstract CircleSprite(FlxSprite) to FlxSprite
 		#end
 	}
 	
-	inline function get_radius() return this.frameWidth * 0.5;
-	inline function get_radiusSquared() return radius * radius;
+	inline function get_radius()
+		return this.frameWidth * 0.5;
+		
+	inline function get_radiusSquared()
+		return radius * radius;
 }
 
 /**
@@ -216,9 +211,10 @@ class InvisibleCircleButton extends FlxTypedButton<FlxSprite>
 	public var radius(get, never):Float;
 	public var lastPointer(default, null):Null<FlxPointer>;
 	
-	inline function get_radius():Float return frameWidth * 0.5;
-	
-	public function new (x = 0.0, y = 0.0, radius:Float, ?onClick)
+	inline function get_radius():Float
+		return frameWidth * 0.5;
+		
+	public function new(x = 0.0, y = 0.0, radius:Float, ?onClick)
 	{
 		super(x, y, onClick);
 		final size = Math.ceil(radius * 2);
@@ -266,10 +262,10 @@ class InvisibleCircleButton extends FlxTypedButton<FlxSprite>
 	{
 		if (!inScreenSpace)
 			return point.distanceSquaredTo(x + radius, y + radius) < radius * radius;
-
+			
 		if (camera == null)
 			camera = getCameras()[0];
-		
+			
 		return calcDeltaTo(point, camera, _point).lengthSquared < radius * radius;
 	}
 	
@@ -277,7 +273,7 @@ class InvisibleCircleButton extends FlxTypedButton<FlxSprite>
 	{
 		if (result == null)
 			result = FlxPoint.get();
-		 
+			
 		final xPos = point.x - camera.scroll.x - radius;
 		final yPos = point.y - camera.scroll.y - radius;
 		getScreenPosition(result, camera);

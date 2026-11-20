@@ -80,7 +80,7 @@ private class SpriteContainer<T:FlxSprite> extends FlxTypedContainer<T>
 {
 	var parentSprite:FlxTypedSpriteContainer<T>;
 	
-	public function new (parent:FlxTypedSpriteContainer<T>, maxSize:Int)
+	public function new(parent:FlxTypedSpriteContainer<T>, maxSize:Int)
 	{
 		parentSprite = parent;
 		super(maxSize);

@@ -22,60 +22,60 @@ class FlxTilemapBuffer implements IFlxDestroyable
 	 * The current X position of the buffer.
 	 */
 	public var x:Float = 0;
-
+	
 	/**
 	 * The current Y position of the buffer.
 	 */
 	public var y:Float = 0;
-
+	
 	/**
 	 * The width of the buffer (usually just a few tiles wider than the camera).
 	 */
 	public var width:Float = 0;
-
+	
 	/**
 	 * The height of the buffer (usually just a few tiles taller than the camera).
 	 */
 	public var height:Float = 0;
-
+	
 	/**
 	 * Whether the buffer needs to be redrawn.
 	 */
 	public var dirty:Bool = false;
-
+	
 	/**
 	 * How many rows of tiles fit in this buffer.
 	 */
 	public var rows:Int = 0;
-
+	
 	/**
 	 * How many columns of tiles fit in this buffer.
 	 */
 	public var columns:Int = 0;
-
+	
 	/**
 	 * Whether or not the coordinates should be rounded during draw(), true by default (recommended for pixel art).
 	 * Only affects tilesheet rendering and rendering using BitmapData.draw() in blitting.
 	 * (copyPixels() only renders on whole pixels by nature). Causes draw() to be used if false, which is more expensive.
 	 */
 	public var pixelPerfectRender:Null<Bool>;
-
+	
 	/**
 	 * The actual buffer BitmapData. (Only used if FlxG.renderBlit == true)
 	 */
 	public var pixels(default, null):BitmapData;
-
+	
 	public var blend:BlendMode;
 	public var antialiasing:Bool = false;
-
+	
 	var _flashRect:Rectangle;
 	var _matrix:FlxMatrix;
-
+	
 	/**
 	 * Variables related to calculation of dirty value
 	 */
 	var _prevTilemapX:Float;
-
+	
 	var _prevTilemapY:Float;
 	var _prevTilemapScaleX:Float;
 	var _prevTilemapScaleY:Float;
@@ -87,7 +87,7 @@ class FlxTilemapBuffer implements IFlxDestroyable
 	var _prevCameraScaleY:Float;
 	var _prevCameraWidth:Int;
 	var _prevCameraHeight:Int;
-
+	
 	/**
 	 * Instantiates a new camera-specific buffer for storing the visual tilemap data.
 	 *
@@ -111,12 +111,11 @@ class FlxTilemapBuffer implements IFlxDestroyable
 	 * @param   heightInTiles  How many tiles tall the tilemap is.
 	 * @param   camera         Which camera this buffer relates to.
 	 */
-	public function resize(tileWidth:Int, tileHeight:Int, widthInTiles:Int, heightInTiles:Int, ?camera:FlxCamera,
-			scaleX = 1.0, scaleY = 1.0):Void
+	public function resize(tileWidth:Int, tileHeight:Int, widthInTiles:Int, heightInTiles:Int, ?camera:FlxCamera, scaleX = 1.0, scaleY = 1.0):Void
 	{
 		updateColumns(tileWidth, widthInTiles, scaleX, camera);
 		updateRows(tileHeight, heightInTiles, scaleY, camera);
-
+		
 		if (FlxG.renderBlit)
 		{
 			final newWidth = Std.int(columns * tileWidth);
@@ -204,15 +203,15 @@ class FlxTilemapBuffer implements IFlxDestroyable
 	{
 		if (widthInTiles < 0)
 			widthInTiles = 0;
-		
+			
 		if (camera == null)
 			camera = FlxG.camera;
-		
+			
 		columns = Math.ceil(camera.viewWidth / (tileWidth * scaleX)) + 1;
 		
 		if (columns > widthInTiles)
 			columns = widthInTiles;
-		
+			
 		width = Std.int(columns * tileWidth * scaleX);
 		
 		dirty = true;
@@ -223,15 +222,15 @@ class FlxTilemapBuffer implements IFlxDestroyable
 	{
 		if (heightInTiles < 0)
 			heightInTiles = 0;
-		
+			
 		if (camera == null)
 			camera = FlxG.camera;
-		
+			
 		rows = Math.ceil(camera.viewHeight / (tileHeight * scaleY)) + 1;
 		
 		if (rows > heightInTiles)
 			rows = heightInTiles;
-		
+			
 		height = Std.int(rows * tileHeight * scaleY);
 		
 		dirty = true;
@@ -244,7 +243,7 @@ class FlxTilemapBuffer implements IFlxDestroyable
 	{
 		if (camera == null)
 			camera = FlxG.camera;
-		
+			
 		return pixelPerfectRender == null ? camera.pixelPerfectRender : pixelPerfectRender;
 	}
 	
@@ -270,7 +269,7 @@ class FlxTilemapBuffer implements IFlxDestroyable
 			|| (camera.scaleY != _prevCameraScaleY)
 			|| (camera.width != _prevCameraWidth)
 			|| (camera.height != _prevCameraHeight);
-		
+			
 		if (dirty)
 		{
 			_prevTilemapX = tilemap.x;

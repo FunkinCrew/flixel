@@ -16,7 +16,7 @@ class CubicMotion extends Motion
 	var _bY:Float = 0;
 	var _ttt:Float = 0;
 	var _tt:Float = 0;
-
+	
 	/**
 	 * Starts moving along the curve.
 	 *
@@ -44,7 +44,7 @@ class CubicMotion extends Motion
 		start();
 		return this;
 	}
-
+	
 	override function update(elapsed:Float):Void
 	{
 		super.update(elapsed);

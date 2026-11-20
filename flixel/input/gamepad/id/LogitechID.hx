@@ -20,12 +20,12 @@ enum abstract LogitechID(Int) to Int
 	var TEN = 17;
 	var LEFT_STICK_CLICK = 18;
 	var RIGHT_STICK_CLICK = 19;
-
+	
 	var DPAD_UP = 4;
 	var DPAD_DOWN = 5;
 	var DPAD_LEFT = 6;
 	var DPAD_RIGHT = 7;
-
+	
 	// TODO: Someone needs to look this up and define it! (NOTE: not all logitech controllers have this)
 	var LOGITECH = -1;
 	#else // native and html5
@@ -41,13 +41,13 @@ enum abstract LogitechID(Int) to Int
 	var TEN = 9;
 	var LEFT_STICK_CLICK = 10;
 	var RIGHT_STICK_CLICK = 11;
-
+	
 	// "fake" IDs, we manually watch for hat axis changes and then send events using these otherwise unused joystick button codes
 	var DPAD_UP = 16;
 	var DPAD_DOWN = 17;
 	var DPAD_LEFT = 18;
 	var DPAD_RIGHT = 19;
-
+	
 	// TODO: Someone needs to look this up and define it! (NOTE: not all logitech controllers have this)
 	var LOGITECH = -5;
 	#end
@@ -61,7 +61,7 @@ enum abstract LogitechID(Int) to Int
 	var RIGHT_STICK_DOWN = 29;
 	var RIGHT_STICK_LEFT = 30;
 	var RIGHT_STICK_RIGHT = 31;
-		
+	
 	public static final LEFT_ANALOG_STICK = new FlxTypedGamepadAnalogStick<LogitechID>(0, 1, {
 		up: LEFT_STICK_UP,
 		down: LEFT_STICK_DOWN,

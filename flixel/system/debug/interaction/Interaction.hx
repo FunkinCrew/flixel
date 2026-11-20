@@ -42,12 +42,12 @@ class Interaction extends Window
 	
 	public var activeTool(default, null):Tool;
 	public var selectedItems(default, null):FlxTypedGroup<FlxObject> = new FlxTypedGroup();
-
+	
 	public var flixelPointer:FlxPoint = new FlxPoint();
 	public var pointerJustPressed:Bool = false;
 	public var pointerJustReleased:Bool = false;
 	public var pointerPressed:Bool = false;
-
+	
 	/**
 	 * Control if an outline should be drawn on selected elements.
 	 * Tools can set this property to `false` if they want to draw custom
@@ -66,7 +66,7 @@ class Interaction extends Window
 		#else
 		false;
 		#end
-	
+		
 	var _container:Sprite;
 	var _customCursor:Sprite;
 	var _tools:Array<Tool> = [];
@@ -77,18 +77,18 @@ class Interaction extends Window
 	var _wasUsingSystemCursor:Bool;
 	var _debuggerInteraction:Bool = false;
 	var _flixelPointer:FlxPointer = new FlxPointer();
-
+	
 	public function new(container:Sprite)
 	{
 		super("Tools", Icon.interactive, 40, 25, false);
 		reposition(2, 100);
 		_container = container;
-
+		
 		_customCursor = new Sprite();
 		_customCursor.mouseEnabled = false;
 		_customCursor.mouseChildren = false;
 		_container.addChild(_customCursor);
-
+		
 		// Add all built-in tools
 		addTool(new Pointer());
 		addTool(new Mover());
@@ -97,20 +97,20 @@ class Interaction extends Window
 		addTool(new ToggleBounds());
 		addTool(new LogBitmap());
 		addTool(new TrackObject());
-
+		
 		FlxG.signals.postDraw.add(postDraw);
 		FlxG.debugger.visibilityChanged.add(handleDebuggerVisibilityChanged);
-
+		
 		FlxG.stage.addEventListener(MouseEvent.MOUSE_MOVE, updateMouse);
 		FlxG.stage.addEventListener(MouseEvent.MOUSE_DOWN, handleMouseClick);
 		FlxG.stage.addEventListener(MouseEvent.MOUSE_UP, handleMouseClick);
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, handleKeyEvent);
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, handleKeyEvent);
-
+		
 		_container.addEventListener(MouseEvent.MOUSE_OVER, handleMouseInDebugger);
 		_container.addEventListener(MouseEvent.MOUSE_OUT, handleMouseInDebugger);
 	}
-
+	
 	function handleDebuggerVisibilityChanged():Void
 	{
 		if (FlxG.debugger.visible)
@@ -154,7 +154,7 @@ class Interaction extends Window
 		// a click related to a tool?
 		if (event.type == MouseEvent.MOUSE_DOWN && objectBelongsToDebugger(event.target))
 			return;
-		
+			
 		pointerJustPressed = event.type == MouseEvent.MOUSE_DOWN;
 		pointerJustReleased = event.type == MouseEvent.MOUSE_UP;
 		
@@ -163,7 +163,7 @@ class Interaction extends Window
 		else if (pointerJustReleased)
 			pointerPressed = false;
 	}
-
+	
 	function objectBelongsToDebugger(object:openfl.utils.Object):Bool
 	{
 		return object is DisplayObject && belongsToDebugger(cast object);
@@ -177,22 +177,22 @@ class Interaction extends Window
 			return true;
 		return belongsToDebugger(object.parent);
 	}
-
+	
 	function handleMouseInDebugger(event:MouseEvent):Void
 	{
 		// If we are not active, we don't really care about
 		// mouse events in the debugger.
 		if (!isActive())
 			return;
-
+			
 		if (event.type == MouseEvent.MOUSE_OVER)
 			_debuggerInteraction = true;
 		else if (event.type == MouseEvent.MOUSE_OUT)
 			_debuggerInteraction = false;
-
+			
 		event.stopPropagation();
 	}
-
+	
 	function handleKeyEvent(event:KeyboardEvent):Void
 	{
 		if (event.type == KeyboardEvent.KEY_DOWN)
@@ -203,7 +203,7 @@ class Interaction extends Window
 			_keysUp.set(event.keyCode, _turn);
 		}
 	}
-
+	
 	function countToolsWithUIButton():Int
 	{
 		var count = 0;
@@ -212,7 +212,7 @@ class Interaction extends Window
 				count++;
 		return count;
 	}
-
+	
 	/**
 	 * Add a new tool to the interaction system.
 	 *
@@ -229,19 +229,19 @@ class Interaction extends Window
 	{
 		tool.init(this);
 		_tools.push(tool);
-
+		
 		// If the tool has no button, it is not added to the interaction window
 		var button = tool.button;
 		if (button == null)
 			return;
-
+			
 		final buttons = countToolsWithUIButton();
 		final row = Math.ceil(buttons / BUTTONS_PER_LINE);
 		final column = (buttons - 1) % BUTTONS_PER_LINE;
-
+		
 		button.x = PADDING + column * SPACING;
 		button.y = 20 * row;
-
+		
 		addChild(button);
 		resizeByTotal(buttons);
 	}
@@ -257,7 +257,7 @@ class Interaction extends Window
 	{
 		if (!_tools.contains(tool))
 			return;
-		
+			
 		// If there's no button just remove it
 		if (tool.button == null)
 		{
@@ -307,7 +307,7 @@ class Interaction extends Window
 		final columns = Math.min(total, BUTTONS_PER_LINE);
 		resize(spacing * columns + padding, spacing * rows + padding);
 	}
-
+	
 	/**
 	 * Clean up memory.
 	 */
@@ -315,53 +315,53 @@ class Interaction extends Window
 	{
 		FlxG.signals.postDraw.remove(postDraw);
 		FlxG.debugger.visibilityChanged.remove(handleDebuggerVisibilityChanged);
-
+		
 		FlxG.stage.removeEventListener(MouseEvent.MOUSE_MOVE, updateMouse);
 		FlxG.stage.removeEventListener(MouseEvent.MOUSE_DOWN, handleMouseClick);
 		FlxG.stage.removeEventListener(MouseEvent.MOUSE_UP, handleMouseClick);
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, handleKeyEvent);
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_UP, handleKeyEvent);
-
+		
 		if (_container != null)
 		{
 			_container.removeEventListener(MouseEvent.MOUSE_OVER, handleMouseInDebugger);
 			_container.removeEventListener(MouseEvent.MOUSE_OUT, handleMouseInDebugger);
 		}
-
+		
 		if (_customCursor != null)
 		{
 			_customCursor.parent.removeChild(_customCursor);
 			_customCursor = null;
 		}
-
+		
 		_tools = FlxDestroyUtil.destroyArray(_tools);
 		selectedItems = FlxDestroyUtil.destroy(selectedItems);
 		flixelPointer = FlxDestroyUtil.destroy(flixelPointer);
-
+		
 		_keysDown = null;
 		_keysUp = null;
 	}
-
+	
 	public function isActive():Bool
 	{
 		return FlxG.debugger.visible && visible;
 	}
-
+	
 	override public function update():Void
 	{
 		if (!isActive())
 			return;
-
+			
 		updateCustomCursors();
-
+		
 		for (tool in _tools)
 			tool.update();
-
+			
 		pointerJustPressed = false;
 		pointerJustReleased = false;
 		_turn++;
 	}
-
+	
 	/**
 	 * Called after the game state has been drawn.
 	 */
@@ -369,14 +369,14 @@ class Interaction extends Window
 	{
 		if (!isActive())
 			return;
-
+			
 		for (tool in _tools)
 			tool.draw();
-
+			
 		if (shouldDrawItemsSelection)
 			drawItemsSelection();
 	}
-
+	
 	public function getDebugGraphics():Graphics
 	{
 		if (FlxG.renderBlit)
@@ -384,20 +384,20 @@ class Interaction extends Window
 			FlxSpriteUtil.flashGfx.clear();
 			return FlxSpriteUtil.flashGfx;
 		}
-
+		
 		#if FLX_DEBUG
 		return FlxG.camera.debugLayer.graphics;
 		#end
-
+		
 		return null;
 	}
-
+	
 	function drawItemsSelection():Void
 	{
 		var gfx:Graphics = getDebugGraphics();
 		if (gfx == null)
 			return;
-
+			
 		for (member in selectedItems)
 		{
 			if (member != null && member.scrollFactor != null && member.isOnScreen())
@@ -406,15 +406,15 @@ class Interaction extends Window
 				final scroll = FlxG.camera.scroll;
 				// Render a white rectangle centered at the selected item
 				gfx.lineStyle(1.0, 0xFFFFFF, 0.75);
-				gfx.drawRect(member.x - scroll.x - margin, member.y - scroll.y - margin, member.width + margin*2, member.height + margin*2);
+				gfx.drawRect(member.x - scroll.x - margin, member.y - scroll.y - margin, member.width + margin * 2, member.height + margin * 2);
 			}
 		}
-
+		
 		// Draw the debug info to the main camera buffer.
 		if (FlxG.renderBlit)
 			FlxG.camera.buffer.draw(FlxSpriteUtil.flashGfxSprite);
 	}
-
+	
 	/**
 	 * Obtain a reference to a tool that has been added to the interaction system and is
 	 * available for use. This method can be used to access information provided by any
@@ -430,11 +430,11 @@ class Interaction extends Window
 				return tool;
 		return null;
 	}
-
+	
 	override public function toggleVisible():Void
 	{
 		super.toggleVisible();
-
+		
 		if (!visible)
 		{
 			// De-select any activate tool
@@ -442,12 +442,12 @@ class Interaction extends Window
 			restoreSystemCursor();
 		}
 	}
-
+	
 	public function registerCustomCursor(name:String, icon:BitmapData, offsetX = 0.0, offsetY = 0.0):Void
 	{
 		if (icon == null)
 			return;
-
+			
 		#if (FLX_NATIVE_CURSOR && FLX_MOUSE)
 		FlxG.mouse.registerSimpleNativeCursorData(name, icon, new Point(-offsetX, -offsetY));
 		#else
@@ -460,7 +460,7 @@ class Interaction extends Window
 		_customCursor.addChild(sprite);
 		#end
 	}
-
+	
 	public function updateCustomCursors():Void
 	{
 		#if FLX_MOUSE
@@ -505,7 +505,7 @@ class Interaction extends Window
 		}
 		#end
 	}
-
+	
 	function saveSystemCursorInfo():Void
 	{
 		#if FLX_MOUSE
@@ -513,7 +513,7 @@ class Interaction extends Window
 		_wasUsingSystemCursor = FlxG.mouse.useSystemCursor;
 		#end
 	}
-
+	
 	function restoreSystemCursor():Void
 	{
 		#if FLX_MOUSE
@@ -522,7 +522,7 @@ class Interaction extends Window
 		_customCursor.visible = false;
 		#end
 	}
-
+	
 	public function setActiveTool(value:Tool):Void
 	{
 		if (activeTool != null)
@@ -530,14 +530,14 @@ class Interaction extends Window
 			activeTool.deactivate();
 			activeTool.button.toggled = true;
 		}
-
+		
 		// If the requested new tool is the same as the already active one,
 		// we deactive it (toggle behavior).
 		if (activeTool == value)
 			value = null;
-
+			
 		activeTool = value;
-
+		
 		resetActiveTool();
 	}
 	
@@ -547,7 +547,7 @@ class Interaction extends Window
 		{
 			// A tool is active. Enable cursor specific cursors
 			setToolsCursorVisibility(true);
-
+			
 			activeTool.button.toggled = false;
 			activeTool.activate();
 			updateCustomCursors();
@@ -558,14 +558,14 @@ class Interaction extends Window
 			// so the user can click buttons, drag windows, etc.
 			setSystemCursorVisibility(true);
 		}
-
+		
 		#if FLX_MOUSE
 		// Allow mouse input only if the interaction tool is visible
 		// and no tool is active.
 		FlxG.mouse.enabled = !isInUse();
 		#end
 	}
-
+	
 	function setSystemCursorVisibility(status:Bool):Void
 	{
 		#if FLX_MOUSE
@@ -573,40 +573,40 @@ class Interaction extends Window
 		#end
 		_customCursor.visible = !status;
 	}
-
+	
 	function setToolsCursorVisibility(status:Bool):Void
 	{
 		#if FLX_MOUSE
 		FlxG.mouse.useSystemCursor = #if FLX_NATIVE_CURSOR status #else false #end;
 		#end
 		_customCursor.visible = status;
-
+		
 		if (status)
 			return;
-
+			
 		// Hide any display-list-based custom cursor.
 		// The proper cursor will be marked as visible
 		// in the update loop.
 		for (i in 0..._customCursor.numChildren)
 			_customCursor.getChildAt(i).visible = false;
 	}
-
+	
 	public function clearSelection():Void
 	{
 		selectedItems.clear();
 	}
-
+	
 	public function keyPressed(key:Int):Bool
 	{
 		return _keysDown.get(key);
 	}
-
+	
 	public function keyJustPressed(key:Int):Bool
 	{
 		var value:Int = _keysUp.get(key) == null ? 0 : _keysUp.get(key);
 		return (_turn - value) == 1;
 	}
-
+	
 	/**
 	 * Informs whether the interactive debug is in use or not. Usage is defined
 	 * as the interactive debug being visible and one of its tools is selected/active.
@@ -617,7 +617,7 @@ class Interaction extends Window
 	{
 		return FlxG.debugger.visible && visible && activeTool != null;
 	}
-
+	
 	/**
 	 * Returns a list all items in the state and substate that are within the given area
 	 * 
@@ -632,7 +632,7 @@ class Interaction extends Window
 		addItemsWithinArea(items, state.members, area);
 		if (state.subState != null)
 			addItemsWithinState(items, state.subState, area);
-		
+			
 		return items;
 	}
 	
@@ -669,10 +669,10 @@ class Interaction extends Window
 	{
 		if (state.subState != null)
 			return getTopItemWithinState(state.subState, area);
-		
+			
 		return getTopItemWithinArea(state.members, area);
 	}
-
+	
 	/**
 	 * Find all items within an area. In order to improve performance and reduce temporary allocations,
 	 * the method has no return, you must pass an array where items will be placed. The method decides
@@ -683,7 +683,7 @@ class Interaction extends Window
 	 * @param   members  Array where the method will recursively search for items.
 	 * @param   area     A rectangle that describes the area where the method should search within.
 	 */
-	@:deprecated("findItemsWithinArea is deprecated, use addItemsWithinArea")// since 5.6.0
+	@:deprecated("findItemsWithinArea is deprecated, use addItemsWithinArea") // since 5.6.0
 	public function findItemsWithinArea(items:Array<FlxBasic>, members:Array<FlxBasic>, area:FlxRect):Void
 	{
 		addItemsWithinArea(cast items, members, area);
@@ -697,9 +697,7 @@ class Interaction extends Window
 	function isOverSprite(sprite:FlxSprite, area:FlxRect):Bool
 	{
 		// Ignore sprites' alpha when clicking a point
-		return (area.width > 1 || area.height > 1)
-			? isOverObject(sprite, area)
-			: sprite.pixelsOverlapPoint(flixelPointer, 0x10);
+		return (area.width > 1 || area.height > 1) ? isOverObject(sprite, area) : sprite.pixelsOverlapPoint(flixelPointer, 0x10);
 	}
 	
 	/**
@@ -723,7 +721,7 @@ class Interaction extends Window
 			// Ignore invisible or non-existent entities
 			if (member == null || !member.visible || !member.exists)
 				continue;
-			
+				
 			final group = FlxTypedGroup.resolveSelectionGroup(member);
 			if (group != null)
 			{
@@ -763,7 +761,7 @@ class Interaction extends Window
 			// Ignore invisible or non-existent entities
 			if (member == null || !member.visible || !member.exists)
 				continue;
-			
+				
 			final group = FlxTypedGroup.resolveGroup(member);
 			if (group != null)
 			{

@@ -12,6 +12,7 @@ enum abstract FlxDirection(Int)
 	var DOWN = 0x1000;
 	
 	var self(get, never):FlxDirection;
+	
 	inline function get_self():FlxDirection
 	{
 		#if (haxe >= version("4.3.0"))
@@ -43,7 +44,6 @@ enum abstract FlxDirection(Int)
 	{
 		return toInt();
 	}
-	
 	
 	inline public function toInt()
 	{

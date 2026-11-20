@@ -9,20 +9,20 @@ class XInputMapping extends FlxTypedGamepadMapping<XInputID>
 	#if FLX_JOYSTICK_API
 	static inline var LEFT_ANALOG_STICK_FAKE_X:Int = 15;
 	static inline var LEFT_ANALOG_STICK_FAKE_Y:Int = 16;
-
+	
 	static inline var RIGHT_ANALOG_STICK_FAKE_X:Int = 17;
 	static inline var RIGHT_ANALOG_STICK_FAKE_Y:Int = 18;
-
+	
 	static inline var LEFT_TRIGGER_FAKE:Int = 19;
 	static inline var RIGHT_TRIGGER_FAKE:Int = 20;
 	#end
-
+	
 	override function initValues():Void
 	{
 		leftStick = XInputID.LEFT_ANALOG_STICK;
 		rightStick = XInputID.RIGHT_ANALOG_STICK;
 	}
-
+	
 	override function getID(rawID:XInputID):FlxGamepadInputID
 	{
 		return switch (rawID)
@@ -60,7 +60,7 @@ class XInputMapping extends FlxTypedGamepadMapping<XInputID>
 			case _: NONE;
 		}
 	}
-
+	
 	override function getRawID(ID:FlxGamepadInputID):XInputID
 	{
 		return switch (ID)
@@ -97,24 +97,24 @@ class XInputMapping extends FlxTypedGamepadMapping<XInputID>
 			default: super.getRawID(ID);
 		}
 	}
-
+	
 	#if flash
 	override function isAxisFlipped(axisID:XInputID):Bool
 	{
 		if (manufacturer == GooglePepper)
 			return false;
-
+			
 		return axisID == XInputID.LEFT_ANALOG_STICK.y || axisID == XInputID.RIGHT_ANALOG_STICK.y;
 	}
 	#end
-
+	
 	#if xbox1
 	override function isAxisFlipped(axisID:XInputID):Bool
 	{
 		return axisID == XInputID.LEFT_ANALOG_STICK.y || axisID == XInputID.RIGHT_ANALOG_STICK.y;
 	}
 	#end
-
+	
 	override function getMappedInput(id:FlxGamepadInputID)
 	{
 		return FlxGamepadMappedInput.X_INPUT(getRawID(id));
@@ -125,15 +125,8 @@ class XInputMapping extends FlxTypedGamepadMapping<XInputID>
 	{
 		// Analog stick and trigger values overlap with regular buttons so we remap to "fake" button ID's
 		return if (axisID == leftStick.x) LEFT_ANALOG_STICK_FAKE_X; else if (axisID == leftStick.y) LEFT_ANALOG_STICK_FAKE_Y; else if (axisID == rightStick.x)
-			RIGHT_ANALOG_STICK_FAKE_X;
-		else if (axisID == rightStick.y)
-			RIGHT_ANALOG_STICK_FAKE_Y;
-		else if (axisID == XInputID.LEFT_TRIGGER)
-			LEFT_TRIGGER_FAKE;
-		else if (axisID == XInputID.RIGHT_TRIGGER)
-			RIGHT_TRIGGER_FAKE;
-		else
-			axisID;
+			RIGHT_ANALOG_STICK_FAKE_X; else if (axisID == rightStick.y) RIGHT_ANALOG_STICK_FAKE_Y; else if (axisID == XInputID.LEFT_TRIGGER)
+			LEFT_TRIGGER_FAKE; else if (axisID == XInputID.RIGHT_TRIGGER) RIGHT_TRIGGER_FAKE; else axisID;
 	}
 	#end
 }

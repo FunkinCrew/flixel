@@ -11,7 +11,7 @@ class ConsoleFrontEnd
 	 * Whether the console should auto-pause or not when it's focused.
 	 */
 	public var autoPause:Bool = true;
-
+	
 	/**
 	 * Whether the console should `step()` the game after a command is entered.
 	 * Setting this to `false` allows inputting multiple console commands within the same frame.
@@ -19,7 +19,7 @@ class ConsoleFrontEnd
 	 * @since 4.2.0
 	 */
 	public var stepAfterCommand:Bool = true;
-
+	
 	/**
 	 * Register a new function to use in any command.
 	 *
@@ -32,7 +32,7 @@ class ConsoleFrontEnd
 		FlxG.game.debugger.console.registerFunction(alias, func);
 		#end
 	}
-
+	
 	/**
 	 * Register a new object to use in any command.
 	 *
@@ -45,7 +45,7 @@ class ConsoleFrontEnd
 		FlxG.game.debugger.console.registerObject(alias, object);
 		#end
 	}
-
+	
 	/**
 	 * Removes an object from the command registry.
 	 *
@@ -60,7 +60,7 @@ class ConsoleFrontEnd
 		FlxG.game.debugger.console.removeObject(object);
 		#end
 	}
-
+	
 	/**
 	 * Removes a function from the command registry.
 	 *
@@ -88,7 +88,7 @@ class ConsoleFrontEnd
 		FlxG.game.debugger.console.removeByAlias(alias);
 		#end
 	}
-
+	
 	/**
 	 * Register a new class to use in any command.
 	 *
@@ -100,7 +100,7 @@ class ConsoleFrontEnd
 		FlxG.game.debugger.console.registerClass(c);
 		#end
 	}
-
+	
 	/**
 	 * Removes a class from the command registry.
 	 *
@@ -113,7 +113,7 @@ class ConsoleFrontEnd
 		FlxG.game.debugger.console.removeClass(c);
 		#end
 	}
-
+	
 	/**
 	 * Register a new enum to use in any command.
 	 *
@@ -126,7 +126,7 @@ class ConsoleFrontEnd
 		FlxG.game.debugger.console.registerEnum(e);
 		#end
 	}
-
+	
 	/**
 	 * Removes an enum from the command registry.
 	 *
@@ -139,7 +139,7 @@ class ConsoleFrontEnd
 		FlxG.game.debugger.console.removeEnum(e);
 		#end
 	}
-
+	
 	@:allow(flixel.FlxG)
 	function new() {}
 }

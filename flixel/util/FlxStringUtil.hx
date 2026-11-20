@@ -31,7 +31,7 @@ class FlxStringUtil
 	{
 		return (Math.abs(EndTicks - StartTicks) / 1000) + "s";
 	}
-
+	
 	/**
 	 * Format seconds as minutes with a colon, an optionally with milliseconds too.
 	 *
@@ -58,10 +58,10 @@ class FlxStringUtil
 			}
 			timeString += timeStringHelper;
 		}
-
+		
 		return timeString;
 	}
-
+	
 	/**
 	 * Generate a comma-separated string from an array.
 	 * Especially useful for tracing or other debug output.
@@ -84,7 +84,7 @@ class FlxStringUtil
 		}
 		return string;
 	}
-
+	
 	/**
 	 * Generate a comma-separated string representation of the keys of a StringMap.
 	 *
@@ -99,10 +99,10 @@ class FlxStringUtil
 			string += Std.string(key);
 			string += ", ";
 		}
-
+		
 		return string.substring(0, string.length - 2);
 	}
-
+	
 	/**
 	 * Automatically commas and decimals in the right places for displaying money amounts.
 	 * Does not include a dollar sign or anything, so doesn't really do much
@@ -118,7 +118,7 @@ class FlxStringUtil
 	{
 		var isNegative = Amount < 0;
 		Amount = Math.abs(Amount);
-
+		
 		var string:String = "";
 		var comma:String = "";
 		var amount:Float = Math.ffloor(Amount);
@@ -126,7 +126,7 @@ class FlxStringUtil
 		{
 			if (string.length > 0 && comma.length <= 0)
 				comma = (EnglishStyle ? "," : ".");
-
+				
 			var zeroes = "";
 			var helper = amount - Math.ffloor(amount / 1000) * 1000;
 			amount = Math.ffloor(amount / 1000);
@@ -139,10 +139,10 @@ class FlxStringUtil
 			}
 			string = zeroes + helper + comma + string;
 		}
-
+		
 		if (string == "")
 			string = "0";
-
+			
 		if (ShowDecimal)
 		{
 			amount = Math.ffloor(Amount * 100) - (Math.ffloor(Amount) * 100);
@@ -151,12 +151,12 @@ class FlxStringUtil
 				string += "0";
 			string += amount;
 		}
-
+		
 		if (isNegative)
 			string = "-" + string;
 		return string;
 	}
-
+	
 	/**
 	 * Takes an amount of bytes and finds the fitting unit. Makes sure that the
 	 * value is below 1024. Example: formatBytes(123456789); -> 117.74MB
@@ -172,7 +172,7 @@ class FlxStringUtil
 		}
 		return FlxMath.roundDecimal(Bytes, Precision) + units[curUnit];
 	}
-
+	
 	/** 
 	 * Takes a string and filters out everything but the digits.
 	 *
@@ -192,7 +192,7 @@ class FlxStringUtil
 		}
 		return output.toString();
 	}
-
+	
 	/**
 	 * Format a text with html tags - useful for TextField.htmlText.
 	 * Used by the log window of the debugger.
@@ -210,7 +210,7 @@ class FlxStringUtil
 	{
 		var prefix:String = "<font size='" + Size + "' color='#" + Color + "'>";
 		var suffix:String = "</font>";
-
+		
 		if (Bold)
 		{
 			prefix = "<b>" + prefix;
@@ -226,10 +226,10 @@ class FlxStringUtil
 			prefix = "<u>" + prefix;
 			suffix = suffix + "</u>";
 		}
-
+		
 		return prefix + Text + suffix;
 	}
-
+	
 	/**
 	 * Get the string name of any class or class instance. Wraps `Type.getClassName()`.
 	 *
@@ -244,10 +244,10 @@ class FlxStringUtil
 			cl = cast objectOrClass;
 		else
 			cl = Type.getClass(objectOrClass);
-
+			
 		return formatPackage(Type.getClassName(cl), simple);
 	}
-
+	
 	/**
 	 * Get the string name of any enum or enum value. Wraps `Type.getEnumName()`.
 	 *
@@ -263,21 +263,21 @@ class FlxStringUtil
 			e = cast enumValueOrEnum;
 		else
 			e = Type.getEnum(enumValueOrEnum);
-
+			
 		return formatPackage(Type.getEnumName(e), simple);
 	}
-
+	
 	static function formatPackage(s:String, simple:Bool):String
 	{
 		if (s == null)
 			return null;
-
+			
 		s = s.replace("::", ".");
 		if (simple)
 			s = s.substr(s.lastIndexOf(".") + 1);
 		return s;
 	}
-
+	
 	/**
 	 * Returns the host from the specified URL.
 	 * The host is one of three parts that comprise the authority.  (User and port are the other two parts.)
@@ -294,10 +294,10 @@ class FlxStringUtil
 			var host = hostFromURL.matched(1);
 			return (host != null) ? host.urlDecode().toLowerCase() : "";
 		}
-
+		
 		return "";
 	}
-
+	
 	/**
 	 * Returns the domain from the specified URL.
 	 * The domain, in this case, refers specifically to the first and second levels only.
@@ -308,7 +308,7 @@ class FlxStringUtil
 	public static function getDomain(url:String):String
 	{
 		var host:String = getHost(url);
-
+		
 		var isLocalhostOrIpAddress:EReg = ~/^(localhost|[0-9.]+|\[[a-f0-9:.]+\])$/i;
 		var domainFromHost:EReg = ~/^(?:[a-z0-9\-]+\.)*([a-z0-9\-]+\.[a-z0-9\-]+)$/i;
 		if (!isLocalhostOrIpAddress.match(host) && domainFromHost.match(host))
@@ -316,10 +316,10 @@ class FlxStringUtil
 			var domain = domainFromHost.matched(1);
 			return (domain != null) ? domain.toLowerCase() : "";
 		}
-
+		
 		return "";
 	}
-
+	
 	/**
 	 * Helper function that uses getClassName to compare two objects' class names.
 	 *
@@ -332,7 +332,7 @@ class FlxStringUtil
 	{
 		return (getClassName(Obj1, Simple) == getClassName(Obj2, Simple));
 	}
-
+	
 	/**
 	 * Split a comma-separated string into an array of ints
 	 *
@@ -353,7 +353,7 @@ class FlxStringUtil
 		}
 		return null;
 	}
-
+	
 	/**
 	 * Split a comma-separated string into an array of floats
 	 *
@@ -374,7 +374,7 @@ class FlxStringUtil
 		}
 		return null;
 	}
-
+	
 	/**
 	 * Converts a one-dimensional array of tile data to a comma-separated string.
 	 *
@@ -391,15 +391,15 @@ class FlxStringUtil
 		var height:Int = Std.int(Data.length / Width);
 		var index:Int;
 		var offset:Int = 0;
-
+		
 		while (row < height)
 		{
 			column = 0;
-
+			
 			while (column < Width)
 			{
 				index = Data[offset];
-
+				
 				if (Invert)
 				{
 					if (index == 0)
@@ -411,7 +411,7 @@ class FlxStringUtil
 						index = 0;
 					}
 				}
-
+				
 				if (column == 0)
 				{
 					if (row == 0)
@@ -427,17 +427,17 @@ class FlxStringUtil
 				{
 					csv += ", " + index;
 				}
-
+				
 				column++;
 				offset++;
 			}
-
+			
 			row++;
 		}
-
+		
 		return csv;
 	}
-
+	
 	/**
 	 * Converts a BitmapData object to a comma-separated string. Black pixels are flagged as 'solid' by default,
 	 * non-black pixels are set as non-colliding. Black pixels must be PURE BLACK.
@@ -454,24 +454,24 @@ class FlxStringUtil
 		{
 			Scale = 1;
 		}
-
+		
 		// Import and scale image if necessary
 		if (Scale > 1)
 		{
 			var bd:BitmapData = Bitmap;
 			Bitmap = new BitmapData(Bitmap.width * Scale, Bitmap.height * Scale);
-
+			
 			#if !flash
 			var bdW:Int = bd.width;
 			var bdH:Int = bd.height;
 			var pCol:Int = 0;
-
+			
 			for (i in 0...bdW)
 			{
 				for (j in 0...bdH)
 				{
 					pCol = bd.getPixel(i, j);
-
+					
 					for (k in 0...Scale)
 					{
 						for (m in 0...Scale)
@@ -487,7 +487,7 @@ class FlxStringUtil
 			Bitmap.draw(bd, mtx);
 			#end
 		}
-
+		
 		if (ColorMap != null)
 		{
 			for (i in 0...ColorMap.length)
@@ -495,7 +495,7 @@ class FlxStringUtil
 				ColorMap[i] = ColorMap[i].rgb;
 			}
 		}
-
+		
 		// Walk image and export pixel values
 		var row:Int = 0;
 		var column:Int;
@@ -503,16 +503,16 @@ class FlxStringUtil
 		var csv:String = "";
 		var bitmapWidth:Int = Bitmap.width;
 		var bitmapHeight:Int = Bitmap.height;
-
+		
 		while (row < bitmapHeight)
 		{
 			column = 0;
-
+			
 			while (column < bitmapWidth)
 			{
 				// Decide if this pixel/tile is solid (1) or not (0)
 				pixel = Bitmap.getPixel(column, row);
-
+				
 				if (ColorMap != null)
 				{
 					pixel = ColorMap.indexOf(pixel);
@@ -525,7 +525,7 @@ class FlxStringUtil
 				{
 					pixel = 0;
 				}
-
+				
 				// Write the result to the string
 				if (column == 0)
 				{
@@ -542,16 +542,16 @@ class FlxStringUtil
 				{
 					csv += ", " + pixel;
 				}
-
+				
 				column++;
 			}
-
+			
 			row++;
 		}
-
+		
 		return csv;
 	}
-
+	
 	/**
 	 * Converts a resource image file to a comma-separated string. Black pixels are flagged as 'solid' by default,
 	 * non-black pixels are set as non-colliding. Black pixels must be PURE BLACK.
@@ -566,7 +566,7 @@ class FlxStringUtil
 	{
 		return bitmapToCSV(graphic.resolveBitmapData(), invert, scale, colorMap);
 	}
-
+	
 	/**
 	 * Helper function to create a string for toString() functions. Automatically rounds values according to FlxG.debugger.precision.
 	 * Strings are formatted in the format: (x: 50 | y: 60 | visible: false)
@@ -591,12 +591,12 @@ class FlxStringUtil
 		output = output.substr(0, output.length - 2).trim();
 		return (output + ")");
 	}
-
+	
 	public static inline function contains(s:String, str:String):Bool
 	{
 		return s.indexOf(str) != -1;
 	}
-
+	
 	/**
 	 * Removes occurrences of a substring by calling `StringTools.replace(s, sub, "")`.
 	 */
@@ -604,7 +604,7 @@ class FlxStringUtil
 	{
 		return s.replace(sub, "");
 	}
-
+	
 	/**
 	 * Inserts `insertion` into `s` at index `pos`.
 	 */
@@ -612,7 +612,7 @@ class FlxStringUtil
 	{
 		return s.substring(0, pos) + insertion + s.substr(pos);
 	}
-
+	
 	public static function sortAlphabetically(list:Array<String>):Array<String>
 	{
 		list.sort(function(a, b)
@@ -627,7 +627,7 @@ class FlxStringUtil
 		});
 		return list;
 	}
-
+	
 	/**
 	 * Returns true if `s` equals `null` or is empty.
 	 * @since 4.1.0
@@ -641,7 +641,7 @@ class FlxStringUtil
 	 * Returns an Underscored, or "slugified" string
 	 * Example: `"A Tale of Two Cities, Part II"` becomes `"a_tale_of_two_cities__part_ii"`
 	 */
-	public static function toUnderscoreCase(str:String):String 
+	public static function toUnderscoreCase(str:String):String
 	{
 		var regex = ~/[^a-z0-9]+/g;
 		return regex.replace(str.toLowerCase(), '_');
@@ -651,37 +651,40 @@ class FlxStringUtil
 	 * Returns a string formatted to 'Title Case'. 
 	 * Example: `"a tale of two cities, pt ii" returns `"A Tale of Two Cities, Part II"`
 	 */
-	public static function toTitleCase(str:String):String 
+	public static function toTitleCase(str:String):String
 	{
-		var exempt:Array<String> = ["a", "an", "the", "at", "by", "for", "in", "of", "on", "to", "up", "and", "as", "but", "or", "nor"];
+		var exempt:Array<String> = [
+			"a", "an", "the", "at", "by", "for", "in", "of", "on", "to", "up", "and", "as", "but", "or", "nor"
+		];
 		var words:Array<String> = str.toLowerCase().split(" ");
 		
-		for (i in 0...words.length) 
+		for (i in 0...words.length)
 		{
 			if (isRomanNumeral(words[i]))
 				words[i] = words[i].toUpperCase();
 			else if (i == 0 || exempt.indexOf(words[i]) == -1)
 				words[i] = words[i].charAt(0).toUpperCase() + words[i].substr(1);
 		}
-
-		return words.join(" ");
 		
+		return words.join(" ");
 	}
 	
 	/**
 	 * Capitalizes the first letter of every word, does not change the others to lower
 	 */
 	static final whitespace = ~/(?<=\r|\s|^)([a-z])/g;
+	
 	public static function capitalizeFirstLetters(str:String):String
 	{
 		// TODO: Unit test
-		return whitespace.map(str, (r)->r.matched(0).toUpperCase());
+		return whitespace.map(str, (r) -> r.matched(0).toUpperCase());
 	}
 	
 	/**
 	 * Wether the string contains a valid roman numeral
 	 */
 	static final roman = ~/^(?=[MDCLXVI])M*(C[MD]|D?C*)(X[CL]|L?X*)(I[XV]|V?I*)$/i;
+	
 	public static function isRomanNumeral(str:String):Bool
 	{
 		return roman.match(str);
@@ -696,28 +699,28 @@ class LabelValuePair implements IFlxDestroyable
 	{
 		return _pool.get().create(label, value);
 	}
-
+	
 	public var label:String;
 	public var value:Dynamic;
-
+	
 	public inline function create(label:String, value:Dynamic):LabelValuePair
 	{
 		this.label = label;
 		this.value = value;
 		return this;
 	}
-
+	
 	public inline function put():Void
 	{
 		_pool.put(this);
 	}
-
+	
 	public inline function destroy():Void
 	{
 		label = null;
 		value = null;
 	}
-
+	
 	@:keep
 	function new() {}
 }

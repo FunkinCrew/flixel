@@ -11,12 +11,12 @@ class NumTween extends FlxTween
 	 * The current value.
 	 */
 	public var value(default, null):Float;
-
+	
 	// Tween information.
 	var _tweenFunction:Float->Void;
 	var _start:Float;
 	var _range:Float;
-
+	
 	/**
 	 * Clean up references
 	 */
@@ -25,7 +25,7 @@ class NumTween extends FlxTween
 		super.destroy();
 		_tweenFunction = null;
 	}
-
+	
 	/**
 	 * Tweens the value from one value to another.
 	 *
@@ -43,12 +43,12 @@ class NumTween extends FlxTween
 		start();
 		return this;
 	}
-
+	
 	override function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
 		value = _start + _range * scale;
-
+		
 		if (_tweenFunction != null)
 			_tweenFunction(value);
 	}

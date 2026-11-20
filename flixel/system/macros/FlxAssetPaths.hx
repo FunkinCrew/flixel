@@ -3,6 +3,7 @@ package flixel.system.macros;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 import sys.FileSystem;
+
 using StringTools;
 using flixel.util.FlxArrayUtil;
 
@@ -24,14 +25,14 @@ class FlxAssetPaths
 	 *                          name with an array of every file in the directory
 	 * @return  The fields are added to the class using this build macro
 	 */
-	public static function buildFileReferences(directory = "assets/", subDirectories = false, ?include:EReg, ?exclude:EReg,
-			?rename:String->Null<String>, listField = "allFiles"):Array<Field>
+	public static function buildFileReferences(directory = "assets/", subDirectories = false, ?include:EReg, ?exclude:EReg, ?rename:String->Null<String>,
+			listField = "allFiles"):Array<Field>
 	{
 		if (!directory.endsWith("/"))
 			directory += "/";
-
+			
 		Context.registerModuleDependency(Context.getLocalModule(), directory);
-
+		
 		final fileReferences = getFileReferences(directory, subDirectories, include, exclude);
 		
 		// determine field names, remove nulls and warn on invalid names
@@ -41,7 +42,7 @@ class FlxAssetPaths
 		final allFiles = [];
 		for (fileRef in fileReferences)
 			allFiles.push(macro $i{fileRef.name});
-		
+			
 		// warns on any duplicates
 		removeDuplicates(fileReferences);
 		
@@ -73,7 +74,7 @@ class FlxAssetPaths
 					name: listField,
 					doc: 'A list of every file in "$directory"',
 					access: [Access.APublic, Access.AStatic],
-					kind: FieldType.FVar(macro:Array<String>, macro $a{allFiles}),
+					kind: FieldType.FVar(macro :Array<String>, macro $a{allFiles}),
 					pos: Context.currentPos()
 				});
 			}
@@ -104,26 +105,27 @@ class FlxAssetPaths
 	 * @param   include         Regular Expression used to allow files based by name
 	 * @param   exclude         Regular Expression used to omit files based by name
 	 */
-	static function addFileReferences(fileReferences:Array<FileReference>, directory:String, subDirectories = false, ?include:EReg, ?exclude:EReg):Array<FileReference>
+	static function addFileReferences(fileReferences:Array<FileReference>, directory:String, subDirectories = false, ?include:EReg,
+			?exclude:EReg):Array<FileReference>
 	{
 		var resolvedPath = #if (ios || tvos) "../assets/" + directory #else directory #end;
 		var directoryInfo = FileSystem.readDirectory(resolvedPath);
 		for (name in directoryInfo)
 		{
 			var path = resolvedPath + name;
-
+			
 			if (!FileSystem.isDirectory(path))
 			{
 				// ignore invisible files
 				if (name.startsWith("."))
 					continue;
-
+					
 				if (include != null && !include.match(path))
 					continue;
-
+					
 				if (exclude != null && exclude.match(path))
 					continue;
-
+					
 				fileReferences.push(new FileReference(path));
 			}
 			else if (subDirectories)
@@ -131,7 +133,7 @@ class FlxAssetPaths
 				addFileReferences(fileReferences, directory + name + "/", true, include, exclude);
 			}
 		}
-
+		
 		return fileReferences;
 	}
 	
@@ -190,7 +192,7 @@ class FlxAssetPaths
 		
 		// Show warnings for ignored files, if were not doing unit tests
 		#if !FLX_UNIT_TEST
-		for (name=>files in ignoredFiles)
+		for (name => files in ignoredFiles)
 		{
 			if (files.length == 1)
 			{
@@ -216,11 +218,11 @@ private class FileReference
 	{
 		return path.split("/").pop();
 	}
-
+	
 	public var value(default, null):String;
 	public var documentation(default, null):String;
 	public var name(default, null):String = null;
-
+	
 	public function new(value:String)
 	{
 		this.value = value;
@@ -231,15 +233,15 @@ private class FileReference
 	 * Creates the name for this field using the supplied method and the path.
 	 * @param   namer  Function that takes a path and returns a haxe field name.
 	 */
-	public function createName(?namer:(String)->Null<String>)
+	public function createName(?namer:(String) -> Null<String>)
 	{
 		if (namer == null)
 			namer = defaultNamer;
-		
+			
 		name = namer(value);
 		if (name == null)
 			return;
-		
+			
 		validateName();
 	}
 	
@@ -265,7 +267,7 @@ private class FileReference
 			name: name,
 			doc: documentation,
 			access: [Access.APublic, Access.AStatic, Access.AInline],
-			kind: FieldType.FVar(macro:String, macro $v{value}),
+			kind: FieldType.FVar(macro :String, macro $v{value}),
 			pos: Context.currentPos()
 		};
 	}

@@ -95,56 +95,56 @@ class FlxFrame implements IFlxDestroyable
 		
 		return getNameOrder(frame1.name) - getNameOrder(frame2.name);
 	}
-
+	
 	public var name:String;
-
+	
 	/**
 	 * Region of the image to render.
 	 */
 	public var frame(default, set):FlxRect;
-
+	
 	/**
 	 * UV coordinates for this frame.
 	 */
 	public var uv:FlxUVRect;
-
+	
 	public var parent:FlxGraphic;
-
+	
 	/**
 	 * Rotation angle of this frame.
 	 * Required for packed atlas images.
 	 */
 	public var angle:FlxFrameAngle;
-
+	
 	public var flipX:Bool;
 	public var flipY:Bool;
-
+	
 	/**
 	 * Original (uncropped) image size.
 	 */
 	public var sourceSize(default, null):FlxPoint;
-
+	
 	/**
 	 * Frame offset from top left corner of original image.
 	 */
 	public var offset(default, null):FlxPoint;
-
+	
 	/**
 	 * The duration of this frame in seconds. If 0, the anim controller will decide the duration
 	 */
 	public var duration:Float;
-
+	
 	/**
 	 * The type of this frame.
 	 */
 	public var type:FlxFrameType;
-
+	
 	/** Internal cache used to draw this frame **/
 	var tileMatrix:MatrixVector;
 	
 	/** Internal cache used to draw this frame **/
 	var blitMatrix:MatrixVector;
-
+	
 	public function new(parent:FlxGraphic, angle = FlxFrameAngle.ANGLE_0, flipX = false, flipY = false, duration = 0.0)
 	{
 		this.parent = parent;
@@ -152,23 +152,23 @@ class FlxFrame implements IFlxDestroyable
 		this.flipX = flipX;
 		this.flipY = flipY;
 		this.duration = duration;
-
+		
 		type = FlxFrameType.REGULAR;
-
+		
 		sourceSize = FlxPoint.get();
 		offset = FlxPoint.get();
-
+		
 		blitMatrix = new MatrixVector();
 		if (FlxG.renderTile)
 			tileMatrix = new MatrixVector();
 	}
-
+	
 	@:allow(flixel.graphics.frames.FlxFramesCollection)
 	@:allow(flixel.graphics.frames.FlxBitmapFont)
 	function cacheFrameMatrix():Void
 	{
 		blitMatrix.copyFrom(this, true);
-
+		
 		if (FlxG.renderTile)
 			tileMatrix.copyFrom(this, false);
 	}
@@ -184,10 +184,10 @@ class FlxFrame implements IFlxDestroyable
 	inline function prepareBlitMatrix(mat:FlxMatrix, blit = true):FlxMatrix
 	{
 		mat.identity();
-
+		
 		if (blit)
 			mat.translate(-frame.x, -frame.y);
-
+			
 		if (angle == FlxFrameAngle.ANGLE_90)
 		{
 			mat.rotateByPositive90();
@@ -198,11 +198,11 @@ class FlxFrame implements IFlxDestroyable
 			mat.rotateByNegative90();
 			mat.translate(0, frame.width);
 		}
-
+		
 		mat.translate(offset.x, offset.y);
 		return mat;
 	}
-
+	
 	/**
 	 * Rotates and flips matrix. This method expects matrix which was prepared by `MatrixVector.copyTo()`.
 	 * Internal use only.
@@ -217,14 +217,14 @@ class FlxFrame implements IFlxDestroyable
 	{
 		var w:Int = Std.int(sourceSize.x);
 		var h:Int = Std.int(sourceSize.y);
-
+		
 		// rotate frame transformation matrix if rotation isn't zero
 		if (rotation != FlxFrameAngle.ANGLE_0)
 		{
 			var t:Int = w;
 			w = h;
 			h = t;
-
+			
 			if (rotation == FlxFrameAngle.ANGLE_90)
 			{
 				mat.rotateByPositive90();
@@ -236,23 +236,23 @@ class FlxFrame implements IFlxDestroyable
 				mat.translate(0, sourceSize.x);
 			}
 		}
-
+		
 		// flip frame transformation matrix
 		if (flipX)
 		{
 			mat.scale(-1, 1);
 			mat.translate(w, 0);
 		}
-
+		
 		if (flipY)
 		{
 			mat.scale(1, -1);
 			mat.translate(0, h);
 		}
-
+		
 		return mat;
 	}
-
+	
 	/**
 	 * Prepares matrix for frame blitting (see `paint` methods).
 	 *
@@ -267,7 +267,7 @@ class FlxFrame implements IFlxDestroyable
 		blitMatrix.copyTo(mat);
 		return rotateAndFlip(mat, rotation, flipX, flipY);
 	}
-
+	
 	/**
 	 * Prepares matrix for frame tile/triangles rendering.
 	 *
@@ -284,18 +284,18 @@ class FlxFrame implements IFlxDestroyable
 			mat.identity();
 			return mat;
 		}
-
+		
 		tileMatrix.copyTo(mat);
-
+		
 		var doFlipX = flipX != this.flipX;
 		var doFlipY = flipY != this.flipY;
-
+		
 		if (rotation == FlxFrameAngle.ANGLE_0 && !doFlipX && !doFlipY)
 			return mat;
-
+			
 		return rotateAndFlip(mat, rotation, doFlipX, doFlipY);
 	}
-
+	
 	/**
 	 * Draws frame on specified `BitmapData` object.
 	 *
@@ -311,10 +311,10 @@ class FlxFrame implements IFlxDestroyable
 	public function paint(?bmd:BitmapData, ?point:Point, mergeAlpha = false, disposeIfNotEqual = false):BitmapData
 	{
 		bmd = checkInputBitmap(bmd, point, FlxFrameAngle.ANGLE_0, mergeAlpha, disposeIfNotEqual);
-
+		
 		if (type == FlxFrameType.EMPTY)
 			return bmd;
-
+			
 		if (angle == FlxFrameAngle.ANGLE_0)
 		{
 			offset.copyTo(_point);
@@ -331,10 +331,10 @@ class FlxFrame implements IFlxDestroyable
 				
 			bmd.draw(parent.bitmap, _matrix, null, null, getDrawFrameRect(_matrix, _rect));
 		}
-
+		
 		return bmd;
 	}
-
+	
 	/**
 	 * Draws rotated and flipped frame on specified BitmapData object.
 	 *
@@ -355,12 +355,12 @@ class FlxFrame implements IFlxDestroyable
 	{
 		if (type == FlxFrameType.EMPTY && rotation == FlxFrameAngle.ANGLE_0)
 			return paint(bmd, point, mergeAlpha, disposeIfNotEqual);
-
+			
 		bmd = checkInputBitmap(bmd, point, rotation, mergeAlpha, disposeIfNotEqual);
-
+		
 		if (type == FlxFrameType.EMPTY)
 			return bmd;
-
+			
 		final doFlipX = flipX != this.flipX;
 		final doFlipY = flipY != this.flipY;
 		
@@ -372,7 +372,7 @@ class FlxFrame implements IFlxDestroyable
 		bmd.draw(parent.bitmap, _matrix, null, null, getDrawFrameRect(_matrix, _rect));
 		return bmd;
 	}
-
+	
 	/**
 	 * Internal method which runs few checks on specified `BitmapData` object.
 	 *
@@ -391,10 +391,10 @@ class FlxFrame implements IFlxDestroyable
 		final flipXY = rotation != FlxFrameAngle.ANGLE_0;
 		final w = Std.int(flipXY ? sourceSize.y : sourceSize.x);
 		final h = Std.int(flipXY ? sourceSize.x : sourceSize.y);
-
+		
 		if (bmd != null && disposeIfNotEqual)
 			bmd = FlxDestroyUtil.disposeIfNotEqual(bmd, w, h);
-
+			
 		if (bmd != null && !mergeAlpha)
 		{
 			if (point != null)
@@ -408,10 +408,10 @@ class FlxFrame implements IFlxDestroyable
 		{
 			bmd = new BitmapData(w, h, true, FlxColor.TRANSPARENT);
 		}
-
+		
 		return bmd;
 	}
-
+	
 	/**
 	 * Internal method which prepares frame rect for blitting.
 	 * Required for rotated frames support.
@@ -424,16 +424,16 @@ class FlxFrame implements IFlxDestroyable
 	{
 		final p1 = FlxPoint.weak(frame.x, frame.y);
 		final p2 = FlxPoint.weak(frame.right, frame.bottom);
-
+		
 		p1.transform(mat);
 		p2.transform(mat);
-
+		
 		final flxRect = FlxRect.get().fromTwoPoints(p1, p2);
 		flxRect.copyToFlash(rect);
 		flxRect.put();
 		return rect;
 	}
-
+	
 	/**
 	 * Generates frame with specified subregion of this frame.
 	 *
@@ -453,9 +453,9 @@ class FlxFrame implements IFlxDestroyable
 			frameToFill.angle = angle;
 			frameToFill.frame = FlxDestroyUtil.put(frameToFill.frame);
 		}
-
+		
 		frameToFill.sourceSize.set(rect.width, rect.height);
-
+		
 		// no need to make all calculations if original frame is empty...
 		if (type == FlxFrameType.EMPTY)
 		{
@@ -463,22 +463,22 @@ class FlxFrame implements IFlxDestroyable
 			frameToFill.offset.set(0, 0);
 			return frameToFill;
 		}
-
+		
 		var clippedRect:FlxRect = FlxRect.get().setSize(frame.width, frame.height);
 		if (angle != FlxFrameAngle.ANGLE_0)
 		{
 			clippedRect.width = frame.height;
 			clippedRect.height = frame.width;
 		}
-
+		
 		var ox:Float = Math.max(offset.x, 0);
 		var oy:Float = Math.max(offset.y, 0);
-
+		
 		rect.offset(-ox, -oy);
 		var frameRect:FlxRect = clippedRect.intersection(rect);
 		clippedRect = FlxDestroyUtil.put(clippedRect);
 		rect.offset(ox, oy);
-
+		
 		if (frameRect.isEmpty)
 		{
 			frameToFill.type = FlxFrameType.EMPTY;
@@ -490,12 +490,12 @@ class FlxFrame implements IFlxDestroyable
 		{
 			frameToFill.type = FlxFrameType.REGULAR;
 			frameToFill.offset.set(frameRect.x, frameRect.y).subtract(rect.x, rect.y).add(offset);
-
+			
 			final p1 = FlxPoint.weak(frameRect.x, frameRect.y);
 			final p2 = FlxPoint.weak(frameRect.right, frameRect.bottom);
-
+			
 			_matrix.identity();
-
+			
 			if (angle == FlxFrameAngle.ANGLE_NEG_90)
 			{
 				_matrix.rotateByPositive90();
@@ -506,22 +506,22 @@ class FlxFrame implements IFlxDestroyable
 				_matrix.rotateByNegative90();
 				_matrix.translate(0, frame.height);
 			}
-
+			
 			if (angle != FlxFrameAngle.ANGLE_0)
 			{
 				p1.transform(_matrix);
 				p2.transform(_matrix);
 			}
-
+			
 			frameRect.fromTwoPoints(p1, p2);
 			frameRect.offset(frame.x, frame.y);
 			frameToFill.frame = frameRect;
 			frameToFill.cacheFrameMatrix();
 		}
-
+		
 		return frameToFill;
 	}
-
+	
 	/**
 	 * Just a helper method for some frame adjusting.
 	 * Try to not use it, since it may cause memory leaks.
@@ -537,7 +537,7 @@ class FlxFrame implements IFlxDestroyable
 		FlxDestroyUtil.put(rect);
 		return frameToFill;
 	}
-
+	
 	/**
 	 * Frame clipping
 	 *
@@ -550,7 +550,7 @@ class FlxFrame implements IFlxDestroyable
 	{
 		if (clippedFrame == null)
 			clippedFrame = new FlxFrame(parent, angle);
-
+			
 		copyTo(clippedFrame);
 		return clippedFrame.clip(rect);
 	}
@@ -569,7 +569,6 @@ class FlxFrame implements IFlxDestroyable
 		rect.y -= frame.y - offset.y;
 		return result;
 	}
-	
 	
 	/**
 	 * Whether this frame fully contains the given rect. If clipping this frame to
@@ -611,7 +610,7 @@ class FlxFrame implements IFlxDestroyable
 		// no need to make all calculations if original frame is empty...
 		if (type == FlxFrameType.EMPTY)
 			return this;
-		
+			
 		final clippedRect = FlxRect.get(0, 0, frame.width, frame.height);
 		if (angle != FlxFrameAngle.ANGLE_0)
 		{
@@ -668,7 +667,7 @@ class FlxFrame implements IFlxDestroyable
 		frameRect.put();
 		return this;
 	}
-
+	
 	/**
 	 * Copies data from this frame into specified frame.
 	 *
@@ -687,7 +686,7 @@ class FlxFrame implements IFlxDestroyable
 			clone.angle = angle;
 			clone.frame = FlxDestroyUtil.put(clone.frame);
 		}
-
+		
 		clone.offset.copyFrom(offset);
 		clone.flipX = flipX;
 		clone.flipY = flipY;
@@ -699,7 +698,7 @@ class FlxFrame implements IFlxDestroyable
 		clone.cacheFrameMatrix();
 		return clone;
 	}
-
+	
 	public function destroy():Void
 	{
 		name = null;
@@ -711,12 +710,12 @@ class FlxFrame implements IFlxDestroyable
 		blitMatrix = null;
 		tileMatrix = null;
 	}
-
+	
 	public function toString():String
 	{
 		return FlxStringUtil.getDebugString([LabelValuePair.weak("name", name)]);
 	}
-
+	
 	function set_frame(value:FlxRect):FlxRect
 	{
 		frame = value;
@@ -729,10 +728,10 @@ class FlxFrame implements IFlxDestroyable
 	{
 		if (frame == null)
 			return;
-		
+			
 		if (uv == null)
 			uv = FlxUVRect.get();
-
+			
 		uv.setFromFrameRect(frame, parent);
 	}
 }
@@ -764,23 +763,55 @@ enum abstract FlxFrameAngle(Int) from Int to Int
 abstract FlxUVRect(FlxRect) from FlxRect to flixel.util.FlxPool.IFlxPooled
 {
 	public var left(get, set):Float;
-	inline function get_left():Float { return this.x; }
-	inline function set_left(value):Float { return this.x = value; }
+	
+	inline function get_left():Float
+	{
+		return this.x;
+	}
+	
+	inline function set_left(value):Float
+	{
+		return this.x = value;
+	}
 	
 	/** Top */
 	public var right(get, set):Float;
-	inline function get_right():Float { return this.width; }
-	inline function set_right(value):Float { return this.width = value; }
+	
+	inline function get_right():Float
+	{
+		return this.width;
+	}
+	
+	inline function set_right(value):Float
+	{
+		return this.width = value;
+	}
 	
 	/** Right */
 	public var top(get, set):Float;
-	inline function get_top():Float { return this.y; }
-	inline function set_top(value):Float { return this.y = value; }
+	
+	inline function get_top():Float
+	{
+		return this.y;
+	}
+	
+	inline function set_top(value):Float
+	{
+		return this.y = value;
+	}
 	
 	/** Bottom */
 	public var bottom(get, set):Float;
-	inline function get_bottom():Float { return this.height; }
-	inline function set_bottom(value):Float { return this.height = value; }
+	
+	inline function get_bottom():Float
+	{
+		return this.height;
+	}
+	
+	inline function set_bottom(value):Float
+	{
+		return this.height = value;
+	}
 	
 	public inline function set(l, t, r, b)
 	{
@@ -825,31 +856,54 @@ abstract FlxUVRect(FlxRect) from FlxRect to flixel.util.FlxPool.IFlxPooled
 abstract MatrixVector(Vector<Float>)
 {
 	public var a(get, set):Float;
-	inline function get_a() return this[0];
-	inline function set_a(value:Float) return this[0] = value;
 	
+	inline function get_a()
+		return this[0];
+		
+	inline function set_a(value:Float)
+		return this[0] = value;
+		
 	public var b(get, set):Float;
-	inline function get_b() return this[1];
-	inline function set_b(value:Float) return this[1] = value;
 	
+	inline function get_b()
+		return this[1];
+		
+	inline function set_b(value:Float)
+		return this[1] = value;
+		
 	public var c(get, set):Float;
-	inline function get_c() return this[2];
-	inline function set_c(value:Float) return this[2] = value;
 	
+	inline function get_c()
+		return this[2];
+		
+	inline function set_c(value:Float)
+		return this[2] = value;
+		
 	public var d(get, set):Float;
-	inline function get_d() return this[3];
-	inline function set_d(value:Float) return this[3] = value;
 	
+	inline function get_d()
+		return this[3];
+		
+	inline function set_d(value:Float)
+		return this[3] = value;
+		
 	public var tx(get, set):Float;
-	inline function get_tx() return this[4];
-	inline function set_tx(value:Float) return this[4] = value;
 	
+	inline function get_tx()
+		return this[4];
+		
+	inline function set_tx(value:Float)
+		return this[4] = value;
+		
 	public var ty(get, set):Float;
-	inline function get_ty() return this[5];
-	inline function set_ty(value:Float) return this[5] = value;
 	
-	
-	public inline function new ()
+	inline function get_ty()
+		return this[5];
+		
+	inline function set_ty(value:Float)
+		return this[5] = value;
+		
+	public inline function new()
 	{
 		this = new Vector<Float>(6);
 		identity();
@@ -897,10 +951,10 @@ abstract MatrixVector(Vector<Float>)
 	overload public inline extern function copyFrom(frame:FlxFrame, forBlit = true):MatrixVector
 	{
 		identity();
-
+		
 		if (forBlit)
 			translate(-frame.frame.x, -frame.frame.y);
-
+			
 		if (frame.angle == FlxFrameAngle.ANGLE_90)
 		{
 			set(-b, a, -d, c, -ty, tx);
@@ -911,7 +965,7 @@ abstract MatrixVector(Vector<Float>)
 			set(b, -a, d, -c, ty, -tx);
 			translate(0, frame.frame.width);
 		}
-
+		
 		translate(frame.offset.x, frame.offset.y);
 		return cast this;
 	}

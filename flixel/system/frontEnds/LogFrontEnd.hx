@@ -14,8 +14,8 @@ class LogFrontEnd
 	 * Whether everything you trace() is being redirected into the log window.
 	 */
 	public var redirectTraces(default, set):Bool = false;
-
-	var _standardTraceFunction:(Dynamic, ?PosInfos)->Void;
+	
+	var _standardTraceFunction:(Dynamic, ?PosInfos) -> Void;
 	
 	public inline function add(data:Dynamic, ?pos:PosInfos):Void
 	{
@@ -49,7 +49,7 @@ class LogFrontEnd
 	{
 		if (style == null)
 			style = LogStyle.NORMAL;
-		
+			
 		final arrayData = (!(data is Array) ? [data] : cast data);
 		
 		#if FLX_DEBUG
@@ -71,7 +71,7 @@ class LogFrontEnd
 			
 			if (style.openConsole)
 				FlxG.debugger.visible = true;
-			
+				
 			if (style.callbackFunction != null)
 				style.callbackFunction();
 		}
@@ -82,7 +82,7 @@ class LogFrontEnd
 		if (style.throwException)
 			throw style.toLogString(arrayData);
 	}
-
+	
 	/**
 	 * Clears the log output.
 	 */
@@ -92,19 +92,19 @@ class LogFrontEnd
 		FlxG.game.debugger.log.clear();
 		#end
 	}
-
+	
 	@:allow(flixel.FlxG)
 	function new()
 	{
 		_standardTraceFunction = haxe.Log.trace;
 	}
-
+	
 	inline function set_redirectTraces(redirect:Bool):Bool
 	{
 		haxe.Log.trace = (redirect) ? processTraceData : _standardTraceFunction;
 		return redirectTraces = redirect;
 	}
-
+	
 	/**
 	 * Internal function used as a interface between trace() and add().
 	 *
@@ -114,7 +114,7 @@ class LogFrontEnd
 	function processTraceData(data:Any, ?info:PosInfos):Void
 	{
 		var paramArray:Array<Any> = [data];
-
+		
 		if (info.customParams != null)
 		{
 			for (i in info.customParams)
@@ -122,7 +122,7 @@ class LogFrontEnd
 				paramArray.push(i);
 			}
 		}
-
+		
 		advanced(paramArray, LogStyle.NORMAL);
 	}
 }

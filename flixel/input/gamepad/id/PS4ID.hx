@@ -67,7 +67,7 @@ enum abstract PS4ID(Int) to Int
 	var RIGHT_STICK_CLICK = 14;
 	var L1 = 15;
 	var R1 = 16;
-
+	
 	#if ps4
 	var TOUCHPAD_CLICK = 10; // On an actual PS4, share is reserved by the system, and the touchpad click can serve more or less as a replacement for the "back/select" button
 	
@@ -89,7 +89,7 @@ enum abstract PS4ID(Int) to Int
 	var SHARE = 40; // Not accessible on an actual PS4, just setting it to a dummy value
 	#else
 	var SHARE = 10; // This is only accessible when not using an actual Playstation 4, otherwise it's reserved by the system
-
+	
 	static inline final LEFT_X = 0;
 	static inline final LEFT_Y = 1;
 	static inline final RIGHT_X = 2;
@@ -109,12 +109,12 @@ enum abstract PS4ID(Int) to Int
 	#end
 	var L2 = 4;
 	var R2 = 5;
-
+	
 	var DPAD_UP = 17;
 	var DPAD_DOWN = 18;
 	var DPAD_LEFT = 19;
 	var DPAD_RIGHT = 20;
-
+	
 	// On linux the drivers we're testing with just make the PS4 controller look like an XInput device,
 	// So strictly speaking these ID's will probably not be used, but the compiler needs something or
 	// else it will not compile on Linux
@@ -125,17 +125,17 @@ enum abstract PS4ID(Int) to Int
 	var TRIANGLE = 3;
 	var L1 = 4;
 	var R1 = 5;
-
+	
 	var SHARE = 8;
 	var OPTIONS = 9;
 	var LEFT_STICK_CLICK = 10;
 	var RIGHT_STICK_CLICK = 11;
 	var PS = 12;
 	var TOUCHPAD_CLICK = 13;
-
+	
 	var L2 = 3;
 	var R2 = 4;
-
+	
 	static inline final LEFT_X = 0;
 	static inline final LEFT_Y = 1;
 	static inline final RIGHT_X = 2;

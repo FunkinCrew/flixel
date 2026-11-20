@@ -19,212 +19,212 @@ class FlxQuadTree extends FlxRect
 	 * Flag for specifying that you want to add an object to the A list.
 	 */
 	public static inline var A_LIST:Int = 0;
-
+	
 	/**
 	 * Flag for specifying that you want to add an object to the B list.
 	 */
 	public static inline var B_LIST:Int = 1;
-
+	
 	/**
 	 * Controls the granularity of the quad tree.  Default is 6 (decent performance on large and small worlds).
 	 */
 	public static var divisions:Int;
-
+	
 	public var exists:Bool;
-
+	
 	/**
 	 * Whether this branch of the tree can be subdivided or not.
 	 */
 	var _canSubdivide:Bool;
-
+	
 	/**
 	 * Refers to the internal A and B linked lists,
 	 * which are used to store objects in the leaves.
 	 */
 	var _headA:FlxLinkedList;
-
+	
 	/**
 	 * Refers to the internal A and B linked lists,
 	 * which are used to store objects in the leaves.
 	 */
 	var _tailA:FlxLinkedList;
-
+	
 	/**
 	 * Refers to the internal A and B linked lists,
 	 * which are used to store objects in the leaves.
 	 */
 	var _headB:FlxLinkedList;
-
+	
 	/**
 	 * Refers to the internal A and B linked lists,
 	 * which are used to store objects in the leaves.
 	 */
 	var _tailB:FlxLinkedList;
-
+	
 	/**
 	 * Internal, governs and assists with the formation of the tree.
 	 */
 	static var _min:Int;
-
+	
 	/**
 	 * Internal, governs and assists with the formation of the tree.
 	 */
 	var _northWestTree:FlxQuadTree;
-
+	
 	/**
 	 * Internal, governs and assists with the formation of the tree.
 	 */
 	var _northEastTree:FlxQuadTree;
-
+	
 	/**
 	 * Internal, governs and assists with the formation of the tree.
 	 */
 	var _southEastTree:FlxQuadTree;
-
+	
 	/**
 	 * Internal, governs and assists with the formation of the tree.
 	 */
 	var _southWestTree:FlxQuadTree;
-
+	
 	/**
 	 * Internal, governs and assists with the formation of the tree.
 	 */
 	var _leftEdge:Float;
-
+	
 	/**
 	 * Internal, governs and assists with the formation of the tree.
 	 */
 	var _rightEdge:Float;
-
+	
 	/**
 	 * Internal, governs and assists with the formation of the tree.
 	 */
 	var _topEdge:Float;
-
+	
 	/**
 	 * Internal, governs and assists with the formation of the tree.
 	 */
 	var _bottomEdge:Float;
-
+	
 	/**
 	 * Internal, governs and assists with the formation of the tree.
 	 */
 	var _halfWidth:Float;
-
+	
 	/**
 	 * Internal, governs and assists with the formation of the tree.
 	 */
 	var _halfHeight:Float;
-
+	
 	/**
 	 * Internal, governs and assists with the formation of the tree.
 	 */
 	var _midpointX:Float;
-
+	
 	/**
 	 * Internal, governs and assists with the formation of the tree.
 	 */
 	var _midpointY:Float;
-
+	
 	/**
 	 * Internal, used to reduce recursive method parameters during object placement and tree formation.
 	 */
 	static var _object:FlxObject;
-
+	
 	/**
 	 * Internal, used to reduce recursive method parameters during object placement and tree formation.
 	 */
 	static var _objectLeftEdge:Float;
-
+	
 	/**
 	 * Internal, used to reduce recursive method parameters during object placement and tree formation.
 	 */
 	static var _objectTopEdge:Float;
-
+	
 	/**
 	 * Internal, used to reduce recursive method parameters during object placement and tree formation.
 	 */
 	static var _objectRightEdge:Float;
-
+	
 	/**
 	 * Internal, used to reduce recursive method parameters during object placement and tree formation.
 	 */
 	static var _objectBottomEdge:Float;
-
+	
 	/**
 	 * Internal, used during tree processing and overlap checks.
 	 */
 	static var _list:Int;
-
+	
 	/**
 	 * Internal, used during tree processing and overlap checks.
 	 */
 	static var _useBothLists:Bool;
-
+	
 	/**
 	 * Internal, used during tree processing and overlap checks.
 	 */
 	static var _processingCallback:FlxObject->FlxObject->Bool;
-
+	
 	/**
 	 * Internal, used during tree processing and overlap checks.
 	 */
 	static var _notifyCallback:FlxObject->FlxObject->Void;
-
+	
 	/**
 	 * Internal, used during tree processing and overlap checks.
 	 */
 	static var _iterator:FlxLinkedList;
-
+	
 	/**
 	 * Internal, helpers for comparing actual object-to-object overlap - see overlapNode().
 	 */
 	static var _objectHullX:Float;
-
+	
 	/**
 	 * Internal, helpers for comparing actual object-to-object overlap - see overlapNode().
 	 */
 	static var _objectHullY:Float;
-
+	
 	/**
 	 * Internal, helpers for comparing actual object-to-object overlap - see overlapNode().
 	 */
 	static var _objectHullWidth:Float;
-
+	
 	/**
 	 * Internal, helpers for comparing actual object-to-object overlap - see overlapNode().
 	 */
 	static var _objectHullHeight:Float;
-
+	
 	/**
 	 * Internal, helpers for comparing actual object-to-object overlap - see overlapNode().
 	 */
 	static var _checkObjectHullX:Float;
-
+	
 	/**
 	 * Internal, helpers for comparing actual object-to-object overlap - see overlapNode().
 	 */
 	static var _checkObjectHullY:Float;
-
+	
 	/**
 	 * Internal, helpers for comparing actual object-to-object overlap - see overlapNode().
 	 */
 	static var _checkObjectHullWidth:Float;
-
+	
 	/**
 	 * Internal, helpers for comparing actual object-to-object overlap - see overlapNode().
 	 */
 	static var _checkObjectHullHeight:Float;
-
+	
 	/**
 	 * Pooling mechanism, turn FlxQuadTree into a linked list, when FlxQuadTrees are destroyed, they get added to the list, and when they get recycled they get removed.
 	 */
 	public static var _NUM_CACHED_QUAD_TREES:Int = 0;
-
+	
 	static var _cachedTreesHead:FlxQuadTree;
-
+	
 	var next:FlxQuadTree;
-
+	
 	/**
 	 * Private, use recycle instead.
 	 */
@@ -234,7 +234,7 @@ class FlxQuadTree extends FlxRect
 		set(X, Y, Width, Height);
 		reset(X, Y, Width, Height, Parent);
 	}
-
+	
 	/**
 	 * Recycle a cached Quad Tree node, or creates a new one if needed.
 	 * @param	X			The X-coordinate of the point in space.
@@ -250,14 +250,14 @@ class FlxQuadTree extends FlxRect
 			var cachedTree:FlxQuadTree = _cachedTreesHead;
 			_cachedTreesHead = _cachedTreesHead.next;
 			_NUM_CACHED_QUAD_TREES--;
-
+			
 			cachedTree.reset(X, Y, Width, Height, Parent);
 			return cachedTree;
 		}
 		else
 			return new FlxQuadTree(X, Y, Width, Height, Parent);
 	}
-
+	
 	/**
 	 * Clear cached Quad Tree nodes. You might want to do this when loading new levels (probably not though, no need to clear cache unless you run into memory problems).
 	 */
@@ -272,16 +272,16 @@ class FlxQuadTree extends FlxRect
 		}
 		_NUM_CACHED_QUAD_TREES = 0;
 	}
-
+	
 	public function reset(X:Float, Y:Float, Width:Float, Height:Float, ?Parent:FlxQuadTree):Void
 	{
 		exists = true;
-
+		
 		set(X, Y, Width, Height);
-
+		
 		_headA = _tailA = FlxLinkedList.recycle();
 		_headB = _tailB = FlxLinkedList.recycle();
-
+		
 		// Copy the parent's children (if there are any)
 		if (Parent != null)
 		{
@@ -323,7 +323,7 @@ class FlxQuadTree extends FlxRect
 			_min = Math.floor((width + height) / (2 * divisions));
 		}
 		_canSubdivide = (width > _min) || (height > _min);
-
+		
 		// Set up comparison/sort helpers
 		_northWestTree = null;
 		_northEastTree = null;
@@ -338,7 +338,7 @@ class FlxQuadTree extends FlxRect
 		_halfHeight = height / 2;
 		_midpointY = _topEdge + _halfHeight;
 	}
-
+	
 	/**
 	 * Clean up memory.
 	 */
@@ -346,30 +346,30 @@ class FlxQuadTree extends FlxRect
 	{
 		_headA = FlxDestroyUtil.destroy(_headA);
 		_headB = FlxDestroyUtil.destroy(_headB);
-
+		
 		_tailA = FlxDestroyUtil.destroy(_tailA);
 		_tailB = FlxDestroyUtil.destroy(_tailB);
-
+		
 		_northWestTree = FlxDestroyUtil.destroy(_northWestTree);
 		_northEastTree = FlxDestroyUtil.destroy(_northEastTree);
-
+		
 		_southWestTree = FlxDestroyUtil.destroy(_southWestTree);
 		_southEastTree = FlxDestroyUtil.destroy(_southEastTree);
-
+		
 		_object = null;
 		_processingCallback = null;
 		_notifyCallback = null;
-
+		
 		exists = false;
-
+		
 		// Deposit this tree into the linked list for reusal.
 		next = _cachedTreesHead;
 		_cachedTreesHead = this;
 		_NUM_CACHED_QUAD_TREES++;
-
+		
 		super.destroy();
 	}
-
+	
 	/**
 	 * Load objects and/or groups into the quad tree, and register notify and processing callbacks.
 	 * @param ObjectOrGroup1	Any object that is or extends FlxObject or FlxGroup.
@@ -393,7 +393,7 @@ class FlxQuadTree extends FlxRect
 		_notifyCallback = NotifyCallback;
 		_processingCallback = ProcessCallback;
 	}
-
+	
 	/**
 	 * Call this function to add an object to the root of the tree.
 	 * This function will recursively add all group members, but
@@ -405,7 +405,7 @@ class FlxQuadTree extends FlxRect
 	public function add(ObjectOrGroup:FlxBasic, list:Int):Void
 	{
 		_list = list;
-
+		
 		var group = FlxTypedGroup.resolveGroup(ObjectOrGroup);
 		if (group != null)
 		{
@@ -451,7 +451,7 @@ class FlxQuadTree extends FlxRect
 			}
 		}
 	}
-
+	
 	/**
 	 * Internal function for recursively navigating and creating the tree
 	 * while adding objects to the appropriate nodes.
@@ -465,7 +465,7 @@ class FlxQuadTree extends FlxRect
 			addToList();
 			return;
 		}
-
+		
 		// See if the selected object fits completely inside any of the quadrants
 		if ((_objectLeftEdge > _leftEdge) && (_objectRightEdge < _midpointX))
 		{
@@ -509,7 +509,7 @@ class FlxQuadTree extends FlxRect
 				return;
 			}
 		}
-
+		
 		// If it wasn't completely contained we have to check out the partial overlaps
 		if ((_objectRightEdge > _leftEdge) && (_objectLeftEdge < _midpointX) && (_objectBottomEdge > _topEdge) && (_objectTopEdge < _midpointY))
 		{
@@ -544,7 +544,7 @@ class FlxQuadTree extends FlxRect
 			_southWestTree.addObject();
 		}
 	}
-
+	
 	/**
 	 * Internal function for recursively adding objects to leaf lists.
 	 */
@@ -592,7 +592,7 @@ class FlxQuadTree extends FlxRect
 			_southWestTree.addToList();
 		}
 	}
-
+	
 	/**
 	 * FlxQuadTree's other main function.  Call this after adding objects
 	 * using FlxQuadTree.load() to compare the objects that you loaded.
@@ -601,7 +601,7 @@ class FlxQuadTree extends FlxRect
 	public function execute():Bool
 	{
 		var overlapProcessed:Bool = false;
-
+		
 		if (_headA.object != null)
 		{
 			var iterator = _headA;
@@ -623,7 +623,7 @@ class FlxQuadTree extends FlxRect
 				iterator = iterator.next;
 			}
 		}
-
+		
 		// Advance through the tree by calling overlap on each child
 		if ((_northWestTree != null) && _northWestTree.execute())
 		{
@@ -641,10 +641,10 @@ class FlxQuadTree extends FlxRect
 		{
 			overlapProcessed = true;
 		}
-
+		
 		return overlapProcessed;
 	}
-
+	
 	/**
 	 * An internal function for comparing an object against the contents of a node.
 	 * @return	Whether or not any overlaps were found.
@@ -658,11 +658,11 @@ class FlxQuadTree extends FlxRect
 		_objectHullWidth = _object.width + ((_objectHullWidth > 0) ? _objectHullWidth : -_objectHullWidth);
 		_objectHullHeight = _object.y - _object.last.y;
 		_objectHullHeight = _object.height + ((_objectHullHeight > 0) ? _objectHullHeight : -_objectHullHeight);
-
+		
 		// Walk the list and check for overlaps
 		var overlapProcessed:Bool = false;
 		var checkObject:FlxObject;
-
+		
 		while (_iterator != null)
 		{
 			checkObject = _iterator.object;
@@ -671,7 +671,7 @@ class FlxQuadTree extends FlxRect
 				_iterator = _iterator.next;
 				continue;
 			}
-
+			
 			// Calculate bulk hull for checkObject
 			_checkObjectHullX = (checkObject.x < checkObject.last.x) ? checkObject.x : checkObject.last.x;
 			_checkObjectHullY = (checkObject.y < checkObject.last.y) ? checkObject.y : checkObject.last.y;
@@ -679,7 +679,7 @@ class FlxQuadTree extends FlxRect
 			_checkObjectHullWidth = checkObject.width + ((_checkObjectHullWidth > 0) ? _checkObjectHullWidth : -_checkObjectHullWidth);
 			_checkObjectHullHeight = checkObject.y - checkObject.last.y;
 			_checkObjectHullHeight = checkObject.height + ((_checkObjectHullHeight > 0) ? _checkObjectHullHeight : -_checkObjectHullHeight);
-
+			
 			// Check for intersection of the two hulls
 			if ((_objectHullX + _objectHullWidth > _checkObjectHullX)
 				&& (_objectHullX < _checkObjectHullX + _checkObjectHullWidth)
@@ -701,7 +701,7 @@ class FlxQuadTree extends FlxRect
 				_iterator = _iterator.next;
 			}
 		}
-
+		
 		return overlapProcessed;
 	}
 }

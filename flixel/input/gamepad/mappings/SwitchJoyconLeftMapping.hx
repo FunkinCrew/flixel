@@ -12,14 +12,14 @@ class SwitchJoyconLeftMapping extends FlxTypedGamepadMapping<SwitchJoyconLeftID>
 	#if FLX_JOYSTICK_API
 	static inline var LEFT_ANALOG_STICK_FAKE_X:Int = 32;
 	static inline var LEFT_ANALOG_STICK_FAKE_Y:Int = 33;
-
+	
 	static inline var RIGHT_ANALOG_STICK_FAKE_X:Int = 34;
 	static inline var RIGHT_ANALOG_STICK_FAKE_Y:Int = 35;
-
+	
 	static inline var LEFT_TRIGGER_FAKE:Int = 36;
 	static inline var RIGHT_TRIGGER_FAKE:Int = 37;
 	#end
-
+	
 	override function initValues():Void
 	{
 		leftStick = SwitchJoyconLeftID.LEFT_ANALOG_STICK;
@@ -27,7 +27,7 @@ class SwitchJoyconLeftMapping extends FlxTypedGamepadMapping<SwitchJoyconLeftID>
 		supportsPointer = false;
 		bottomIsAccept = false;
 	}
-
+	
 	override function getID(rawID:SwitchJoyconLeftID):FlxGamepadInputID
 	{
 		return switch (rawID)
@@ -49,7 +49,7 @@ class SwitchJoyconLeftMapping extends FlxTypedGamepadMapping<SwitchJoyconLeftID>
 			case _: NONE;
 		}
 	}
-
+	
 	override function getRawID(id:FlxGamepadInputID):SwitchJoyconLeftID
 	{
 		return switch (id)
@@ -75,7 +75,7 @@ class SwitchJoyconLeftMapping extends FlxTypedGamepadMapping<SwitchJoyconLeftID>
 			default: super.getRawID(id);
 		}
 	}
-
+	
 	override function getInputLabel(id:FlxGamepadInputID)
 	{
 		return switch (id)
@@ -102,20 +102,9 @@ class SwitchJoyconLeftMapping extends FlxTypedGamepadMapping<SwitchJoyconLeftID>
 	override function axisIndexToRawID(axisID:SwitchJoyconLeftID):Int
 	{
 		// Analog stick and trigger values overlap with regular buttons so we remap to "fake" button ID's
-		return if (axisID == leftStick.x)
-				LEFT_ANALOG_STICK_FAKE_X;
-			else if (axisID == leftStick.y)
-				LEFT_ANALOG_STICK_FAKE_Y;
-			else if (axisID == rightStick.x)
-				RIGHT_ANALOG_STICK_FAKE_X;
-			else if (axisID == rightStick.y)
-				RIGHT_ANALOG_STICK_FAKE_Y;
-			else if (axisID == SwitchJoyconLeftID.SL)
-				LEFT_TRIGGER_FAKE;
-			else if (axisID == SwitchJoyconLeftID.SR)
-				RIGHT_TRIGGER_FAKE;
-			else
-				axisID;
+		return if (axisID == leftStick.x) LEFT_ANALOG_STICK_FAKE_X; else if (axisID == leftStick.y) LEFT_ANALOG_STICK_FAKE_Y; else if (axisID == rightStick.x)
+			RIGHT_ANALOG_STICK_FAKE_X; else if (axisID == rightStick.y) RIGHT_ANALOG_STICK_FAKE_Y; else if (axisID == SwitchJoyconLeftID.SL)
+			LEFT_TRIGGER_FAKE; else if (axisID == SwitchJoyconLeftID.SR) RIGHT_TRIGGER_FAKE; else axisID;
 	}
 	#end
 }

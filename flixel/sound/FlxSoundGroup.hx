@@ -9,17 +9,17 @@ class FlxSoundGroup
 	 * The sounds in this group
 	 */
 	public var sounds:Array<FlxSound> = [];
-
+	
 	/**
 	 * The volume of this group
 	 */
 	public var volume(default, set):Float;
-
+	
 	/**
 	 * Whether or not this group is muted
 	 */
 	public var muted(default, set):Bool;
-
+	
 	/**
 	 * Create a new sound group
 	 * @param	volume  The initial volume of this group
@@ -28,7 +28,7 @@ class FlxSoundGroup
 	{
 		this.volume = volume;
 	}
-
+	
 	/**
 	 * Add a sound to this group, will remove the sound from any group it is currently in
 	 * @param	sound The sound to add to this group
@@ -41,7 +41,7 @@ class FlxSoundGroup
 			// remove from prev group
 			if (sound.group != null)
 				sound.group.sounds.remove(sound);
-			
+				
 			sounds.push(sound);
 			@:bypassAccessor
 			sound.group = this;
@@ -51,7 +51,7 @@ class FlxSoundGroup
 		}
 		return false;
 	}
-
+	
 	/**
 	 * Remove a sound from this group
 	 * @param	sound The sound to remove
@@ -70,7 +70,7 @@ class FlxSoundGroup
 		}
 		return false;
 	}
-
+	
 	/**
 	 * Call this function to pause all sounds in this group.
 	 * @since 4.3.0
@@ -80,7 +80,7 @@ class FlxSoundGroup
 		for (sound in sounds)
 			sound.pause();
 	}
-
+	
 	/**
 	 * Unpauses all sounds in this group. Only works on sounds that have been paused.
 	 * @since 4.3.0
@@ -90,7 +90,7 @@ class FlxSoundGroup
 		for (sound in sounds)
 			sound.resume();
 	}
-
+	
 	/**
 	 * Returns the volume of this group, taking `muted` in account.
 	 * @return The volume of the group or 0 if the group is muted.
@@ -99,7 +99,7 @@ class FlxSoundGroup
 	{
 		return muted ? 0.0 : volume;
 	}
-
+	
 	function set_volume(volume:Float):Float
 	{
 		this.volume = volume;
@@ -110,7 +110,7 @@ class FlxSoundGroup
 		}
 		return volume;
 	}
-
+	
 	function set_muted(value:Bool):Bool
 	{
 		muted = value;

@@ -56,7 +56,7 @@ class AssetFrontEnd
 	 */
 	final parentDirectory:String;
 	
-	public function new ()
+	public function new()
 	{
 		final rawPath = '${haxe.macro.Compiler.getDefine("FLX_CUSTOM_ASSETS_DIRECTORY")}';
 		directory = '${haxe.macro.Compiler.getDefine("FLX_CUSTOM_ASSETS_DIRECTORY_ABS")}';
@@ -82,7 +82,7 @@ class AssetFrontEnd
 		return id.startsWith("flixel/") || id.contains(':');
 	}
 	#else
-	public function new () {}
+	public function new() {}
 	#end
 	
 	#if (FLX_DEFAULT_SOUND_EXT == "1" || FLX_NO_DEFAULT_SOUND_EXT)
@@ -106,7 +106,6 @@ class AssetFrontEnd
 		#if FLX_STANDARD_ASSETS_DIRECTORY
 		return getOpenflAssetUnsafe(id, type, useCache);
 		#else
-		
 		if (useOpenflAssets(id))
 			return getOpenflAssetUnsafe(id, type, useCache);
 		// load from custom assets directory
@@ -119,7 +118,7 @@ class AssetFrontEnd
 				sys.io.File.getContent(getPath(id));
 			case BINARY:
 				sys.io.File.getBytes(getPath(id));
-			
+				
 			// Check cache
 			case IMAGE if (canUseCache && Assets.cache.hasBitmapData(id)):
 				Assets.cache.getBitmapData(id);
@@ -127,7 +126,7 @@ class AssetFrontEnd
 				Assets.cache.getSound(id);
 			case FONT if (canUseCache && Assets.cache.hasFont(id)):
 				Assets.cache.getFont(id);
-			
+				
 			// Get asset and set cache
 			case IMAGE:
 				final bitmap = BitmapData.fromFile(getPath(id));
@@ -153,7 +152,7 @@ class AssetFrontEnd
 	function getOpenflAssetUnsafe(id:String, type:FlxAssetType, useCache = true):Null<Any>
 	{
 		// Use openfl assets
-		return switch(type)
+		return switch (type)
 		{
 			case TEXT: Assets.getText(id);
 			case BINARY: Assets.getBytes(id);
@@ -184,7 +183,7 @@ class AssetFrontEnd
 		{
 			if (isLocal(id, type))
 				return getAssetUnsafe(id, type, useCache);
-			
+				
 			log('$type asset "$id" exists, but only asynchronously');
 			return null;
 		}
@@ -206,10 +205,9 @@ class AssetFrontEnd
 		#if FLX_STANDARD_ASSETS_DIRECTORY
 		return loadOpenflAsset(id, type, useCache);
 		#else
-		
 		if (useOpenflAssets(id))
 			return loadOpenflAsset(id, type, useCache);
-		
+			
 		// get the asset synchronously and wrap it in a future
 		return Future.withValue(getAsset(id, type, useCache));
 		// TODO: html?
@@ -218,7 +216,7 @@ class AssetFrontEnd
 	
 	function loadOpenflAsset(id:String, type:FlxAssetType, useCache = true):Future<Any>
 	{
-		return switch(type)
+		return switch (type)
 		{
 			case TEXT: Assets.loadText(id);
 			case BINARY: Assets.loadBytes(id);
@@ -274,10 +272,9 @@ class AssetFrontEnd
 		#if FLX_STANDARD_ASSETS_DIRECTORY
 		return Assets.isLocal(id, type.toOpenFlType(), useCache);
 		#else
-		
 		if (useOpenflAssets(id))
 			Assets.isLocal(id, type.toOpenFlType(), useCache);
-		
+			
 		return true;
 		#end
 	}
@@ -642,13 +639,13 @@ class AssetFrontEnd
 		return Xml.parse(xmlText);
 	}
 	
-	inline function wrapFuture<T1, T2>(future:Future<T1>, converter:(T1)->T2):Future<T2>
+	inline function wrapFuture<T1, T2>(future:Future<T1>, converter:(T1) -> T2):Future<T2>
 	{
 		final promise = new lime.app.Promise<T2>();
 		
-		future.onComplete((data)->promise.complete(converter(data)));
-		future.onError((error)->promise.error(error));
-		future.onProgress((progress, total)->promise.progress(progress, total));
+		future.onComplete((data) -> promise.complete(converter(data)));
+		future.onError((error) -> promise.error(error));
+		future.onProgress((progress, total) -> promise.progress(progress, total));
 		
 		return promise.future;
 	}
@@ -668,7 +665,7 @@ enum abstract FlxAssetType(String)
 	var FONT = "font";
 	
 	/** Image assets, such as *.png or *.jpg files */
-	var IMAGE ="image";
+	var IMAGE = "image";
 	
 	/** Audio assets, such as *.ogg or *.wav files */
 	var SOUND = "sound";
@@ -678,7 +675,7 @@ enum abstract FlxAssetType(String)
 	
 	public function toOpenFlType()
 	{
-		return switch((cast this:FlxAssetType))
+		return switch ((cast this : FlxAssetType))
 		{
 			case BINARY: AssetType.BINARY;
 			case FONT: AssetType.FONT;
