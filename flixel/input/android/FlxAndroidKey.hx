@@ -14,14 +14,14 @@ enum abstract FlxAndroidKey(Int) from Int to Int
 	var NONE = -1;
 	var MENU = 0x40000118;
 	var BACK = 0x4000011A;
-
+	
 	@:from
 	public static inline function fromString(s:String)
 	{
 		s = s.toUpperCase();
 		return fromStringMap.exists(s) ? fromStringMap.get(s) : NONE;
 	}
-
+	
 	@:to
 	public inline function toString():String
 	{

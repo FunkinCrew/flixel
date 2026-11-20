@@ -35,7 +35,7 @@ class FlxMouseEvent<T:FlxObject> implements IFlxDestroyable
 	 * instance to which `FlxMouseEvent` provides access.
 	 */
 	public static var globalManager:FlxMouseEventManager;
-
+	
 	/**
 	 * Adds an object to the FlxMouseEventManager registry. Automatically initializes the plugin.
 	 *
@@ -55,10 +55,9 @@ class FlxMouseEvent<T:FlxObject> implements IFlxDestroyable
 	public static inline function add<T:FlxObject>(object:T, ?onMouseDown:T->Void, ?onMouseUp:T->Void, ?onMouseOver:T->Void, ?onMouseOut:T->Void,
 			mouseChildren = false, mouseEnabled = true, pixelPerfect = true, ?mouseButtons:Array<FlxMouseButtonID>):T
 	{
-		return globalManager.add(object, onMouseDown, onMouseUp, onMouseOver, onMouseOut,
-			mouseChildren, mouseEnabled, pixelPerfect, mouseButtons);
+		return globalManager.add(object, onMouseDown, onMouseUp, onMouseOver, onMouseOut, mouseChildren, mouseEnabled, pixelPerfect, mouseButtons);
 	}
-
+	
 	/**
 	 * Removes a registered object from the registry.
 	 */
@@ -66,7 +65,7 @@ class FlxMouseEvent<T:FlxObject> implements IFlxDestroyable
 	{
 		return globalManager.remove(object);
 	}
-
+	
 	/**
 	 * Removes all registered objects from the registry.
 	 */
@@ -74,7 +73,7 @@ class FlxMouseEvent<T:FlxObject> implements IFlxDestroyable
 	{
 		globalManager.removeAll();
 	}
-
+	
 	/**
 	 * Reorders the registered objects, using the current object drawing order.
 	 * This should be called if you alter the draw/update order of a registered object,
@@ -86,7 +85,7 @@ class FlxMouseEvent<T:FlxObject> implements IFlxDestroyable
 	{
 		globalManager.reorder();
 	}
-
+	
 	/**
 	 * Sets the mouseDown callback associated with an object.
 	 *
@@ -97,7 +96,7 @@ class FlxMouseEvent<T:FlxObject> implements IFlxDestroyable
 	{
 		globalManager.setMouseDownCallback(object, onMouseDown);
 	}
-
+	
 	/**
 	 * Sets the mouseUp callback associated with an object.
 	 *
@@ -108,7 +107,7 @@ class FlxMouseEvent<T:FlxObject> implements IFlxDestroyable
 	{
 		globalManager.setMouseUpCallback(object, onMouseUp);
 	}
-
+	
 	/**
 	 * Sets the mouseClick callback associated with an object.
 	 *
@@ -120,7 +119,7 @@ class FlxMouseEvent<T:FlxObject> implements IFlxDestroyable
 	{
 		globalManager.setMouseClickCallback(object, onMouseClick);
 	}
-
+	
 	/**
 	 * Sets the mouseDoubleClick callback associated with an object.
 	 *
@@ -132,7 +131,7 @@ class FlxMouseEvent<T:FlxObject> implements IFlxDestroyable
 	{
 		globalManager.setMouseDoubleClickCallback(object, onMouseDoubleClick);
 	}
-
+	
 	/**
 	 * Sets the mouseOver callback associated with an object.
 	 *
@@ -143,7 +142,7 @@ class FlxMouseEvent<T:FlxObject> implements IFlxDestroyable
 	{
 		globalManager.setMouseOverCallback(object, onMouseOver);
 	}
-
+	
 	/**
 	 * Sets the mouseOut callback associated with an object.
 	 *
@@ -154,7 +153,7 @@ class FlxMouseEvent<T:FlxObject> implements IFlxDestroyable
 	{
 		globalManager.setMouseOutCallback(object, onMouseOut);
 	}
-
+	
 	/**
 	 * Sets the mouseMove callback associated with an object.
 	 *
@@ -166,7 +165,7 @@ class FlxMouseEvent<T:FlxObject> implements IFlxDestroyable
 	{
 		globalManager.setMouseMoveCallback(object, onMouseMove);
 	}
-
+	
 	/**
 	 * Sets the mouseWheel callback associated with an object.
 	 *
@@ -178,7 +177,7 @@ class FlxMouseEvent<T:FlxObject> implements IFlxDestroyable
 	{
 		globalManager.setMouseWheelCallback(object, onMouseWheel);
 	}
-
+	
 	/**
 	 * Enables/disables mouse behavior for an object.
 	 *
@@ -188,7 +187,7 @@ class FlxMouseEvent<T:FlxObject> implements IFlxDestroyable
 	{
 		globalManager.setObjectMouseEnabled(object, mouseEnabled);
 	}
-
+	
 	/**
 	 * Checks if a registered object is mouseEnabled.
 	 */
@@ -196,7 +195,7 @@ class FlxMouseEvent<T:FlxObject> implements IFlxDestroyable
 	{
 		return globalManager.isObjectMouseEnabled(object);
 	}
-
+	
 	/**
 	 * Enables/disables mouseChildren for an object.
 	 *
@@ -206,7 +205,7 @@ class FlxMouseEvent<T:FlxObject> implements IFlxDestroyable
 	{
 		globalManager.setObjectMouseChildren(object, mouseChildren);
 	}
-
+	
 	/**
 	 * Checks if an object allows mouseChildren.
 	 */
@@ -214,7 +213,7 @@ class FlxMouseEvent<T:FlxObject> implements IFlxDestroyable
 	{
 		return globalManager.isObjectMouseChildren(object);
 	}
-
+	
 	/**
 	 * @param   mouseButtons    The mouse buttons that can trigger callbacks. Left only by default.
 	 */
@@ -222,7 +221,7 @@ class FlxMouseEvent<T:FlxObject> implements IFlxDestroyable
 	{
 		globalManager.setObjectMouseButtons(object, mouseButtons);
 	}
-
+	
 	public var object:FlxObject;
 	public var onMouseDown:T->Void;
 	public var onMouseUp:T->Void;
@@ -238,10 +237,10 @@ class FlxMouseEvent<T:FlxObject> implements IFlxDestroyable
 	public var sprite:FlxSprite;
 	public var mouseButtons:Array<FlxMouseButtonID>;
 	public var currentMouseButton:Null<FlxMouseButtonID>;
-
+	
 	@:allow(flixel.input.mouse.FlxMouseEventManager)
-	function new(object:T, onMouseDown:T->Void, onMouseUp:T->Void, onMouseOver:T->Void, onMouseOut:T->Void,
-		mouseChildren:Bool, mouseEnabled:Bool, pixelPerfect:Bool, mouseButtons:Null<Array<FlxMouseButtonID>>)
+	function new(object:T, onMouseDown:T->Void, onMouseUp:T->Void, onMouseOver:T->Void, onMouseOut:T->Void, mouseChildren:Bool, mouseEnabled:Bool,
+			pixelPerfect:Bool, mouseButtons:Null<Array<FlxMouseButtonID>>)
 	{
 		this.object = object;
 		this.onMouseDown = onMouseDown;
@@ -252,13 +251,13 @@ class FlxMouseEvent<T:FlxObject> implements IFlxDestroyable
 		this.mouseEnabled = mouseEnabled;
 		this.pixelPerfect = pixelPerfect;
 		this.mouseButtons = (mouseButtons == null) ? [FlxMouseButtonID.LEFT] : mouseButtons;
-
+		
 		if ((object is FlxSprite))
 		{
 			sprite = cast object;
 		}
 	}
-
+	
 	public function destroy():Void
 	{
 		object = null;

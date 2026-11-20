@@ -40,6 +40,7 @@ typedef FlxSoundAsset = OneOfThree<String, Sound, Class<Sound>>;
 typedef FlxGraphicAsset = OneOfThree<FlxGraphic, BitmapData, String>;
 typedef FlxTilemapGraphicAsset = OneOfFour<FlxFramesCollection, FlxGraphic, BitmapData, String>;
 typedef FlxBitmapFontGraphicAsset = OneOfFour<FlxFrame, FlxGraphic, BitmapData, String>;
+
 abstract FlxGraphicSource(OneOfThree<BitmapData, Class<Dynamic>, String>) from BitmapData from Class<Dynamic> from String
 {
 	public function resolveBitmapData()
@@ -56,8 +57,7 @@ abstract FlxAngelCodeAsset(OneOfThree<Xml, String, Bytes>) from Xml from String 
 	}
 }
 
-
-@:deprecated("`FlxAngelCodeXmlAsset` is deprecated, use `FlxAngelCodeAsset` instead")// 5.6.0
+@:deprecated("`FlxAngelCodeXmlAsset` is deprecated, use `FlxAngelCodeAsset` instead") // 5.6.0
 typedef FlxAngelCodeXmlAsset = FlxAngelCodeAsset;
 
 abstract FlxXmlAsset(OneOfTwo<Xml, String>) from Xml from String
@@ -69,18 +69,18 @@ abstract FlxXmlAsset(OneOfTwo<Xml, String>) from Xml from String
 			final str:String = cast this;
 			if (FlxG.assets.exists(str))
 				return fromPath(str);
-
+				
 			return fromXmlString(str);
 		}
-
+		
 		return cast(this, Xml);
 	}
-
+	
 	static inline function fromPath<T>(path:String):Xml
 	{
 		return FlxG.assets.getXmlUnsafe(path);
 	}
-
+	
 	static inline function fromXmlString<T>(data:String):Xml
 	{
 		return FlxG.assets.parseXml(data);
@@ -96,18 +96,18 @@ abstract FlxJsonAsset<T>(OneOfTwo<T, String>) from T from String
 			final str:String = cast this;
 			if (FlxG.assets.exists(str))
 				return fromPath(str);
-
+				
 			return fromDataString(str);
 		}
-
+		
 		return cast this;
 	}
-
+	
 	static inline function fromPath<T>(path:String):T
 	{
 		return cast FlxG.assets.getJsonUnsafe(path);
 	}
-
+	
 	static inline function fromDataString<T>(data:String):T
 	{
 		return cast FlxG.assets.parseJson(data);
@@ -125,7 +125,7 @@ class FlxAssets
 	 * for backwards compatibility reasons.
 	 */
 	public static var defaultSoundExtension = #if flash "mp3" #else "ogg" #end;
-
+	
 	#if (macro || doc_gen)
 	/**
 	 * Reads files from a directory relative to this project and generates `public static inline`
@@ -181,8 +181,8 @@ class FlxAssets
 	 * @see [Flixel 5.0.0 Migration guide - AssetPaths has less caveats](https://github.com/HaxeFlixel/flixel/wiki/Flixel-5.0.0-Migration-guide#assetpaths-has-less-caveats-2575)
 	 * @see [Haxe Macros: Code completion for everything](http://blog.stroep.nl/2014/01/haxe-macros/)
 	**/
-	public static function buildFileReferences(directory = "assets/", subDirectories = false, ?include:Expr, ?exclude:Expr,
-			?rename:String->Null<String>, listField = "allFiles"):Array<Field>
+	public static function buildFileReferences(directory = "assets/", subDirectories = false, ?include:Expr, ?exclude:Expr, ?rename:String->Null<String>,
+			listField = "allFiles"):Array<Field>
 	{
 		#if doc_gen
 		return [];
@@ -191,7 +191,7 @@ class FlxAssets
 		return buildRefs(directory, subDirectories, exprToRegex(include), exprToRegex(exclude), rename, listField);
 		#end
 	}
-
+	
 	#if !doc_gen
 	static function exprToRegex(expr:Expr):EReg
 	{
@@ -217,7 +217,7 @@ class FlxAssets
 	// fonts
 	public static var FONT_DEFAULT:String = "Nokia Cellphone FC Small";
 	public static var FONT_DEBUGGER:String = "Monsterrat";
-
+	
 	public static function drawLogo(graph:Graphics):Void
 	{
 		// draw green area
@@ -232,7 +232,7 @@ class FlxAssets
 		graph.lineTo(13, 50);
 		graph.lineTo(50, 13);
 		graph.endFill();
-
+		
 		// draw yellow area
 		graph.beginFill(0xffc132);
 		graph.moveTo(0, 0);
@@ -242,7 +242,7 @@ class FlxAssets
 		graph.lineTo(0, 25);
 		graph.lineTo(0, 0);
 		graph.endFill();
-
+		
 		// draw red area
 		graph.beginFill(0xf5274e);
 		graph.moveTo(100, 0);
@@ -252,7 +252,7 @@ class FlxAssets
 		graph.lineTo(100, 25);
 		graph.lineTo(100, 0);
 		graph.endFill();
-
+		
 		// draw blue area
 		graph.beginFill(0x3641ff);
 		graph.moveTo(0, 100);
@@ -262,7 +262,7 @@ class FlxAssets
 		graph.lineTo(0, 75);
 		graph.lineTo(0, 100);
 		graph.endFill();
-
+		
 		// draw light-blue area
 		graph.beginFill(0x04cdfb);
 		graph.moveTo(100, 100);
@@ -283,7 +283,7 @@ class FlxAssets
 	{
 		return FlxG.assets.getBitmapData(id);
 	}
-
+	
 	/**
 	 * Generates BitmapData from specified class. Less typing.
 	 *
@@ -294,7 +294,7 @@ class FlxAssets
 	{
 		return Type.createInstance(source, []);
 	}
-
+	
 	/**
 	 * Takes Dynamic object as a input and tries to convert it to BitmapData:
 	 * 1) if the input is BitmapData, then it will return this BitmapData;
@@ -319,10 +319,10 @@ class FlxAssets
 		{
 			return FlxG.assets.getBitmapData(cast graphic);
 		}
-
+		
 		return null;
 	}
-
+	
 	/**
 	 * Takes Dynamic object as a input and tries to find appropriate key String for its BitmapData:
 	 * 1) if the input is BitmapData, then it will return second (optional) argument (the Key);
@@ -338,7 +338,7 @@ class FlxAssets
 	{
 		if (key != null)
 			return key;
-		
+			
 		if ((graphic is BitmapData))
 		{
 			return key;
@@ -354,7 +354,7 @@ class FlxAssets
 		
 		return null;
 	}
-
+	
 	/**
 	 * Loads an OpenFL sound asset from the given asset id. If an extension not provided the 
 	 * `defaultSoundExtension` is used (defaults to "ogg" on non-flash targets).
@@ -382,10 +382,10 @@ class FlxAssets
 		final needsExt = Path.extension(id).length == 0;
 		if (needsExt)
 			id += "." + defaultSoundExtension;
-
+			
 		return FlxG.assets.getSoundUnsafe(id, useCache);
 	}
-
+	
 	public static function getVirtualInputFrames():FlxAtlasFrames
 	{
 		var bitmapData = new GraphicVirtualInput(0, 0);

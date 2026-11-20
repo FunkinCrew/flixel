@@ -67,75 +67,75 @@ class FlxG
 	 * Override `onFocus()` and `onFocusLost()` for your own behaviour in your state.
 	 */
 	public static var autoPause:Bool = true;
-
+	
 	/**
 	 * WARNING: Changing this can lead to issues with physics and the recording system. Setting this to `false` might lead to smoother animations (even at lower fps) at the cost of physics accuracy.
 	 * 
 	 * UPDATE: The new mainloop inside lime should no longer require this and so rn it does nothing.
 	 */
 	public static var fixedTimestep:Bool = true;
-
+	
 	/**
 	 * How fast or slow time should pass in the game; default is `1.0`.
 	 */
 	public static var timeScale:Float = 1.0;
-
+	
 	/**
 	 * How fast or slow animations should pass in the game; default is `1.0`.
 	 * @since 5.5.0
 	 */
 	public static var animationTimeScale:Float = 1.0;
-
+	
 	/**
 	 * How many times the quad tree should divide the world on each axis.
 	 * Generally, sparse collisions can have fewer divisons,
 	 * while denser collision activity usually profits from more. Default value is `6`.
 	 */
 	public static var worldDivisions:Int = 6;
-
+	
 	/**
 	 * By default this just refers to the first entry in the `FlxG.cameras.list`
 	 * array but you can do what you like with it.
 	 */
 	public static var camera:FlxCamera;
-
+	
 	/**
 	 * The HaxeFlixel version, in semantic versioning syntax. Use `Std.string()`
 	 * on it to get a `String` formatted like this: `"HaxeFlixel MAJOR.MINOR.PATCH-COMMIT_SHA"`.
 	 */
 	public static final VERSION = new FlxVersion(6, 1, 2);
-
+	
 	/**
 	 * Internal tracker for game object.
 	 */
 	public static var game(default, null):FlxGame;
-
+	
 	/**
 	 * The Flash stage object (required for event listeners).
 	 * Will be `null` if it's not safe/useful yet.
 	 */
 	public static var stage(get, never):Stage;
-
+	
 	/**
 	 * Access the current game state from anywhere. Consider using `addChildBelowMouse()`
 	 * if you want to add a `DisplayObject` to the stage instead of directly adding it here!
 	 */
 	public static var state(get, never):FlxState;
-
+	
 	/**
 	 * How many times you want your game to update each second.
 	 * More updates usually means better collisions and smoother motion.
 	 * NOTE: This is NOT the same thing as the draw framerate!
 	 */
 	public static var updateFramerate(default, set):Int;
-
+	
 	/**
 	 * How many times you want your game to step each second. More steps usually means greater responsiveness,
 	 * but it can also slowdown your game if the stage can't keep up with the update routine.
 	 * NOTE: This is NOT the same thing as the update framerate!
 	 */
 	public static var drawFramerate(default, set):Int;
-
+	
 	/**
 	 * Whether the game is running on a mobile device.
 	 * If on HTML5, it returns `FlxG.html5.onMobile`.
@@ -143,18 +143,18 @@ class FlxG
 	 * @since 4.2.0
 	 */
 	public static var onMobile(get, never):Bool;
-
+	
 	public static var renderMethod(default, null):FlxRenderMethod;
-
+	
 	public static var renderBlit(default, null):Bool;
 	public static var renderTile(default, null):Bool;
-
+	
 	/**
 	 * Represents the amount of time in seconds that passed since last frame.
 	 */
 	@:allow(flixel.FlxGame.updateElapsed)
 	public static var elapsed(default, null):Float = 0;
-
+	
 	/**
 	 * Useful when the timestep is NOT fixed (i.e. variable),
 	 * to prevent jerky movement or erratic behavior at very low fps.
@@ -162,38 +162,38 @@ class FlxG
 	 * slowdown instead of frameskip; default is 1/10th of a second.
 	 */
 	public static var maxElapsed:Float = 0.1;
-
+	
 	/**
 	 * The width of the screen in game pixels. Read-only, use `resizeGame()` to change.
 	 */
 	@:allow(flixel.system.scaleModes)
 	public static var width(default, null):Int;
-
+	
 	/**
 	 * The height of the screen in game pixels. Read-only, use `resizeGame()` to change.
 	 */
 	@:allow(flixel.system.scaleModes)
 	public static var height(default, null):Int;
-
+	
 	/**
 	 * The scale mode the game should use.
 	 * HaxeFlixel includes several available scale modes, which are located in `flixel.system.scaleModes`.
 	 * However, you may also create a class which extends `BaseScaleMode`, and override its behavior according to your needs.
 	 */
 	public static var scaleMode(default, set):BaseScaleMode = new RatioScaleMode();
-
+	
 	/**
 	 * Use this to toggle between fullscreen and normal mode. Works on CPP, Neko and Flash.
 	 * You can easily toggle fullscreen with e.g.: `FlxG.fullscreen = !FlxG.fullscreen;`
 	 */
 	public static var fullscreen(get, set):Bool;
-
+	
 	/**
 	 * The dimensions of the game world, used by the quad tree for collisions and overlap checks.
 	 * Use `.set()` instead of creating a new object!
 	 */
 	public static var worldBounds(default, null):FlxRect = FlxRect.get();
-
+	
 	#if FLX_SAVE
 	/**
 	 * A `FlxSave` used internally by flixel to save sound preferences and
@@ -201,13 +201,13 @@ class FlxG
 	 */
 	public static var save(default, null):FlxSave = new FlxSave();
 	#end
-
+	
 	/**
 	 * A `FlxRandom` object which can be used to generate random numbers.
 	 * Also used by Flixel internally.
 	 */
 	public static var random(default, null):FlxRandom = new FlxRandom();
-
+	
 	#if FLX_MOUSE
 	/**
 	 * Used for mouse input. e.g.: check if the left mouse button
@@ -215,21 +215,21 @@ class FlxG
 	 */
 	public static var mouse(default, set):FlxMouse;
 	#end
-
+	
 	#if FLX_TOUCH
 	/**
 	 * Useful for devices with multitouch support.
 	 */
 	public static var touches(default, null):FlxTouchManager;
 	#end
-
+	
 	#if FLX_POINTER_INPUT
 	/**
 	 * Contains all "swipes" from both mouse and touch input that have just ended.
 	 */
 	public static var swipes(default, null):Array<FlxSwipe> = [];
 	#end
-
+	
 	#if FLX_KEYBOARD
 	/**
 	 * Used for keyboard input e.g.: check if the left arrow key is
@@ -237,114 +237,114 @@ class FlxG
 	 */
 	public static var keys(default, null):FlxKeyboard;
 	#end
-
+	
 	#if FLX_GAMEPAD
 	/**
 	 * Allows accessing the available gamepads.
 	 */
 	public static var gamepads(default, null):FlxGamepadManager;
 	#end
-
+	
 	#if android
 	/**
 	 * Useful for tracking Back, Home buttons etc on Android devices.
 	 */
 	public static var android(default, null):FlxAndroidKeys;
 	#end
-
+	
 	#if FLX_ACCELEROMETER
 	/**
 	 * Provides access to the accelerometer data of mobile devices as `x`/`y`/`z` values.
 	 */
 	public static var accelerometer(default, null):FlxAccelerometer;
 	#end
-
+	
 	#if FLX_GYROSCOPE
 	/**
 	 * Provides access to the accelerometer data of mobile devices as `pitch`/`roll`/`yaw` values.
 	 */
 	public static var gyroscope(default, null):FlxGyroscope;
 	#end
-
+	
 	#if js
 	/**
 	 * Has some HTML5-specific things like browser detection, browser dimensions etc...
 	 */
 	public static var html5(default, null):HTML5FrontEnd = new HTML5FrontEnd();
 	#end
-
+	
 	/**
 	 * Mostly used internally, but you can use it too to reset inputs and create input classes of your own.
 	 */
 	public static var inputs(default, null):InputFrontEnd = new InputFrontEnd();
-
+	
 	/**
 	 * Used to register functions and objects or add new commands to the console window.
 	 */
 	public static var console(default, null):ConsoleFrontEnd = new ConsoleFrontEnd();
-
+	
 	/**
 	 * Used to add messages to the log window or enable `trace()` redirection.
 	 */
 	public static var log(default, null):LogFrontEnd = new LogFrontEnd();
-
+	
 	/**
 	 * Used to add images to the bitmap log window.
 	 */
 	public static var bitmapLog(default, null):BitmapLogFrontEnd = new BitmapLogFrontEnd();
-
+	
 	/**
 	 * Used to add or remove things to / from the watch window.
 	 */
 	public static var watch(default, null):WatchFrontEnd = new WatchFrontEnd();
-
+	
 	/**
 	 * Used it to show / hide the debugger, change its layout,
 	 * activate debug drawing or change the key used to toggle it.
 	 */
 	public static var debugger(default, null):DebuggerFrontEnd = new DebuggerFrontEnd();
-
+	
 	/**
 	 * Contains all the functions needed for recording and replaying.
 	 */
 	public static var vcr(default, null):VCRFrontEnd;
-
+	
 	/**
 	 * Contains things related to bitmaps, for example regarding the `BitmapData` cache and the cache itself.
 	 */
 	public static var bitmap(default, null):BitmapFrontEnd = new BitmapFrontEnd();
-
+	
 	/**
 	 * Contains things related to cameras, a list of all cameras and several effects like `flash()` or `fade()`.
 	 */
 	public static var cameras(default, null):CameraFrontEnd = new CameraFrontEnd();
-
+	
 	/**
 	 * Contains a list of all plugins and the functions required to `add()`, `remove()` them etc.
 	 */
 	public static var plugins(default, null):PluginFrontEnd;
-
+	
 	public static var initialWidth(default, null):Int = 0;
 	public static var initialHeight(default, null):Int = 0;
-
+	
 	#if FLX_SOUND_SYSTEM
 	/**
 	 * Contains a list of all sounds and other things to manage or `play()` sounds.
 	 */
 	public static var sound(default, null):SoundFrontEnd;
 	#end
-
+	
 	/**
 	 * Contains system-wide signals like `gameResized` or `preStateSwitch`.
 	 */
 	public static var signals(default, null):SignalFrontEnd = new SignalFrontEnd();
-
+	
 	/**
 	 * Contains helper functions relating to retrieving assets
 	 * @since 5.9.0
 	 */
 	public static var assets(default, null):AssetFrontEnd = new AssetFrontEnd();
-
+	
 	/**
 	 * Resizes the game within the window by reapplying the current scale mode.
 	 */
@@ -352,7 +352,7 @@ class FlxG
 	{
 		scaleMode.onMeasure(width, height);
 	}
-
+	
 	/**
 	 * Resizes the window. Only works on desktop targets (Neko, Windows, Linux, Mac).
 	 */
@@ -368,7 +368,7 @@ class FlxG
 		#end
 		#end
 	}
-
+	
 	/**
 	 * Like hitting the reset button on a game console, this will re-launch the game as if it just started.
 	 */
@@ -376,7 +376,7 @@ class FlxG
 	{
 		game._resetGame = true;
 	}
-
+	
 	/**
 	 * Attempts to switch from the current game state to `nextState`.
 	 * The state switch is successful if `switchTo()` of the current `state` returns `true`.
@@ -395,7 +395,7 @@ class FlxG
 				FlxG.log.warn("`onOutroComplete` was called after the state was switched. This will be ignored");
 		});
 	}
-
+	
 	/**
 	 * Request a reset of the current game state.
 	 * Calls `switchState()` with a new instance of the current `state`.
@@ -404,7 +404,7 @@ class FlxG
 	{
 		switchState(state._constructor);
 	}
-
+	
 	/**
 	 * Call this function to see if one `FlxObject` overlaps another within `FlxG.worldBounds`.
 	 * Can be called with one object and one group, or two groups, or two objects,
@@ -436,7 +436,7 @@ class FlxG
 			objectOrGroup1 = state;
 		if (objectOrGroup2 == objectOrGroup1)
 			objectOrGroup2 = null;
-
+			
 		FlxQuadTree.divisions = worldDivisions;
 		final quadTree = FlxQuadTree.recycle(worldBounds.x, worldBounds.y, worldBounds.width, worldBounds.height);
 		quadTree.load(objectOrGroup1, objectOrGroup2, notifyCallback, processCallback);
@@ -444,7 +444,7 @@ class FlxG
 		quadTree.destroy();
 		return result;
 	}
-
+	
 	/**
 	 * A pixel perfect collision check between two `FlxSprite` objects.
 	 * It will do a bounds check first, and if that passes it will run a
@@ -463,7 +463,7 @@ class FlxG
 	{
 		return FlxCollision.pixelPerfectCheck(sprite1, sprite2, alphaTolerance, camera);
 	}
-
+	
 	/**
 	 * Call this function to see if one `FlxObject` collides with another within `FlxG.worldBounds`.
 	 * Can be called with one object and one group, or two groups, or two objects,
@@ -486,7 +486,7 @@ class FlxG
 	{
 		return overlap(objectOrGroup1, objectOrGroup2, notifyCallback, FlxObject.separate);
 	}
-
+	
 	/**
 	 * Regular `DisplayObject`s are normally displayed over the Flixel cursor and the Flixel debugger if simply
 	 * added to `stage`. This function simplifies things by adding a `DisplayObject` directly below mouse level.
@@ -499,12 +499,12 @@ class FlxG
 	{
 		var index = game.getChildIndex(game._inputContainer);
 		var max = game.numChildren;
-
+		
 		index = FlxMath.maxAdd(index, indexModifier, max);
 		game.addChildAt(child, index);
 		return child;
 	}
-
+	
 	/**
 	 * Removes a child from the Flixel display list, if it is part of it.
 	 *
@@ -517,7 +517,7 @@ class FlxG
 			game.removeChild(child);
 		return child;
 	}
-
+	
 	/**
 	 * Opens a web page, by default a new tab or window. If the URL does not
 	 * already start with `"http://"` or `"https://"`, it gets added automatically.
@@ -533,10 +533,10 @@ class FlxG
 			url = 'https://${url}';
 		else if (protocol[0] != 'http' && protocol[0] != 'https')
 			throw "openURL can only open http and https links.";
-
+			
 		Lib.getURL(new URLRequest(url), target);
 	}
-
+	
 	/**
 	 * Called by `FlxGame` to set up `FlxG` during `FlxGame`'s constructor.
 	 */
@@ -547,63 +547,63 @@ class FlxG
 			width = -width;
 		if (height < 0)
 			height = -height;
-
+			
 		FlxG.game = game;
 		FlxG.width = width;
 		FlxG.height = height;
-
+		
 		initRenderMethod();
 		#if FLX_OPENGL_AVAILABLE
 		// Query once when window is created and cache for later
 		bitmap.get_maxTextureSize();
 		#end
-
+		
 		FlxG.initialWidth = width;
 		FlxG.initialHeight = height;
-
+		
 		resizeGame(Lib.current.stage.stageWidth, Lib.current.stage.stageHeight);
-
+		
 		// Instantiate inputs
 		#if FLX_KEYBOARD
 		keys = inputs.addInput(new FlxKeyboard());
 		#end
-
+		
 		#if FLX_MOUSE
 		mouse = inputs.addInput(new FlxMouse(game._inputContainer));
 		#end
-
+		
 		#if FLX_TOUCH
 		touches = inputs.addInput(new FlxTouchManager());
 		#end
-
+		
 		#if FLX_GAMEPAD
 		gamepads = inputs.addInput(new FlxGamepadManager());
 		#end
-
+		
 		#if android
 		android = inputs.addInput(new FlxAndroidKeys());
 		#end
-
+		
 		#if FLX_ACCELEROMETER
 		accelerometer = new FlxAccelerometer();
 		#end
-
+		
 		#if FLX_GYROSCOPE
 		gyroscope = new FlxGyroscope();
 		#end
-
+		
 		#if FLX_SAVE
 		initSave();
 		#end
-
+		
 		plugins = new PluginFrontEnd();
 		vcr = new VCRFrontEnd();
-
+		
 		#if FLX_SOUND_SYSTEM
 		sound = new SoundFrontEnd();
 		#end
 	}
-
+	
 	static function initRenderMethod():Void
 	{
 		#if !flash
@@ -619,24 +619,24 @@ class FlxG
 		renderMethod = DRAW_TILES;
 		#end
 		#end
-
+		
 		#if air
 		renderMethod = BLITTING;
 		#end
-
+		
 		renderBlit = renderMethod == BLITTING;
 		renderTile = renderMethod == DRAW_TILES;
-
+		
 		FlxObject.defaultPixelPerfectPosition = renderBlit;
 	}
-
+	
 	#if FLX_SAVE
 	static function initSave()
 	{
 		// Don't init if the FlxG.save.bind was manually called before the FlxGame was created
 		if (save.isBound)
 			return;
-
+			
 		// Use Project.xml data to determine save id (since 5.0.0).
 		final name = stage.application.meta["file"];
 		save.bind(FlxSave.validate(name));
@@ -645,7 +645,7 @@ class FlxG
 			save.mergeDataFrom("flixel", null, false, false);
 	}
 	#end
-
+	
 	/**
 	 * Called whenever the game is reset, doesn't have to do quite as much work as the basic initialization stuff.
 	 */
@@ -653,7 +653,7 @@ class FlxG
 	static function reset():Void
 	{
 		random.resetInitialSeed();
-
+		
 		bitmap.reset();
 		inputs.reset();
 		#if FLX_SOUND_SYSTEM
@@ -667,14 +667,14 @@ class FlxG
 		worldBounds.set(-10, -10, width + 20, height + 20);
 		worldDivisions = 6;
 	}
-
+	
 	static function set_scaleMode(value:BaseScaleMode):BaseScaleMode
 	{
 		scaleMode = value;
 		game.onResize(null);
 		return value;
 	}
-
+	
 	#if FLX_MOUSE
 	static function set_mouse(newMouse:FlxMouse):FlxMouse
 	{
@@ -684,7 +684,7 @@ class FlxG
 			mouse = inputs.addUniqueType(newMouse);
 			return mouse;
 		}
-
+		
 		// replace existing mouse
 		final oldMouse:FlxMouse = mouse;
 		final result:FlxMouse = inputs.replace(oldMouse, newMouse, true);
@@ -693,55 +693,55 @@ class FlxG
 			mouse = result;
 			return newMouse;
 		}
-
+		
 		return oldMouse;
 	}
 	#end
-
+	
 	static function set_updateFramerate(value:Int):Int
 	{
 		if (value < drawFramerate)
 			log.warn("FlxG.framerate: the game's framerate shouldn't be smaller than the flash framerate," + " since it can stop your game from updating.");
-
+			
 		updateFramerate = value;
-
+		
 		return value;
 	}
-
+	
 	static function set_drawFramerate(value:Int):Int
 	{
 		if (value > updateFramerate)
 			log.warn("FlxG.drawFramerate: the update framerate shouldn't be smaller than the draw framerate," + " since it can stop your game from updating.");
-
+			
 		drawFramerate = value;
-
+		
 		if (game.stage != null)
 			game.stage.frameRate = drawFramerate;
-
+			
 		return value;
 	}
-
+	
 	static function get_fullscreen():Bool
 	{
 		return stage.displayState == StageDisplayState.FULL_SCREEN || stage.displayState == StageDisplayState.FULL_SCREEN_INTERACTIVE;
 	}
-
+	
 	static function set_fullscreen(value:Bool):Bool
 	{
 		stage.displayState = value ? StageDisplayState.FULL_SCREEN : StageDisplayState.NORMAL;
 		return value;
 	}
-
+	
 	static inline function get_stage():Stage
 	{
 		return Lib.current.stage;
 	}
-
+	
 	static inline function get_state():FlxState
 	{
 		return game._state;
 	}
-
+	
 	static inline function get_onMobile():Bool
 	{
 		return #if js

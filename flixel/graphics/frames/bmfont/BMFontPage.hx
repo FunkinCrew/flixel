@@ -25,8 +25,7 @@ class BMFontPage
 	
 	static function fromXml(pageNode:BMFontXml):BMFontPage
 	{
-		return
-		{
+		return {
 			id: pageNode.att.int("id"),
 			file: pageNode.att.string("file")
 		}
@@ -35,24 +34,25 @@ class BMFontPage
 	static function listFromXml(pagesNode:BMFontXml):Array<BMFontPage>
 	{
 		final pages = pagesNode.nodes("page");
-		return [for (page in pages) fromXml(page) ];
+		return [for (page in pages) fromXml(page)];
 	}
 	
 	static function fromText(pageText:String)
 	{
 		var id = -1;
 		var file:String = null;
-		BMFontUtil.forEachAttribute(pageText, 
-			function(key:String, value:String)
+		BMFontUtil.forEachAttribute(pageText, function(key:String, value:String)
+		{
+			switch key
 			{
-				switch key
-				{
-					case 'id': id = Std.parseInt(value);
-					case 'file': file = value;
-					default: FlxG.log.warn('Unexpected font char attribute: $key=$value');
-				}
+				case 'id':
+					id = Std.parseInt(value);
+				case 'file':
+					file = value;
+				default:
+					FlxG.log.warn('Unexpected font char attribute: $key=$value');
 			}
-		);
+		});
 		return new BMFontPage(id, file);
 	}
 	

@@ -41,15 +41,15 @@ class Tracker extends Watch
 	 * FlxSprite profile were added before the one for FlxObject, it would never be selected.
 	 */
 	public static var profiles:Array<TrackerProfile>;
-
+	
 	/**
 	 * Stores a reference to all objects for a which a tracker window exists
 	 * to prevent the creation of two windows for the same object.
 	 */
 	public static var objectsBeingTracked:Array<Dynamic> = [];
-
+	
 	static var _numTrackerWindows:Int = 0;
-
+	
 	public static inline function addProfile(Profile:TrackerProfile):Void
 	{
 		if (Profile != null)
@@ -58,42 +58,49 @@ class Tracker extends Watch
 			profiles.push(Profile);
 		}
 	}
-
+	
 	public static function findProfile(Object:Dynamic):TrackerProfile
 	{
 		initProfiles();
-
+		
 		var lastMatchingProfile:TrackerProfile = null;
 		for (profile in profiles)
 			if (Std.isOfType(Object, profile.objectClass) || Object == profile.objectClass)
 				lastMatchingProfile = profile;
-
+				
 		return lastMatchingProfile;
 	}
-
+	
 	public static function onStateSwitch():Void
 	{
 		_numTrackerWindows = 0;
 	}
-
+	
 	static function initProfiles():Void
 	{
 		if (profiles == null)
 		{
 			profiles = [];
-
+			
 			addProfile(new TrackerProfile(FlxG, [
-				"width", "height", "worldBounds.x", "worldBounds.y", "worldBounds.width", "worldBounds.height", "worldDivisions", "updateFramerate",
+				"width",
+				"height",
+				"worldBounds.x",
+				"worldBounds.y",
+				"worldBounds.width",
+				"worldBounds.height",
+				"worldDivisions",
+				"updateFramerate",
 				"drawFramerate",
 				"elapsed",
 				"maxElapsed",
 				"autoPause",
 				"timeScale"
 			]));
-
+			
 			addProfile(new TrackerProfile(FlxBasePoint, ["x", "y"]));
 			addProfile(new TrackerProfile(FlxRect, ["width", "height"], [FlxBasePoint]));
-
+			
 			addProfile(new TrackerProfile(FlxBasic, ["active", "visible", "alive", "exists"]));
 			addProfile(new TrackerProfile(FlxObject, ["velocity", "acceleration", "drag", "angle", "immovable"], [FlxRect, FlxBasic]));
 			addProfile(new TrackerProfile(FlxTilemap, ["auto", "widthInTiles", "heightInTiles", "totalTiles", "scale"], [FlxObject]));
@@ -111,11 +118,11 @@ class Tracker extends Watch
 				"borderSize",
 				"borderStyle"
 			], [FlxSprite]));
-
+			
 			addProfile(new TrackerProfile(FlxTypedGroup, ["length", "members.length", "maxSize"], [FlxBasic]));
 			addProfile(new TrackerProfile(FlxSpriteGroup, null, [FlxSprite, FlxTypedGroup]));
 			addProfile(new TrackerProfile(FlxState, ["persistentUpdate", "persistentDraw", "destroySubStates", "bgColor"], [FlxTypedGroup]));
-
+			
 			addProfile(new TrackerProfile(FlxCamera, [
 				"style",
 				"followLerp",
@@ -126,11 +133,20 @@ class Tracker extends Watch
 				"alpha",
 				"angle"
 			], [FlxBasic, FlxRect]));
-
+			
 			addProfile(new TrackerProfile(FlxTween, [
-				"active", "duration", "type", "percent", "finished", "scale", "backward", "executions", "startDelay", "loopDelay"
+				"active",
+				"duration",
+				"type",
+				"percent",
+				"finished",
+				"scale",
+				"backward",
+				"executions",
+				"startDelay",
+				"loopDelay"
 			]));
-
+			
 			addProfile(new TrackerProfile(FlxPath, ["speed", "angle", "autoCenter", "nodeIndex", "active", "finished"]));
 			addProfile(new TrackerProfile(FlxTimer, [
 				"time",
@@ -143,11 +159,11 @@ class Tracker extends Watch
 				"elapsedLoops",
 				"progress"
 			]));
-
+			
 			addProfile(new TrackerProfile(FlxAnimationController, ["frameIndex", "frameName", "name", "paused", "finished", "frames"]));
-
+			
 			addProfile(new TrackerProfile(FlxTypedEmitter, ["emitting", "frequency", "bounce"], [FlxTypedGroup, FlxRect]));
-
+			
 			// Inputs
 			#if FLX_MOUSE
 			addProfile(new TrackerProfile(FlxMouse, [
@@ -159,8 +175,7 @@ class Tracker extends Watch
 				"pressed",
 				"justPressed",
 				"justReleased"
-				#if FLX_MOUSE_ADVANCED, "pressedMiddle", "justPressedMiddle", "justReleasedMiddle", "pressedRight", "justPressedRight", "justReleasedRight"
-				#end
+				#if FLX_MOUSE_ADVANCED, "pressedMiddle", "justPressedMiddle", "justReleasedMiddle", "pressedRight", "justPressedRight", "justReleasedRight" #end
 			], [FlxBasePoint]));
 			#end
 			#if FLX_TOUCH
@@ -177,43 +192,43 @@ class Tracker extends Watch
 			#if FLX_GAMEPAD
 			addProfile(new TrackerProfile(FlxGamepad, ["id", "deadZone", "hat", "ball", "dpadUp", "dpadDown", "dpadLeft", "dpadRight"]));
 			#end
-
+			
 			#if FLX_POINTER_INPUT
 			addProfile(new TrackerProfile(FlxSwipe, ["ID", "startPosition", "endPosition", "distance", "angle", "duration"]));
 			#end
-
+			
 			addProfile(new TrackerProfile(DisplayObject, ["z", "scaleX", "scaleY", "mouseX", "mouseY", "rotationX", "rotationY", "visible"], [FlxRect]));
 			addProfile(new TrackerProfile(Point, null, [FlxBasePoint]));
 			addProfile(new TrackerProfile(Rectangle, null, [FlxRect]));
 			addProfile(new TrackerProfile(Matrix, ["a", "b", "c", "d", "tx", "ty"]));
 		}
 	}
-
+	
 	var _object:Dynamic;
-
+	
 	public function new(Profile:TrackerProfile, ObjectOrClass:Dynamic, ?WindowTitle:String)
 	{
 		super(true);
-
+		
 		initProfiles();
 		_object = ObjectOrClass;
 		objectsBeingTracked.push(_object);
-
+		
 		initWatchEntries(Profile);
-
+		
 		_title.text = (WindowTitle == null) ? FlxStringUtil.getClassName(_object, true) : WindowTitle;
 		visible = true;
-
+		
 		resize(200, entriesContainer.height + 30);
-
+		
 		// Small x and y offset
 		x = _numTrackerWindows * 80;
 		y = _numTrackerWindows * 25 + 20;
 		_numTrackerWindows++;
-
+		
 		FlxG.signals.preStateSwitch.add(close);
 	}
-
+	
 	override public function destroy():Void
 	{
 		FlxG.signals.preStateSwitch.remove(close);
@@ -222,16 +237,16 @@ class Tracker extends Watch
 		_object = null;
 		super.destroy();
 	}
-
+	
 	function findProfileByClass(ObjectClass:Class<Dynamic>):TrackerProfile
 	{
 		for (profile in profiles)
 			if (profile.objectClass == ObjectClass)
 				return profile;
-
+				
 		return null;
 	}
-
+	
 	function initWatchEntries(Profile:TrackerProfile):Void
 	{
 		if (Profile != null)
@@ -240,17 +255,17 @@ class Tracker extends Watch
 			addVariables(Profile.variables);
 		}
 	}
-
+	
 	function addExtensions(Profile:TrackerProfile):Void
 	{
 		if (Profile.extensions == null)
 			return;
-
+			
 		for (extension in Profile.extensions)
 		{
 			if (extension == null)
 				continue;
-
+				
 			var extensionProfile:TrackerProfile = findProfileByClass(extension);
 			if (extensionProfile != null)
 			{
@@ -259,12 +274,12 @@ class Tracker extends Watch
 			}
 		}
 	}
-
+	
 	function addVariables(Variables:Array<String>):Void
 	{
 		if (Variables == null)
 			return;
-
+			
 		for (variable in Variables)
 			add(variable, FIELD(_object, variable));
 	}
@@ -276,14 +291,14 @@ class TrackerProfile
 	public var objectClass:Class<Dynamic>;
 	public var variables:Array<String>;
 	public var extensions:Array<Class<Dynamic>>;
-
+	
 	public function new(ObjectClass:Class<Dynamic>, ?Variables:Array<String>, ?Extensions:Array<Class<Dynamic>>)
 	{
 		objectClass = ObjectClass;
 		variables = Variables;
 		extensions = Extensions;
 	}
-
+	
 	public function toString():String
 	{
 		return FlxStringUtil.getDebugString([

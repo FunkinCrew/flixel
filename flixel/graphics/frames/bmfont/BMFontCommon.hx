@@ -26,8 +26,7 @@ class BMFontCommon
 	
 	static function fromXml(commonNode:BMFontXml):BMFontCommon
 	{
-		return
-		{
+		return {
 			lineHeight: commonNode.att.int("lineHeight"),
 			base: commonNode.att.intSafe("base", -1),
 			scaleW: commonNode.att.intWarn("scaleW", 1),
@@ -54,37 +53,44 @@ class BMFontCommon
 		var greenChnl:Int = 0;
 		var blueChnl:Int = 0;
 		
-		BMFontUtil.forEachAttribute(commonText,
-			function(key:String, value:String)
-			{
-				switch key
-				{
-					case 'lineHeight': lineHeight = Std.parseInt(value);
-					case 'base': base = Std.parseInt(value);
-					case 'scaleW': scaleW = Std.parseInt(value);
-					case 'scaleH': scaleH = Std.parseInt(value);
-					case 'pages': pages = Std.parseInt(value);
-					case 'packed': packed = value != '0';
-					case 'alphaChnl': alphaChnl = Std.parseInt(value);
-					case 'redChnl': redChnl = Std.parseInt(value);
-					case 'greenChnl': greenChnl = Std.parseInt(value);
-					case 'blueChnl': blueChnl = Std.parseInt(value);
-				}
-			}
-		);
-		
-		return
+		BMFontUtil.forEachAttribute(commonText, function(key:String, value:String)
 		{
-			lineHeight : lineHeight,
-			base : base,
-			scaleW : scaleW,
-			scaleH : scaleH,
-			pages : pages,
-			packed : packed,
-			alphaChnl : alphaChnl,
-			redChnl : redChnl,
-			greenChnl : greenChnl,
-			blueChnl : blueChnl
+			switch key
+			{
+				case 'lineHeight':
+					lineHeight = Std.parseInt(value);
+				case 'base':
+					base = Std.parseInt(value);
+				case 'scaleW':
+					scaleW = Std.parseInt(value);
+				case 'scaleH':
+					scaleH = Std.parseInt(value);
+				case 'pages':
+					pages = Std.parseInt(value);
+				case 'packed':
+					packed = value != '0';
+				case 'alphaChnl':
+					alphaChnl = Std.parseInt(value);
+				case 'redChnl':
+					redChnl = Std.parseInt(value);
+				case 'greenChnl':
+					greenChnl = Std.parseInt(value);
+				case 'blueChnl':
+					blueChnl = Std.parseInt(value);
+			}
+		});
+		
+		return {
+			lineHeight: lineHeight,
+			base: base,
+			scaleW: scaleW,
+			scaleH: scaleH,
+			pages: pages,
+			packed: packed,
+			alphaChnl: alphaChnl,
+			redChnl: redChnl,
+			greenChnl: greenChnl,
+			blueChnl: blueChnl
 		};
 	}
 	
@@ -93,7 +99,7 @@ class BMFontCommon
 		final blockSize = bytes.readInt32();
 		if (blockSize != 15)
 			throw 'Invalid block size for common block. Expected 15 got $blockSize';
-		
+			
 		return {
 			lineHeight: bytes.readInt16(),
 			base: bytes.readInt16(),

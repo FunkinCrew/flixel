@@ -3,19 +3,19 @@ package flixel.input.gamepad.id;
 import flixel.input.gamepad.FlxGamepadAnalogStick;
 
 /**
- * IDs for Switch Pro controllers
- *
- *-------
- * NOTES
- *-------
- *
- * WINDOWS: untested.
- *
- * LINUX: untested
- *
- * MAC: Worked out of box for me when connected via microUSB cable or Bluetooth
- * 
- * @since 4.8.0
+	* IDs for Switch Pro controllers
+	*
+	*-------
+	* NOTES
+	*-------
+	*
+	* WINDOWS: untested.
+	*
+	* LINUX: untested
+	*
+	* MAC: Worked out of box for me when connected via microUSB cable or Bluetooth
+	* 
+	* @since 4.8.0
  */
 enum abstract SwitchProID(Int) to Int
 {
@@ -48,7 +48,6 @@ enum abstract SwitchProID(Int) to Int
 	var RIGHT_STICK_DOWN = 29;
 	var RIGHT_STICK_LEFT = 30;
 	var RIGHT_STICK_RIGHT = 31;
-	
 	#else
 	var ZL = 4;
 	var ZR = 5;
@@ -92,5 +91,4 @@ enum abstract SwitchProID(Int) to Int
 		left: RIGHT_STICK_LEFT,
 		right: RIGHT_STICK_RIGHT
 	});
-	
 }

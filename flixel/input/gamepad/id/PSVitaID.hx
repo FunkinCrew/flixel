@@ -18,7 +18,7 @@ enum abstract PSVitaID(Int) to Int
 	var START = 12;
 	var L = 15;
 	var R = 16;
-
+	
 	var DPAD_UP = 17;
 	var DPAD_DOWN = 18;
 	var DPAD_LEFT = 19;

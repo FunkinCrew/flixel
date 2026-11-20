@@ -11,7 +11,7 @@ class PSVitaMapping extends FlxTypedGamepadMapping<PSVitaID>
 		leftStick = PSVitaID.LEFT_ANALOG_STICK;
 		rightStick = PSVitaID.RIGHT_ANALOG_STICK;
 	}
-
+	
 	override function getID(rawID:PSVitaID):FlxGamepadInputID
 	{
 		return switch (rawID)
@@ -39,7 +39,7 @@ class PSVitaMapping extends FlxTypedGamepadMapping<PSVitaID>
 			case _: NONE;
 		}
 	}
-
+	
 	override function getRawID(ID:FlxGamepadInputID):PSVitaID
 	{
 		return switch (ID)

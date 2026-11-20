@@ -35,28 +35,28 @@ class FlxAngle
 	public static macro function sinCosGenerator(length:Int = 360, sinAmplitude:Float = 1.0, cosAmplitude:Float = 1.0, frequency:Float = 1.0):Expr
 	{
 		var table = {cos: [], sin: []};
-
+		
 		for (c in 0...length)
 		{
 			var radian = c * frequency * Math.PI / 180;
 			table.cos.push(Math.cos(radian) * cosAmplitude);
 			table.sin.push(Math.sin(radian) * sinAmplitude);
 		}
-
+		
 		return Context.makeExpr(table, Context.currentPos());
 	}
-
+	
 	#if !macro
 	/**
 	 * Convert radians to degrees by multiplying it with this value.
 	 */
 	public static var TO_DEG(get, never):Float;
-
+	
 	/**
 	 * Convert degrees to radians by multiplying it with this value.
 	 */
 	public static var TO_RAD(get, never):Float;
-
+	
 	/**
 	 * Calculates the angle from (0, 0) to (x, y), in radians
 	 * @param x The x distance from the origin
@@ -67,7 +67,7 @@ class FlxAngle
 	{
 		return angleFromOrigin(x, y, false);
 	}
-
+	
 	/**
 	 * Calculates the angle from (0, 0) to (x, y), in degrees
 	 * @param x The x distance from the origin
@@ -78,7 +78,7 @@ class FlxAngle
 	{
 		return angleFromOrigin(x, y, true);
 	}
-
+	
 	/**
 	 * Calculates the angle from (0, 0) to (x, y)
 	 * @param x         The x distance from the origin
@@ -88,12 +88,9 @@ class FlxAngle
 	 */
 	public static inline function angleFromOrigin(x:Float, y:Float, asDegrees:Bool = false)
 	{
-		return if (asDegrees)
-				Math.atan2(y, x) * TO_DEG;
-			else
-				Math.atan2(y, x);
+		return if (asDegrees) Math.atan2(y, x) * TO_DEG; else Math.atan2(y, x);
 	}
-
+	
 	/**
 	 * Keeps an angle value between -180 and +180 by wrapping it
 	 * e.g an angle of +270 will be converted to -90
@@ -113,10 +110,10 @@ class FlxAngle
 		{
 			angle = wrapAngle(angle + 360);
 		}
-
+		
 		return angle;
 	}
-
+	
 	/**
 	 * Converts a Radian value into a Degree
 	 * Converts the radians value into degrees and returns
@@ -128,7 +125,7 @@ class FlxAngle
 	{
 		return radians * TO_DEG;
 	}
-
+	
 	/**
 	 * Converts a Degrees value into a Radian
 	 * Converts the degrees value into radians and returns
@@ -140,7 +137,7 @@ class FlxAngle
 	{
 		return degrees * TO_RAD;
 	}
-
+	
 	/**
 	 * Find the angle between the two FlxSprite, taking their x/y and origin into account.
 	 *
@@ -153,10 +150,10 @@ class FlxAngle
 	{
 		var dx:Float = (SpriteB.x + SpriteB.origin.x) - (SpriteA.x + SpriteA.origin.x);
 		var dy:Float = (SpriteB.y + SpriteB.origin.y) - (SpriteA.y + SpriteA.origin.y);
-
+		
 		return angleFromOrigin(dx, dy, AsDegrees);
 	}
-
+	
 	/**
 	 * Find the angle (in degrees) between the two FlxSprite, taking their x/y and origin into account.
 	 * @since 5.0.0
@@ -169,7 +166,7 @@ class FlxAngle
 	{
 		return angleBetween(SpriteA, SpriteB, true);
 	}
-
+	
 	/**
 	 * Find the angle (in radians) between the two FlxSprite, taking their x/y and origin into account.
 	 * @since 5.0.0
@@ -182,7 +179,7 @@ class FlxAngle
 	{
 		return angleBetween(SpriteA, SpriteB, false);
 	}
-
+	
 	/**
 	 * Find the angle between an FlxSprite and an FlxPoint.
 	 * The source sprite takes its x/y and origin into account.
@@ -196,12 +193,12 @@ class FlxAngle
 	{
 		var dx:Float = (Target.x) - (Sprite.x + Sprite.origin.x);
 		var dy:Float = (Target.y) - (Sprite.y + Sprite.origin.y);
-
+		
 		Target.putWeak();
-
+		
 		return angleFromOrigin(dx, dy, AsDegrees);
 	}
-
+	
 	/**
 	 * Find the angle between two FlxPoints.
 	 *
@@ -214,13 +211,13 @@ class FlxAngle
 	{
 		var dx:Float = PointB.x - PointA.x;
 		var dy:Float = PointB.y - PointA.y;
-
+		
 		PointA.putWeak();
 		PointB.putWeak();
-
+		
 		return angleFromOrigin(dx, dy, AsDegrees);
 	}
-
+	
 	/**
 	 * Find the angle (in degrees) between an FlxSprite and an FlxPoint.
 	 * The source sprite takes its x/y and origin into account.
@@ -234,7 +231,7 @@ class FlxAngle
 	{
 		return angleBetweenPoint(Sprite, Target, true);
 	}
-
+	
 	/**
 	 * Find the angle (in radians) between an FlxSprite and an FlxPoint.
 	 * The source sprite takes its x/y and origin into account.
@@ -248,7 +245,7 @@ class FlxAngle
 	{
 		return angleBetweenPoint(Sprite, Target, false);
 	}
-
+	
 	#if FLX_MOUSE
 	/**
 	 * Find the angle between an FlxSprite and the mouse,
@@ -262,17 +259,17 @@ class FlxAngle
 	{
 		if (Object == null)
 			return 0;
-
+			
 		var p:FlxPoint = Object.getScreenPosition();
-
+		
 		var dx:Float = FlxG.mouse.viewX - p.x;
 		var dy:Float = FlxG.mouse.viewY - p.y;
-
+		
 		p.put();
-
+		
 		return angleFromOrigin(dx, dy, AsDegrees);
 	}
-
+	
 	/**
 	 * Find the angle (in degrees) between an FlxSprite and the mouse,
 	 * taking their **screen** x/y and origin into account.
@@ -285,7 +282,7 @@ class FlxAngle
 	{
 		return angleBetweenMouse(Object, true);
 	}
-
+	
 	/**
 	 * Find the angle (in radians) between an FlxSprite and the mouse,
 	 * taking their **screen** x/y and origin into account.
@@ -299,7 +296,7 @@ class FlxAngle
 		return angleBetweenMouse(Object, false);
 	}
 	#end
-
+	
 	#if FLX_TOUCH
 	/**
 	 * Find the angle between an FlxSprite and a FlxTouch,
@@ -314,15 +311,15 @@ class FlxAngle
 	{
 		// In order to get the angle between the object and mouse, we need the objects screen coordinates (rather than world coordinates)
 		var p:FlxPoint = Object.getScreenPosition();
-
+		
 		var dx:Float = Touch.viewX - p.x;
 		var dy:Float = Touch.viewY - p.y;
-
+		
 		p.put();
-
+		
 		return angleFromOrigin(dx, dy, AsDegrees);
 	}
-
+	
 	/**
 	 * Find the angle (in degrees) between an FlxSprite and a FlxTouch,
 	 * taking their **screen** x/y and origin into account.
@@ -336,7 +333,7 @@ class FlxAngle
 	{
 		return angleBetweenTouch(Object, Touch, true);
 	}
-
+	
 	/**
 	 * Find the angle (in radians) between an FlxSprite and a FlxTouch,
 	 * taking their **screen** x/y and origin into account.
@@ -351,12 +348,12 @@ class FlxAngle
 		return angleBetweenTouch(Object, Touch, false);
 	}
 	#end
-
+	
 	static inline function get_TO_DEG():Float
 	{
 		return 180 / Math.PI;
 	}
-
+	
 	static inline function get_TO_RAD():Float
 	{
 		return Math.PI / 180;

@@ -126,7 +126,6 @@ abstract AseAtlasTagRepeat(Null<String>) from Null<String> to Null<String>
 	{
 		return Std.parseInt(this);
 	}
-	
 }
 
 enum abstract AseAtlasTagDirection(String) to String

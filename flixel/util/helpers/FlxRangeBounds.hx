@@ -12,17 +12,17 @@ class FlxRangeBounds<T>
 	 * The beginning minimum and maximum values of this property.
 	 */
 	public var start:FlxBounds<T>;
-
+	
 	/**
 	 * The ending minimum and maximum values of this property.
 	 */
 	public var end:FlxBounds<T>;
-
+	
 	/**
 	 * A flag that can be used to toggle the use of this property.
 	 */
 	public var active:Bool = true;
-
+	
 	/**
 	 * Create a new RangeBounds object. Must be typed, e.g. var myRangeBounds = new RangeBounds<Float>(0, 0, 0, 0);
 	 *
@@ -37,7 +37,7 @@ class FlxRangeBounds<T>
 		start = new FlxBounds<T>(startMin, startMax == null ? startMin : startMax);
 		end = new FlxBounds<T>(endMin == null ? startMin : endMin, endMax == null ? start.max : endMax);
 	}
-
+	
 	/**
 	 * Handy function to set the the beginning and ending range of values for an emitter property in one line.
 	 *
@@ -53,10 +53,10 @@ class FlxRangeBounds<T>
 		start.max = startMax == null ? start.min : startMax;
 		end.min = endMin == null ? start.min : endMin;
 		end.max = endMax == null ? (endMin == null ? start.max : end.min) : endMax;
-
+		
 		return this;
 	}
-
+	
 	/**
 	 * Function to compare this FlxRangeBounds to another.
 	 *
@@ -67,7 +67,7 @@ class FlxRangeBounds<T>
 	{
 		return start.equals(OtherRangeBounds.start) && end.equals(OtherRangeBounds.end);
 	}
-
+	
 	/**
 	 * Convert object to readable string name. Useful for debugging, save games, etc.
 	 */

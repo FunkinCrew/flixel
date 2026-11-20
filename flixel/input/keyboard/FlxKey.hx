@@ -111,14 +111,14 @@ enum abstract FlxKey(Int) from Int to Int
 	var NUMPADPERIOD = 110;
 	var NUMPADMULTIPLY = 106;
 	var NUMPADSLASH = 111;
-
+	
 	@:from
 	public static inline function fromString(s:String)
 	{
 		s = s.toUpperCase();
 		return fromStringMap.exists(s) ? fromStringMap.get(s) : NONE;
 	}
-
+	
 	@:to
 	public inline function toString():String
 	{

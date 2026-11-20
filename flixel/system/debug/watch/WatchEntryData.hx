@@ -12,12 +12,12 @@ enum WatchEntryData
 	 * `object.field` resolved via `Reflect.getProperty()`.
 	 */
 	FIELD(object:Dynamic, field:String);
-
+	
 	/**
 	 * Manually updated values.
 	 */
 	QUICK(value:String);
-
+	
 	/**
 	 * Haxe expression evaluated with hscript.
 	 */
@@ -26,5 +26,5 @@ enum WatchEntryData
 	/**
 	 * A function that returns the value to display.
 	 */
-	FUNCTION(func:()->Dynamic);
+	FUNCTION(func:() -> Dynamic);
 }

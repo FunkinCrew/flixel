@@ -18,7 +18,7 @@ class FlxFilterFrames extends FlxFramesCollection
 {
 	static var point:Point = new Point();
 	static var rect:Rectangle = new Rectangle();
-
+	
 	/**
 	 * Generates new frames collection from specified frames.
 	 *
@@ -32,48 +32,48 @@ class FlxFilterFrames extends FlxFramesCollection
 	{
 		return new FlxFilterFrames(frames, widthInc, heightInc, filters);
 	}
-
+	
 	/**
 	 * Original frames collection
 	 */
 	public var sourceFrames(default, null):FlxFramesCollection;
-
+	
 	/**
 	 * How much frames should expand horizontally
 	 */
 	public var widthInc(default, null):Int = 0;
-
+	
 	/**
 	 * How much frames should expand vertically
 	 */
 	public var heightInc(default, null):Int = 0;
-
+	
 	/**
 	 * Filters applied to these frames
 	 */
 	public var filters(default, set):Array<BitmapFilter>;
-
+	
 	function new(sourceFrames:FlxFramesCollection, widthInc:Int = 0, heightInc:Int = 0, ?filters:Array<BitmapFilter>)
 	{
 		super(null, FlxFrameCollectionType.FILTER);
-
+		
 		this.sourceFrames = sourceFrames;
-
+		
 		widthInc = (widthInc >= 0) ? widthInc : 0;
 		heightInc = (heightInc >= 0) ? heightInc : 0;
-
+		
 		widthInc = 2 * Math.ceil(0.5 * widthInc);
 		heightInc = 2 * Math.ceil(0.5 * heightInc);
-
+		
 		this.widthInc = widthInc;
 		this.heightInc = heightInc;
-
+		
 		this.filters = (filters == null) ? [] : filters;
-
+		
 		genFrames();
 		applyFilters();
 	}
-
+	
 	/**
 	 * Just helper method which "centers" sprite offsets
 	 *
@@ -85,27 +85,27 @@ class FlxFilterFrames extends FlxFramesCollection
 	{
 		if (updateFrames)
 			set_filters(filters);
-
+			
 		var w:Float = spr.width;
 		var h:Float = spr.height;
 		spr.setFrames(this, saveAnimations);
 		spr.offset.add(0.5 * widthInc, 0.5 * heightInc);
 		spr.setSize(w, h);
 	}
-
+	
 	function genFrames():Void
 	{
 		var canvas:BitmapData;
 		var graph:FlxGraphic;
 		var filterFrame:FlxFrame;
-
+		
 		for (frame in sourceFrames.frames)
 		{
 			canvas = new BitmapData(Std.int(frame.sourceSize.x + widthInc), Std.int(frame.sourceSize.y + heightInc), true, FlxColor.TRANSPARENT);
 			graph = FlxGraphic.fromBitmapData(canvas, false, null, false);
-
+			
 			filterFrame = graph.imageFrame.frame;
-
+			
 			frames.push(filterFrame);
 			if (frame.name != null)
 			{
@@ -113,10 +113,10 @@ class FlxFilterFrames extends FlxFramesCollection
 				framesByName.set(frame.name, filterFrame);
 			}
 		}
-
+		
 		regenBitmaps(false);
 	}
-
+	
 	/**
 	 * Adds a filter to this frames collection.
 	 *
@@ -130,7 +130,7 @@ class FlxFilterFrames extends FlxFramesCollection
 			applyFilter(filter);
 		}
 	}
-
+	
 	/**
 	 * Removes a filter from this frames collection.
 	 *
@@ -140,11 +140,11 @@ class FlxFilterFrames extends FlxFramesCollection
 	{
 		if (filters.length == 0 || filter == null)
 			return;
-
+			
 		if (filters.remove(filter))
 			regenAndApplyFilters();
 	}
-
+	
 	/**
 	 * Removes all filters from the frames.
 	 */
@@ -152,42 +152,42 @@ class FlxFilterFrames extends FlxFramesCollection
 	{
 		if (filters.length == 0)
 			return;
-
+			
 		filters.splice(0, filters.length);
 		regenBitmaps();
 	}
-
+	
 	function regenAndApplyFilters():Void
 	{
 		regenBitmaps();
 		applyFilters();
 	}
-
+	
 	function regenBitmaps(fill:Bool = true):Void
 	{
 		var numFrames:Int = frames.length;
 		var frame:FlxFrame;
 		var sourceFrame:FlxFrame;
 		var frameOffset:Point = point;
-
+		
 		for (i in 0...numFrames)
 		{
 			sourceFrame = sourceFrames.frames[i];
 			frame = frames[i];
-
+			
 			if (fill)
 				frame.parent.bitmap.fillRect(frame.parent.bitmap.rect, FlxColor.TRANSPARENT);
-
+				
 			frameOffset.setTo(widthInc * 0.5, heightInc * 0.5);
-
+			
 			sourceFrame.paint(frame.parent.bitmap, frameOffset, true);
 		}
 	}
-
+	
 	function applyFilter(filter:BitmapFilter)
 	{
 		var bitmap:BitmapData;
-
+		
 		for (frame in frames)
 		{
 			point.setTo(0, 0);
@@ -196,31 +196,31 @@ class FlxFilterFrames extends FlxFramesCollection
 			bitmap.applyFilter(bitmap, rect, point, filter);
 		}
 	}
-
+	
 	function applyFilters():Void
 	{
 		for (filter in filters)
 			applyFilter(filter);
 	}
-
+	
 	override public function destroy():Void
 	{
 		sourceFrames = null;
 		filters = null;
-
+		
 		for (frame in frames)
 			frame.parent.destroy();
-
+			
 		super.destroy();
 	}
-
+	
 	function set_filters(value:Array<BitmapFilter>):Array<BitmapFilter>
 	{
 		filters = value;
-
+		
 		if (value != null)
 			regenAndApplyFilters();
-
+			
 		return filters;
 	}
 }

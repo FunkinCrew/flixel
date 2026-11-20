@@ -27,7 +27,7 @@ class FlxSoundTray extends Sprite
 	 * Because reading any data from DisplayObject is insanely expensive in hxcpp, keep track of whether we need to update it or not.
 	 */
 	public var active:Bool;
-
+	
 	/**
 	 * The volume label
 	 */
@@ -39,7 +39,7 @@ class FlxSoundTray extends Sprite
 	 * Helps us auto-hide the sound tray after a volume change.
 	 */
 	var _timer:Float;
-
+	
 	/**
 	 * Helps display the volume bars on the sound tray.
 	 */
@@ -49,18 +49,18 @@ class FlxSoundTray extends Sprite
 	 * The minimum width of the sound tray
 	 */
 	var _minWidth:Int = 80;
-
+	
 	var _defaultScale:Float = 2.0;
-
+	
 	/**The sound used when increasing the volume.**/
 	public var volumeUpSound:FlxSoundAsset = "flixel/sounds/beep";
-
+	
 	/**The sound used when decreasing the volume.**/
 	public var volumeDownSound:FlxSoundAsset = 'flixel/sounds/beep';
-
+	
 	/**Whether or not changing the volume should make noise.**/
 	public var silent:Bool = false;
-
+	
 	/**
 	 * Sets up the "sound tray", the little volume meter that pops down sometimes.
 	 */
@@ -68,21 +68,21 @@ class FlxSoundTray extends Sprite
 	public function new()
 	{
 		super();
-
+		
 		visible = false;
 		scaleX = _defaultScale;
 		scaleY = _defaultScale;
 		_bg = new Bitmap(new BitmapData(_minWidth, 30, true, 0x7F000000));
 		screenCenter();
 		addChild(_bg);
-
+		
 		_label = new TextField();
 		_label.width = _bg.width;
 		// text.height = bg.height;
 		_label.multiline = true;
 		// text.wordWrap = true;
 		_label.selectable = false;
-
+		
 		#if flash
 		_label.embedFonts = true;
 		_label.antiAliasType = AntiAliasType.NORMAL;
@@ -95,10 +95,9 @@ class FlxSoundTray extends Sprite
 		addChild(_label);
 		_label.text = "VOLUME";
 		_label.y = 16;
-
-
+		
 		_bars = new Array();
-
+		
 		var tmp:Bitmap;
 		for (i in 0...10)
 		{
@@ -107,11 +106,11 @@ class FlxSoundTray extends Sprite
 			_bars.push(tmp);
 		}
 		updateSize();
-
+		
 		y = -height;
 		visible = false;
 	}
-
+	
 	/**
 	 * This function updates the soundtray object.
 	 */
@@ -125,12 +124,12 @@ class FlxSoundTray extends Sprite
 		else if (y > -height)
 		{
 			y -= (MS / 1000) * height * 0.5;
-
+			
 			if (y <= -height)
 			{
 				visible = false;
 				active = false;
-
+				
 				#if FLX_SAVE
 				// Save sound preferences
 				if (FlxG.save.isBound)
@@ -155,7 +154,7 @@ class FlxSoundTray extends Sprite
 	{
 		if (sound != null)
 			FlxG.sound.play(FlxG.assets.getSoundAddExt(sound));
-		
+			
 		_timer = duration;
 		y = 0;
 		visible = true;
@@ -163,7 +162,7 @@ class FlxSoundTray extends Sprite
 		final numBars = FlxG.sound.muted ? 0 : Math.round(FlxG.sound.logToLinear(FlxG.sound.volume) * 10);
 		for (i in 0..._bars.length)
 			_bars[i].alpha = i < numBars ? 1.0 : 0.5;
-
+			
 		_label.text = label;
 		updateSize();
 	}
@@ -194,12 +193,11 @@ class FlxSoundTray extends Sprite
 		showAnim(volume, silent ? null : volumeDownSound);
 	}
 	
-
 	public function screenCenter():Void
 	{
 		scaleX = _defaultScale;
 		scaleY = _defaultScale;
-
+		
 		x = (0.5 * (Lib.current.stage.stageWidth - _bg.width * _defaultScale) - FlxG.game.x);
 	}
 	

@@ -14,40 +14,40 @@ class FlxAnimationController implements IFlxDestroyable
 	 * Property access for currently playing animation (warning: can be `null`).
 	 */
 	public var curAnim(get, set):FlxAnimation;
-
+	
 	/**
 	 * The frame index of the current animation. Can be changed manually.
 	 */
 	public var frameIndex(default, set):Int = -1;
-
+	
 	/**
 	 * Tell the sprite to change to a frame with specific name.
 	 * Useful for sprites with loaded TexturePacker atlas.
 	 */
 	public var frameName(get, set):String;
-
+	
 	/**
 	 * Gets or sets the currently playing animation (warning: can be `null`).
 	 */
 	public var name(get, set):String;
-
+	
 	/**
 	 * Pause or resume the current animation.
 	 */
 	public var paused(get, set):Bool;
-
+	
 	/**
 	 * Whether the current animation has finished playing.
 	 */
 	public var finished(get, set):Bool;
-
+	
 	/**
 	 * The total number of frames in this image.
 	 * WARNING: assumes each row in the sprite sheet is full!
 	 * @since 5.3.0
 	 */
 	public var numFrames(get, never):Int;
-
+	
 	/**
 	 * If assigned, will be called each time the current animation's frame changes
 	 * 
@@ -56,7 +56,7 @@ class FlxAnimationController implements IFlxDestroyable
 	 * @param   frameIndex   The current animation's frameIndex in the tile sheet
 	 */
 	@:deprecated('callback is deprecated, use onFrameChange.add') // 5.9.0
-	public var callback:(animName:String, frameNumber:Int, frameIndex:Int)->Void;
+	public var callback:(animName:String, frameNumber:Int, frameIndex:Int) -> Void;
 	
 	/**
 	 * If assigned, will be called each time the current animation finishes.
@@ -74,7 +74,7 @@ class FlxAnimationController implements IFlxDestroyable
 	 * @param   frameIndex   The current animation's frameIndex in the tile sheet
 	 * @since 5.9.0
 	 */
-	public final onFrameChange = new FlxTypedSignal<(animName:String, frameNumber:Int, frameIndex:Int)->Void>();
+	public final onFrameChange = new FlxTypedSignal<(animName:String, frameNumber:Int, frameIndex:Int) -> Void>();
 	
 	/**
 	 * Dispatches each time the current animation finishes.
@@ -82,7 +82,7 @@ class FlxAnimationController implements IFlxDestroyable
 	 * @param   animName  The name of the current animation
 	 * @since 5.9.0
 	 */
-	public final onFinish = new FlxTypedSignal<(animName:String)->Void>();
+	public final onFinish = new FlxTypedSignal<(animName:String) -> Void>();
 	
 	/**
 	 * Dispatches each time the current animation's loop is complete.
@@ -91,36 +91,36 @@ class FlxAnimationController implements IFlxDestroyable
 	 * @param   animName  The name of the current animation
 	 * @since 5.9.0
 	 */
-	public final onLoop = new FlxTypedSignal<(animName:String)->Void>();
+	public final onLoop = new FlxTypedSignal<(animName:String) -> Void>();
 	
 	/**
 	 * How fast or slow time should pass for this animation controller
 	 */
 	public var timeScale:Float = 1.0;
-
+	
 	/**
 	 * Internal, reference to owner sprite.
 	 */
 	var _sprite:FlxSprite;
-
+	
 	/**
 	 * Internal, currently playing animation.
 	 */
 	@:allow(flixel.animation)
 	var _curAnim:FlxAnimation;
-
+	
 	/**
 	 * Internal, stores all the animation that were added to this sprite.
 	 */
 	var _animations(default, null):Map<String, FlxAnimation> = [];
-
+	
 	var _prerotated:FlxPrerotatedAnimation;
-
+	
 	public function new(sprite:FlxSprite)
 	{
 		_sprite = sprite;
 	}
-
+	
 	public function update(elapsed:Float):Void
 	{
 		if (_curAnim != null)
@@ -132,31 +132,31 @@ class FlxAnimationController implements IFlxDestroyable
 			_prerotated.angle = _sprite.angle;
 		}
 	}
-
+	
 	public function copyFrom(controller:FlxAnimationController):FlxAnimationController
 	{
 		destroyAnimations();
-
+		
 		for (anim in controller._animations)
 		{
 			add(anim.name, anim.frames, anim.frameRate, anim.looped, anim.flipX, anim.flipY);
 		}
-
+		
 		if (controller._prerotated != null)
 		{
 			createPrerotated();
 		}
-
+		
 		if (controller.name != null)
 		{
 			name = controller.name;
 		}
-
+		
 		frameIndex = controller.frameIndex;
-
+		
 		return this;
 	}
-
+	
 	public function createPrerotated(?Controller:FlxAnimationController):Void
 	{
 		destroyAnimations();
@@ -164,33 +164,33 @@ class FlxAnimationController implements IFlxDestroyable
 		_prerotated = new FlxPrerotatedAnimation(Controller, Controller._sprite.bakedRotationAngle);
 		_prerotated.angle = _sprite.angle;
 	}
-
+	
 	public function destroyAnimations():Void
 	{
 		clearAnimations();
 		clearPrerotated();
 	}
-
+	
 	@:haxe.warning("-WDeprecated")
 	public function destroy():Void
 	{
 		FlxDestroyUtil.destroy(onFrameChange);
 		FlxDestroyUtil.destroy(onFinish);
 		FlxDestroyUtil.destroy(onLoop);
-
+		
 		destroyAnimations();
 		_animations = null;
 		callback = null;
 		finishCallback = null;
 		_sprite = null;
 	}
-
+	
 	@:allow(flixel.animation.FlxAnimation)
 	function getFrameDuration(index:Int)
 	{
 		return _sprite.frames.frames[index].duration;
 	}
-
+	
 	function clearPrerotated():Void
 	{
 		if (_prerotated != null)
@@ -199,7 +199,7 @@ class FlxAnimationController implements IFlxDestroyable
 		}
 		_prerotated = null;
 	}
-
+	
 	function clearAnimations():Void
 	{
 		if (_animations != null)
@@ -214,11 +214,11 @@ class FlxAnimationController implements IFlxDestroyable
 				}
 			}
 		}
-
+		
 		_animations = new Map<String, FlxAnimation>();
 		_curAnim = null;
 	}
-
+	
 	/**
 	 * Adds a new animation to the sprite.
 	 *
@@ -253,7 +253,7 @@ class FlxAnimationController implements IFlxDestroyable
 				// So we are cloning it (only once) and will use its copy
 				if (framesToAdd == frames)
 					framesToAdd = frames.copy();
-
+					
 				framesToAdd.splice(i, 1);
 			}
 		}
@@ -269,7 +269,7 @@ class FlxAnimationController implements IFlxDestroyable
 		else
 			FlxG.log.warn('Could not create animation: "$name", no valid frames were given');
 	}
-
+	
 	/**
 	 * Removes (and destroys) an animation.
 	 *
@@ -284,7 +284,7 @@ class FlxAnimationController implements IFlxDestroyable
 			anim.destroy();
 		}
 	}
-
+	
 	/**
 	 * Adds to an existing animation in the sprite by appending the specified frames to the existing frames.
 	 * Use this method when the indices of the frames in the atlas are already known.
@@ -304,7 +304,7 @@ class FlxAnimationController implements IFlxDestroyable
 		}
 		
 		var hasInvalidFrames = false;
-
+		
 		// Check _animations frames
 		for (frame in frames)
 		{
@@ -317,7 +317,7 @@ class FlxAnimationController implements IFlxDestroyable
 		if (hasInvalidFrames)
 			FlxG.log.warn('Could not append frames above ${numFrames - 1} to animation: "$name"');
 	}
-
+	
 	/**
 	 * Adds a new animation to the sprite.
 	 *
@@ -334,7 +334,7 @@ class FlxAnimationController implements IFlxDestroyable
 		{
 			var indices:Array<Int> = new Array<Int>();
 			byNamesHelper(indices, FrameNames); // finds frames and appends them to the blank array
-
+			
 			if (indices.length > 0)
 			{
 				var anim = new FlxAnimation(this, Name, indices, FrameRate, Looped, FlipX, FlipY);
@@ -342,7 +342,7 @@ class FlxAnimationController implements IFlxDestroyable
 			}
 		}
 	}
-
+	
 	/**
 	 * Adds to an existing animation in the sprite by appending the specified frames to the existing frames.
 	 * Use this method when the exact name of each frame from the atlas is known (e.g. `"walk00.png"`, `"walk01.png"`).
@@ -359,13 +359,13 @@ class FlxAnimationController implements IFlxDestroyable
 			FlxG.log.warn('No animation called "$name"');
 			return;
 		}
-
+		
 		if (_sprite.frames != null)
 		{
 			byNamesHelper(anim.frames, frameNames); // finds frames and appends them to the existing array
 		}
 	}
-
+	
 	/**
 	 * Adds a new animation to the sprite. Should be slightly faster than `addByIndices()`.
 	 *
@@ -387,7 +387,7 @@ class FlxAnimationController implements IFlxDestroyable
 			var frameIndices:Array<Int> = new Array<Int>();
 			// finds frames and appends them to the blank array
 			byStringIndicesHelper(frameIndices, Prefix, Indices, Postfix);
-
+			
 			if (frameIndices.length > 0)
 			{
 				var anim:FlxAnimation = new FlxAnimation(this, Name, frameIndices, FrameRate, Looped, FlipX, FlipY);
@@ -395,7 +395,7 @@ class FlxAnimationController implements IFlxDestroyable
 			}
 		}
 	}
-
+	
 	/**
 	 * Adds to an existing animation in the sprite by appending the specified frames to the existing frames.
 	 * Should be slightly faster than `appendByIndices()`. Use this method when the names of each frame from
@@ -415,14 +415,14 @@ class FlxAnimationController implements IFlxDestroyable
 			FlxG.log.warn('No animation called "$name"');
 			return;
 		}
-
+		
 		if (_sprite.frames != null)
 		{
 			// finds frames and appends them to the existing array
 			byStringIndicesHelper(anim.frames, prefix, indices, suffix);
 		}
 	}
-
+	
 	/**
 	 * Adds a new animation to the sprite.
 	 *
@@ -443,7 +443,7 @@ class FlxAnimationController implements IFlxDestroyable
 			var frameIndices:Array<Int> = new Array<Int>();
 			// finds frames and appends them to the blank array
 			byIndicesHelper(frameIndices, Prefix, Indices, Postfix);
-
+			
 			if (frameIndices.length > 0)
 			{
 				var anim:FlxAnimation = new FlxAnimation(this, Name, frameIndices, FrameRate, Looped, FlipX, FlipY);
@@ -451,7 +451,7 @@ class FlxAnimationController implements IFlxDestroyable
 			}
 		}
 	}
-
+	
 	/**
 	 * Adds to an existing animation in the sprite by appending the specified frames to the existing frames.
 	 * Use this method when the names of each frame from the atlas share a common prefix
@@ -472,14 +472,14 @@ class FlxAnimationController implements IFlxDestroyable
 			FlxG.log.warn('No animation called "$name"');
 			return;
 		}
-
+		
 		if (_sprite.frames != null)
 		{
 			// finds frames and appends them to the existing array
 			byIndicesHelper(anim.frames, prefix, indices, suffix);
 		}
 	}
-
+	
 	/**
 	 * Find a sprite frame so that for `Prefix = "file"; Index = 5; Postfix = ".png"`
 	 * It will find frame with name `"file5.png"`. If it doesn't exist it will try
@@ -500,10 +500,10 @@ class FlxAnimationController implements IFlxDestroyable
 					return i;
 			}
 		}
-
+		
 		return -1;
 	}
-
+	
 	/**
 	 * Adds a new animation to the sprite.
 	 *
@@ -533,7 +533,7 @@ class FlxAnimationController implements IFlxDestroyable
 				FlxG.log.warn('Could not create animation: "$name", no frames were found with the prefix "$prefix" ');
 		}
 	}
-
+	
 	/**
 	 * Adds to an existing animation in the sprite by appending the specified frames to the existing frames.
 	 * Use this method when the names of each frame from the atlas share a common prefix
@@ -552,7 +552,7 @@ class FlxAnimationController implements IFlxDestroyable
 			FlxG.log.warn('No animation called "$name"');
 			return;
 		}
-
+		
 		if (_sprite.frames != null)
 		{
 			final animFrames:Array<FlxFrame> = new Array<FlxFrame>();
@@ -567,7 +567,7 @@ class FlxAnimationController implements IFlxDestroyable
 				FlxG.log.warn('Could not append to animation: "$name", no frames were found with the prefix: "$prefix"');
 		}
 	}
-
+	
 	/**
 	 * Plays an existing animation (e.g. `"run"`).
 	 * If you call an animation that is already playing, it will be ignored.
@@ -588,16 +588,16 @@ class FlxAnimationController implements IFlxDestroyable
 			}
 			_curAnim = null;
 		}
-
+		
 		if (animName == null || _animations.get(animName) == null)
 		{
 			FlxG.log.warn('No animation called "$animName"');
 			return;
 		}
-
+		
 		var oldFlipX:Bool = false;
 		var oldFlipY:Bool = false;
-
+		
 		if (_curAnim != null && animName != _curAnim.name)
 		{
 			oldFlipX = _curAnim.flipX;
@@ -606,13 +606,13 @@ class FlxAnimationController implements IFlxDestroyable
 		}
 		_curAnim = _animations.get(animName);
 		_curAnim.play(force, reversed, frame);
-
+		
 		if (oldFlipX != _curAnim.flipX || oldFlipY != _curAnim.flipY)
 		{
 			_sprite.dirty = true;
 		}
 	}
-
+	
 	/**
 	 * Stops current animation and resets its frame index to zero.
 	 */
@@ -623,7 +623,7 @@ class FlxAnimationController implements IFlxDestroyable
 			_curAnim.reset();
 		}
 	}
-
+	
 	/**
 	 * Stops current animation and sets its frame to the last one.
 	 */
@@ -634,7 +634,7 @@ class FlxAnimationController implements IFlxDestroyable
 			_curAnim.finish();
 		}
 	}
-
+	
 	/**
 	 * Just stops current animation.
 	 */
@@ -645,7 +645,7 @@ class FlxAnimationController implements IFlxDestroyable
 			_curAnim.stop();
 		}
 	}
-
+	
 	/**
 	 * Pauses the current animation.
 	 */
@@ -656,7 +656,7 @@ class FlxAnimationController implements IFlxDestroyable
 			_curAnim.pause();
 		}
 	}
-
+	
 	/**
 	 * Resumes the current animation if it exists.
 	 */
@@ -667,7 +667,7 @@ class FlxAnimationController implements IFlxDestroyable
 			_curAnim.resume();
 		}
 	}
-
+	
 	/**
 	 * Reverses current animation if it exists.
 	 */
@@ -678,7 +678,7 @@ class FlxAnimationController implements IFlxDestroyable
 			_curAnim.reverse();
 		}
 	}
-
+	
 	/**
 	 * Gets the FlxAnimation object with the specified name.
 	 */
@@ -686,7 +686,7 @@ class FlxAnimationController implements IFlxDestroyable
 	{
 		return _animations.get(name);
 	}
-
+	
 	/**
 	 * Changes to a random animation frame.
 	 * Useful for instantiating particles or other weird things.
@@ -700,7 +700,7 @@ class FlxAnimationController implements IFlxDestroyable
 		}
 		frameIndex = FlxG.random.int(0, numFrames - 1);
 	}
-
+	
 	@:haxe.warning("-WDeprecated")
 	function fireCallback():Void
 	{
@@ -713,7 +713,7 @@ class FlxAnimationController implements IFlxDestroyable
 		
 		onFrameChange.dispatch(name, number, frameIndex);
 	}
-
+	
 	@:allow(flixel.animation)
 	@:haxe.warning("-WDeprecated")
 	function fireFinishCallback(?name:String):Void
@@ -725,13 +725,13 @@ class FlxAnimationController implements IFlxDestroyable
 		
 		onFinish.dispatch(name);
 	}
-
+	
 	@:allow(flixel.animation)
 	function fireLoopCallback(?name:String):Void
 	{
 		onLoop.dispatch(name);
 	}
-
+	
 	function byNamesHelper(addTo:Array<Int>, frameNames:Array<String>):Void
 	{
 		for (frameName in frameNames)
@@ -743,7 +743,7 @@ class FlxAnimationController implements IFlxDestroyable
 			}
 		}
 	}
-
+	
 	function byStringIndicesHelper(addTo:Array<Int>, prefix:String, indices:Array<String>, suffix:String):Void
 	{
 		for (index in indices)
@@ -756,7 +756,7 @@ class FlxAnimationController implements IFlxDestroyable
 			}
 		}
 	}
-
+	
 	function byIndicesHelper(addTo:Array<Int>, prefix:String, indices:Array<Int>, suffix:String):Void
 	{
 		for (index in indices)
@@ -766,7 +766,7 @@ class FlxAnimationController implements IFlxDestroyable
 				addTo.push(indexToAdd);
 		}
 	}
-
+	
 	function byPrefixHelper(addTo:Array<Int>, frames:Array<FlxFrame>, prefix:String):Void
 	{
 		final name = frames[0].name;
@@ -779,7 +779,7 @@ class FlxAnimationController implements IFlxDestroyable
 			addTo.push(getFrameIndex(frame));
 		}
 	}
-
+	
 	function findByPrefix(animFrames:Array<FlxFrame>, prefix:String, logError = true):Void
 	{
 		for (frame in _sprite.frames.frames)
@@ -795,8 +795,8 @@ class FlxAnimationController implements IFlxDestroyable
 		#if FLX_DEBUG
 		if (invalidFrames.length == 0 || !logError)
 			return;
-		
-		final names = invalidFrames.map((f)->'"${f.name}"').join(", ");
+			
+		final names = invalidFrames.map((f) -> '"${f.name}"').join(", ");
 		FlxG.log.error('Attempting to use frames that belong to a destroyed graphic, frame names: $names');
 		#end
 	}
@@ -814,7 +814,7 @@ class FlxAnimationController implements IFlxDestroyable
 		
 		return invalid;
 	}
-
+	
 	function set_frameIndex(Frame:Int):Int
 	{
 		if (_sprite.frames != null && numFrames > 0)
@@ -824,15 +824,15 @@ class FlxAnimationController implements IFlxDestroyable
 			frameIndex = Frame;
 			fireCallback();
 		}
-
+		
 		return frameIndex;
 	}
-
+	
 	inline function get_frameName():String
 	{
 		return _sprite.frame.name;
 	}
-
+	
 	function set_frameName(Value:String):String
 	{
 		if (_sprite.frames != null && _sprite.frames.exists(Value))
@@ -842,17 +842,17 @@ class FlxAnimationController implements IFlxDestroyable
 				_curAnim.stop();
 				_curAnim = null;
 			}
-
+			
 			var frame = _sprite.frames.getByName(Value);
 			if (frame != null)
 			{
 				frameIndex = getFrameIndex(frame);
 			}
 		}
-
+		
 		return Value;
 	}
-
+	
 	function get_name():String
 	{
 		var animName:String = null;
@@ -862,13 +862,13 @@ class FlxAnimationController implements IFlxDestroyable
 		}
 		return animName;
 	}
-
+	
 	function set_name(AnimName:String):String
 	{
 		play(AnimName);
 		return AnimName;
 	}
-
+	
 	/**
 	 * Gets a list with all the animations that are added in a sprite.
 	 * WARNING: Do not confuse with `getNameList`, this function returns the animation instances
@@ -878,15 +878,15 @@ class FlxAnimationController implements IFlxDestroyable
 	public function getAnimationList():Array<FlxAnimation>
 	{
 		var animList:Array<FlxAnimation> = [];
-
+		
 		for (anims in _animations)
 		{
 			animList.push(anims);
 		}
-
+		
 		return animList;
 	}
-
+	
 	/**
 	 * Gets a list with all the name animations that are added in a sprite
 	 * WARNING: Do not confuse with `getAnimationList`, this function returns the animation names
@@ -900,10 +900,10 @@ class FlxAnimationController implements IFlxDestroyable
 		{
 			namesList.push(names);
 		}
-
+		
 		return namesList;
 	}
-
+	
 	/**
 	 * Checks if an animation exists by it's name.
 	 * @param name The animation name.
@@ -913,7 +913,7 @@ class FlxAnimationController implements IFlxDestroyable
 	{
 		return _animations.exists(name);
 	}
-
+	
 	/**
 	 * Renames the animation with a new name.
 	 * @param oldName the name that is replaced.
@@ -932,12 +932,12 @@ class FlxAnimationController implements IFlxDestroyable
 		anim.name = newName;
 		_animations.remove(oldName);
 	}
-
+	
 	inline function get_curAnim():FlxAnimation
 	{
 		return _curAnim;
 	}
-
+	
 	inline function set_curAnim(anim:FlxAnimation):FlxAnimation
 	{
 		if (anim != _curAnim)
@@ -946,7 +946,7 @@ class FlxAnimationController implements IFlxDestroyable
 			{
 				_curAnim.stop();
 			}
-
+			
 			if (anim != null)
 			{
 				anim.play();
@@ -954,7 +954,7 @@ class FlxAnimationController implements IFlxDestroyable
 		}
 		return _curAnim = anim;
 	}
-
+	
 	inline function get_paused():Bool
 	{
 		var paused = false;
@@ -964,7 +964,7 @@ class FlxAnimationController implements IFlxDestroyable
 		}
 		return paused;
 	}
-
+	
 	inline function set_paused(value:Bool):Bool
 	{
 		if (_curAnim != null)
@@ -980,7 +980,7 @@ class FlxAnimationController implements IFlxDestroyable
 		}
 		return value;
 	}
-
+	
 	function get_finished():Bool
 	{
 		var finished = true;
@@ -990,7 +990,7 @@ class FlxAnimationController implements IFlxDestroyable
 		}
 		return finished;
 	}
-
+	
 	inline function set_finished(value:Bool):Bool
 	{
 		if (value && _curAnim != null)
@@ -999,12 +999,12 @@ class FlxAnimationController implements IFlxDestroyable
 		}
 		return value;
 	}
-
+	
 	inline function get_numFrames():Int
 	{
 		return _sprite.numFrames;
 	}
-
+	
 	/**
 	 * Helper function used for finding index of `FlxFrame` in `_framesData`'s frames array
 	 *

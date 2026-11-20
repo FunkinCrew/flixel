@@ -27,12 +27,12 @@ class ConsoleUtil
 	 * The hscript parser to make strings into haxe code.
 	 */
 	static var parser:Parser;
-
+	
 	/**
 	 * The custom hscript interpreter to run the haxe code from the parser.
 	 */
 	public static var interp:Interp;
-
+	
 	/**
 	 * Sets up the hscript parser and interpreter.
 	 */
@@ -41,14 +41,14 @@ class ConsoleUtil
 		parser = new Parser();
 		parser.allowJSON = true;
 		parser.allowTypes = true;
-
+		
 		#if (polymod)
 		interp = new Interp(null, null);
 		#else
 		interp = new Interp();
 		#end
 	}
-
+	
 	/**
 	 * Converts the input string into its AST form to be executed.
 	 *
@@ -61,7 +61,7 @@ class ConsoleUtil
 			input = input.substr(0, -1);
 		return parser.parseString(input);
 	}
-
+	
 	/**
 	 * Parses and runs the input command.
 	 *
@@ -72,7 +72,7 @@ class ConsoleUtil
 	{
 		return interp.expr(parseCommand(input));
 	}
-
+	
 	/**
 	 * Runs the input expression.
 	 * @param   expr  The expression to run
@@ -82,7 +82,7 @@ class ConsoleUtil
 	{
 		return interp.expr(expr);
 	}
-
+	
 	/**
 	 * Register a new object to use in any command.
 	 *
@@ -94,7 +94,7 @@ class ConsoleUtil
 		if (object == null || Reflect.isObject(object))
 			interp.variables.set(alias, object);
 	}
-
+	
 	/**
 	 * Register a new function to use in any command.
 	 *
@@ -106,7 +106,7 @@ class ConsoleUtil
 		if (Reflect.isFunction(func))
 			interp.variables.set(alias, func);
 	}
-
+	
 	/**
 	 * Removes an alias from the command registry.
 	 *
@@ -118,7 +118,7 @@ class ConsoleUtil
 		interp.variables.remove(alias);
 	}
 	#end
-
+	
 	public static function getFields(Object:Dynamic):Array<String>
 	{
 		var fields = [];
@@ -128,10 +128,10 @@ class ConsoleUtil
 			fields = Type.getEnumConstructs(Object);
 		else if (Reflect.isObject(Object)) // get instance fields
 			fields = Type.getInstanceFields(Type.getClass(Object));
-
+			
 		// on Flash, enums are classes, so Std.isOfType(_, Enum) fails
 		fields.remove("__constructs__");
-
+		
 		var filteredFields = [];
 		for (field in fields)
 		{
@@ -146,14 +146,14 @@ class ConsoleUtil
 			else
 				filteredFields.push(field);
 		}
-
+		
 		return sortFields(filteredFields);
 	}
-
+	
 	static function sortFields(fields:Array<String>):Array<String>
 	{
 		var underscoreList = [];
-
+		
 		fields = fields.filter(function(field)
 		{
 			if (field.startsWith("_"))
@@ -163,13 +163,13 @@ class ConsoleUtil
 			}
 			return true;
 		});
-
+		
 		fields.sortAlphabetically();
 		underscoreList.sortAlphabetically();
-
+		
 		return fields.concat(underscoreList);
 	}
-
+	
 	/**
 	 * Shortcut to log a text with the Console LogStyle.
 	 *
@@ -188,7 +188,7 @@ private class Interp extends HScriptInterp
 	{
 		return toArray(locals.keys()).concat(toArray(variables.keys()));
 	}
-
+	
 	function toArray<T>(iterator:Iterator<T>):Array<T>
 	{
 		var array = [];
@@ -196,7 +196,7 @@ private class Interp extends HScriptInterp
 			array.push(element);
 		return array;
 	}
-
+	
 	#if (hscript && !polymod)
 	override function get(o:Dynamic, f:String):Dynamic
 	{
@@ -204,7 +204,7 @@ private class Interp extends HScriptInterp
 			error(EInvalidAccess(f));
 		return Reflect.getProperty(o, f);
 	}
-
+	
 	override function set(o:Dynamic, f:String, v:Dynamic):Dynamic
 	{
 		if (o == null)

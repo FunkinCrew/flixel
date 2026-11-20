@@ -47,7 +47,7 @@ class WatchEntry extends Sprite implements IFlxDestroyable
 		
 		updateName();
 		
-		addChild(removeButton = new FlxSystemButton(Icon.close, ()->onRemove.dispatch()));
+		addChild(removeButton = new FlxSystemButton(Icon.close, () -> onRemove.dispatch()));
 		removeButton.y = (TEXT_HEIGHT - removeButton.height) / 2;
 		removeButton.alpha = 0.3;
 	}
@@ -77,11 +77,11 @@ class WatchEntry extends Sprite implements IFlxDestroyable
 		addChild(textField);
 		return textField;
 	}
-
+	
 	public function updateSize(nameWidth:Float, windowWidth:Float):Void
 	{
 		var textWidth = windowWidth - removeButton.width - GUTTER;
-
+		
 		nameText.width = nameWidth;
 		valueText.x = nameWidth + GUTTER;
 		valueText.width = textWidth - nameWidth - GUTTER;
@@ -112,7 +112,7 @@ class WatchEntry extends Sprite implements IFlxDestroyable
 		var currentWidth = nameText.textWidth + 4;
 		nameText.width = Math.min(currentWidth, MAX_NAME_WIDTH);
 	}
-
+	
 	function getValue():Dynamic
 	{
 		return switch (data)
@@ -131,20 +131,20 @@ class WatchEntry extends Sprite implements IFlxDestroyable
 				func();
 		}
 	}
-
+	
 	function getFormattedValue():String
 	{
 		var value:Dynamic = getValue();
 		return Std.string(formatValue(getValue()));
 	}
-
+	
 	static function formatValue(value:Any):String
 	{
 		if ((value is Float))
 			value = FlxMath.roundDecimal(cast value, FlxG.debugger.precision);
 		return Std.string(value);
 	}
-
+	
 	function submitValue(value:Dynamic):Void
 	{
 		switch (data)
@@ -154,7 +154,7 @@ class WatchEntry extends Sprite implements IFlxDestroyable
 			case _:
 		}
 	}
-
+	
 	public function updateValue()
 	{
 		if (!valueText.isEditing)
@@ -164,22 +164,22 @@ class WatchEntry extends Sprite implements IFlxDestroyable
 				valueText.text = newValue;
 		}
 	}
-
+	
 	public function getNameWidth():Float
 	{
 		return nameText.textWidth;
 	}
-
+	
 	public function getValueWidth():Float
 	{
 		return valueText.textWidth;
 	}
-
+	
 	public function getMinWidth():Float
 	{
 		return getValueWidth() + (2 + GUTTER) * 2 + removeButton.width;
 	}
-
+	
 	public function destroy()
 	{
 		nameText = FlxDestroyUtil.removeChild(this, nameText);

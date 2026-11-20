@@ -17,7 +17,7 @@ import flixel.util.FlxSpriteUtil;
 class FlxTileblock extends FlxSprite
 {
 	var tileSprite:FlxSprite;
-
+	
 	/**
 	 * Creates a new FlxBlock object with the specified position and size.
 	 *
@@ -34,13 +34,13 @@ class FlxTileblock extends FlxSprite
 		immovable = true;
 		moves = false;
 	}
-
+	
 	override public function destroy():Void
 	{
 		tileSprite = FlxDestroyUtil.destroy(tileSprite);
 		super.destroy();
 	}
-
+	
 	/**
 	 * Fills the block with a randomly arranged selection of frames.
 	 *
@@ -54,29 +54,29 @@ class FlxTileblock extends FlxSprite
 		{
 			return this;
 		}
-
+		
 		// First create a tile brush
 		tileSprite = (tileSprite == null) ? new FlxSprite() : tileSprite;
 		tileSprite.frames = tileFrames;
 		var spriteWidth:Int = Std.int(tileSprite.width);
 		var spriteHeight:Int = Std.int(tileSprite.height);
 		var total:Int = tileSprite.numFrames + empties;
-
+		
 		// Then prep the "canvas" as it were (just double checking that the size is on tile boundaries)
 		var regen:Bool = false;
-
+		
 		if (width % tileSprite.width != 0)
 		{
 			width = Std.int((width / spriteWidth + 1)) * spriteWidth;
 			regen = true;
 		}
-
+		
 		if (height % tileSprite.height != 0)
 		{
 			height = Std.int((height / spriteHeight + 1)) * spriteHeight;
 			regen = true;
 		}
-
+		
 		if (regen)
 		{
 			makeGraphic(Std.int(width), Std.int(height), 0, true);
@@ -85,7 +85,7 @@ class FlxTileblock extends FlxSprite
 		{
 			FlxSpriteUtil.fill(this, 0);
 		}
-
+		
 		// Stamp random tiles onto the canvas
 		var row:Int = 0;
 		var column:Int;
@@ -93,12 +93,12 @@ class FlxTileblock extends FlxSprite
 		var destinationY:Int = 0;
 		var widthInTiles:Int = Std.int(width / spriteWidth);
 		var heightInTiles:Int = Std.int(height / spriteHeight);
-
+		
 		while (row < heightInTiles)
 		{
 			destinationX = 0;
 			column = 0;
-
+			
 			while (column < widthInTiles)
 			{
 				if (FlxG.random.float() * total > empties)
@@ -107,19 +107,19 @@ class FlxTileblock extends FlxSprite
 					tileSprite.drawFrame();
 					stamp(tileSprite, destinationX, destinationY);
 				}
-
+				
 				destinationX += spriteWidth;
 				column++;
 			}
-
+			
 			destinationY += spriteHeight;
 			row++;
 		}
-
+		
 		dirty = true;
 		return this;
 	}
-
+	
 	/**
 	 * Fills the block with a randomly arranged selection of graphics from the image provided.
 	 *
@@ -135,29 +135,29 @@ class FlxTileblock extends FlxSprite
 		{
 			return this;
 		}
-
+		
 		var graph:FlxGraphic = FlxG.bitmap.add(tileGraphic);
 		if (graph == null)
 		{
 			return this;
 		}
-
+		
 		if (tileWidth == 0)
 		{
 			tileWidth = graph.height;
 			tileWidth = (tileWidth > graph.width) ? graph.width : tileWidth;
 		}
-
+		
 		if (tileHeight == 0)
 		{
 			tileHeight = tileWidth;
 			tileHeight = (tileHeight > graph.height) ? graph.height : tileHeight;
 		}
-
+		
 		var tileFrames:FlxTileFrames = FlxTileFrames.fromGraphic(graph, FlxPoint.get(tileWidth, tileHeight));
 		return this.loadFrames(tileFrames, empties);
 	}
-
+	
 	public function setTile(x:Int, y:Int, index:Int):Void
 	{
 		tileSprite.animation.frameIndex = index;

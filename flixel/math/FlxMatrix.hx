@@ -21,18 +21,18 @@ class FlxMatrix extends Matrix
 		var a1:Float = a * cos - b * sin;
 		b = a * sin + b * cos;
 		a = a1;
-
+		
 		var c1:Float = c * cos - d * sin;
 		d = c * sin + d * cos;
 		c = c1;
-
+		
 		var tx1:Float = tx * cos - ty * sin;
 		ty = tx * sin + ty * cos;
 		tx = tx1;
-
+		
 		return this;
 	}
-
+	
 	/**
 	 * Adds 180 degrees to rotation of this matrix
 	 * @return	rotated matrix
@@ -42,7 +42,7 @@ class FlxMatrix extends Matrix
 		this.setTo(-a, -b, -c, -d, -tx, -ty);
 		return this;
 	}
-
+	
 	/**
 	 * Adds 90 degrees to rotation of this matrix
 	 * @return	rotated matrix
@@ -52,7 +52,7 @@ class FlxMatrix extends Matrix
 		this.setTo(-b, a, -d, c, -ty, tx);
 		return this;
 	}
-
+	
 	/**
 	 * Subtract 90 degrees from rotation of this matrix
 	 * @return	rotated matrix
@@ -62,7 +62,7 @@ class FlxMatrix extends Matrix
 		this.setTo(b, -a, d, -c, ty, -tx);
 		return this;
 	}
-
+	
 	/**
 	 * Transforms x coordinate of the point.
 	 * Took original code from openfl.geom.Matrix (which isn't available on flash target).
@@ -77,7 +77,7 @@ class FlxMatrix extends Matrix
 	{
 		return px * a + py * c + tx;
 	}
-
+	
 	/**
 	 * Transforms y coordinate of the point.
 	 * Took original code from openfl.geom.Matrix (which isn't available on flash target).
@@ -92,7 +92,7 @@ class FlxMatrix extends Matrix
 	{
 		return px * b + py * d + ty;
 	}
-
+	
 	#if (nme && !flash)
 	public function copyFrom(sourceMatrix:Matrix):Void
 	{

@@ -42,7 +42,7 @@ abstract NextState(Dynamic)
 	}
 	
 	@:from
-	public static function fromMaker(func:()->FlxState):NextState
+	public static function fromMaker(func:() -> FlxState):NextState
 	{
 		return cast func;
 	}
@@ -57,11 +57,11 @@ abstract NextState(Dynamic)
 			return cast this();
 	}
 	
-	public function getConstructor():()->FlxState
+	public function getConstructor():() -> FlxState
 	{
 		if (this is FlxState)
 		{
-			return function ():FlxState
+			return function():FlxState
 			{
 				return cast Type.createInstance(Type.getClass(this), []);
 			}
@@ -108,7 +108,7 @@ abstract InitialState(Dynamic) to NextState
 	}
 	
 	@:from
-	public static function fromMaker(func:()->FlxState):InitialState
+	public static function fromMaker(func:() -> FlxState):InitialState
 	{
 		return cast func;
 	}
@@ -118,7 +118,7 @@ abstract InitialState(Dynamic) to NextState
 	{
 		if (this is Class)
 		{
-			return function ():FlxState
+			return function():FlxState
 			{
 				return cast Type.createInstance(this, []);
 			}

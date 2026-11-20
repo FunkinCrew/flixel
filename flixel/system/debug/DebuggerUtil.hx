@@ -17,7 +17,7 @@ class DebuggerUtil
 	{
 		return initTextField(new TextField(), X, Y, Color, Size);
 	}
-
+	
 	public static function initTextField<T:TextField>(tf:T, X:Float = 0, Y:Float = 0, Color:FlxColor = FlxColor.WHITE, Size:Int = 12):T
 	{
 		tf.x = X;
@@ -35,7 +35,7 @@ class DebuggerUtil
 		tf.autoSize = TextFieldAutoSize.LEFT;
 		return tf;
 	}
-
+	
 	@:allow(flixel.system)
 	static function fixSize(bitmapData:BitmapData):BitmapData
 	{
@@ -43,7 +43,7 @@ class DebuggerUtil
 		Reflect.setProperty(bitmapData, "width", 11);
 		Reflect.setProperty(bitmapData, "height", 11);
 		#end
-
+		
 		return bitmapData;
 	}
 }

@@ -27,13 +27,17 @@ class WatchBase<TEntry:WatchEntry> extends Window
 	static inline var LINE_HEIGHT:Int = 15;
 	
 	public var alwaysOnTop(get, set):Bool;
-	inline function get_alwaysOnTop() return _alwaysOnTop;
-	inline function set_alwaysOnTop(value:Bool) return _alwaysOnTop = value;
 	
+	inline function get_alwaysOnTop()
+		return _alwaysOnTop;
+		
+	inline function set_alwaysOnTop(value:Bool)
+		return _alwaysOnTop = value;
+		
 	final entriesContainer:ScrollSprite;
 	final scrollbar:ScrollBar;
 	final entries:Array<TEntry> = [];
-	var create:(displayName:String, data:WatchEntryData)->TEntry;
+	var create:(displayName:String, data:WatchEntryData) -> TEntry;
 	
 	public function new(entryConstructor, title, ?icon, resizable = true, ?bounds, closable = false, alwaysOnTop = true)
 	{
@@ -56,7 +60,7 @@ class WatchBase<TEntry:WatchEntry> extends Window
 	{
 		if (isInvalid(displayName, data))
 			return;
-		
+			
 		var existing = getExistingEntry(displayName, data);
 		if (existing != null)
 		{
@@ -68,10 +72,10 @@ class WatchBase<TEntry:WatchEntry> extends Window
 			}
 			return;
 		}
-
+		
 		addEntry(displayName, data);
 	}
-
+	
 	function isInvalid(displayName:String, data:WatchEntryData):Bool
 	{
 		return switch (data)
@@ -85,7 +89,7 @@ class WatchBase<TEntry:WatchEntry> extends Window
 				func == null;
 		}
 	}
-
+	
 	function getExistingEntry(displayName:String, data:WatchEntryData):TEntry
 	{
 		for (entry in entries)
@@ -100,7 +104,7 @@ class WatchBase<TEntry:WatchEntry> extends Window
 		}
 		return null;
 	}
-
+	
 	function addEntry(displayName:String, data:WatchEntryData, redraw = true)
 	{
 		final entry = create(displayName, data);
@@ -110,14 +114,14 @@ class WatchBase<TEntry:WatchEntry> extends Window
 		if (redraw)
 			updateSize();
 	}
-
+	
 	public function remove(displayName:String, data:WatchEntryData):Void
 	{
 		final existing = getExistingEntry(displayName, data);
 		if (existing != null)
 			removeEntry(existing);
 	}
-
+	
 	function removeEntry(entry:TEntry)
 	{
 		entries.fastSplice(entry);
@@ -125,7 +129,7 @@ class WatchBase<TEntry:WatchEntry> extends Window
 		entry.destroy();
 		updateSize();
 	}
-
+	
 	/**
 	 * internal method to remove all without calling updateSize
 	 */
@@ -139,24 +143,25 @@ class WatchBase<TEntry:WatchEntry> extends Window
 		
 		entries.resize(0);
 	}
-
+	
 	public function removeAll():Void
 	{
 		clear();
 	}
-
+	
 	override function update():Void
 	{
 		// Skip processing because all children are invisible!
-		if (!this.visible || !this.parent.visible) return;
-
+		if (!this.visible || !this.parent.visible)
+			return;
+			
 		for (entry in entries)
 		{
 			if (entriesContainer.isChildVisible(entry))
 				entry.updateValue();
 		}
 	}
-
+	
 	override function updateSize():Void
 	{
 		final oldMinSize = minSize.x;
@@ -192,17 +197,17 @@ class WatchBase<TEntry:WatchEntry> extends Window
 			entry.updateSize(nameWidth, width);
 		}
 	}
-
+	
 	function getMaxNameWidth():Float
 	{
 		return getMax(function(entry) return entry.getNameWidth());
 	}
-
+	
 	function getMaxMinWidth():Float
 	{
 		return getMax(function(entry) return entry.getMinWidth());
 	}
-
+	
 	function getMax(getValue:WatchEntry->Float):Float
 	{
 		var max = 0.0;

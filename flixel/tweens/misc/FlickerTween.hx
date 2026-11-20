@@ -104,10 +104,10 @@ class FlickerTween extends FlxTween
 		{
 			if (options.endVisibility != null)
 				endVisibility = options.endVisibility;
-			
+				
 			if (options.ratio != null)
 				ratio = options.ratio;
-			
+				
 			if (options.tweenFunction != null)
 				tweenFunction = options.tweenFunction;
 		}

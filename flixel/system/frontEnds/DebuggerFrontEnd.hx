@@ -24,7 +24,7 @@ class DebuggerFrontEnd
 	 * The amount of decimals Floats are rounded to in the debugger.
 	 */
 	public var precision:Int = 3;
-
+	
 	#if FLX_KEYBOARD
 	/**
 	 * The key codes used to toggle the debugger (see FlxG.keys for the keys available).
@@ -32,23 +32,23 @@ class DebuggerFrontEnd
 	 */
 	public var toggleKeys:Array<FlxKey> = [F2, GRAVEACCENT, BACKSLASH];
 	#end
-
+	
 	/**
 	 * Whether to draw the hitboxes of FlxObjects.
 	 */
 	public var drawDebug(default, set):Bool = false;
-
+	
 	/**
 	 * Dispatched when `drawDebug` is changed.
 	 */
 	public var drawDebugChanged(default, null):FlxSignal = new FlxSignal();
-
+	
 	/**
 	 * Dispatched when `visible` is changed.
 	 * @since 4.1.0
 	 */
 	public var visibilityChanged(default, null):FlxSignal = new FlxSignal();
-
+	
 	public var visible(default, set):Bool = false;
 	
 	#if FLX_DEBUG
@@ -79,7 +79,7 @@ class DebuggerFrontEnd
 		FlxG.game.debugger.setLayout(Layout);
 		#end
 	}
-
+	
 	/**
 	 * Just resets the debugger windows to whatever the last selected layout was (STANDARD by default).
 	 */
@@ -89,7 +89,7 @@ class DebuggerFrontEnd
 		FlxG.game.debugger.resetLayout();
 		#end
 	}
-
+	
 	/**
 	 * Create and add a new debugger button.
 	 *
@@ -109,7 +109,7 @@ class DebuggerFrontEnd
 		return null;
 		#end
 	}
-
+	
 	/**
 	 * Creates a new tracker window if there exists a tracking profile for the class / class of the object.
 	 * By default, flixel classes like FlxBasic, FlxRect and FlxPoint are supported.
@@ -122,7 +122,7 @@ class DebuggerFrontEnd
 		#if FLX_DEBUG
 		if (Tracker.objectsBeingTracked.contains(ObjectOrClass))
 			return null;
-
+			
 		var profile = Tracker.findProfile(ObjectOrClass);
 		if (profile == null)
 		{
@@ -134,7 +134,7 @@ class DebuggerFrontEnd
 		#end
 		return null;
 	}
-
+	
 	/**
 	 * Adds a new TrackerProfile for track(). This also overrides existing profiles.
 	 *
@@ -146,7 +146,7 @@ class DebuggerFrontEnd
 		Tracker.addProfile(Profile);
 		#end
 	}
-
+	
 	/**
 	 * Removes and destroys a button from the debugger.
 	 *
@@ -164,28 +164,28 @@ class DebuggerFrontEnd
 	{
 		if (drawDebug == Value)
 			return drawDebug;
-
+			
 		drawDebug = Value;
 		#if FLX_DEBUG
 		drawDebugChanged.dispatch();
 		#end
 		return drawDebug;
 	}
-
+	
 	function set_visible(value:Bool):Bool
 	{
 		if (visible == value)
 			return visible;
-
+			
 		visible = value;
-
+		
 		#if FLX_DEBUG
 		FlxG.game.debugger.visible = value;
 		FlxG.game.debugger.tabChildren = value;
-
+		
 		visibilityChanged.dispatch();
 		#end
-
+		
 		return visible;
 	}
 }
@@ -195,11 +195,15 @@ class DebuggerFrontEnd
 class DebugToolsFrontEnd
 {
 	public var activeTool(get, never):Tool;
-	inline function get_activeTool() return interaction.activeTool;
 	
+	inline function get_activeTool()
+		return interaction.activeTool;
+		
 	var interaction(get, never):Interaction;
-	inline function get_interaction() return FlxG.game.debugger.interaction;
 	
+	inline function get_interaction()
+		return FlxG.game.debugger.interaction;
+		
 	function new() {}
 	
 	public function add(tool)
@@ -217,8 +221,10 @@ class DebugToolsFrontEnd
 class DebugWindowsFrontEnd
 {
 	var debugger(get, never):FlxDebugger;
-	inline function get_debugger() return FlxG.game.debugger;
 	
+	inline function get_debugger()
+		return FlxG.game.debugger;
+		
 	function new() {}
 	
 	public function add(window, ?button)

@@ -13,13 +13,13 @@ class FlxTypedGamepadMapping<TInputID:Int>
 {
 	public var supportsMotion:Bool = false;
 	public var supportsPointer:Bool = false;
-
+	
 	public var leftStick:FlxTypedGamepadAnalogStick<TInputID>;
 	public var rightStick:FlxTypedGamepadAnalogStick<TInputID>;
-
+	
 	@:allow(flixel.input.gamepad.FlxGamepad)
 	var attachment(default, set):FlxGamepadAttachment = NONE;
-
+	
 	var manufacturer:Manufacturer;
 	
 	/**
@@ -27,12 +27,12 @@ class FlxTypedGamepadMapping<TInputID:Int>
 	 * @since 5.9.0
 	 */
 	var bottomIsAccept:Bool = true;
-
+	
 	public function new(?attachment:FlxGamepadAttachment)
 	{
 		if (attachment != null)
 			this.attachment = attachment;
-
+			
 		#if flash
 		manufacturer = switch (Capabilities.manufacturer)
 		{
@@ -41,12 +41,12 @@ class FlxTypedGamepadMapping<TInputID:Int>
 			default: Unknown;
 		}
 		#end
-
+		
 		initValues();
 	}
-
+	
 	function initValues():Void {}
-
+	
 	public function getAnalogStick(ID:FlxGamepadInputID):FlxTypedGamepadAnalogStick<TInputID>
 	{
 		return switch (ID)
@@ -59,7 +59,7 @@ class FlxTypedGamepadMapping<TInputID:Int>
 				null;
 		}
 	}
-
+	
 	/**
 	 * Given a raw hardware code, return the "universal" ID
 	 */
@@ -67,7 +67,7 @@ class FlxTypedGamepadMapping<TInputID:Int>
 	{
 		return FlxGamepadInputID.NONE;
 	}
-
+	
 	/**
 	 * Given an ID, return the raw hardware code
 	 */
@@ -79,7 +79,7 @@ class FlxTypedGamepadMapping<TInputID:Int>
 			case CANCEL if (getGlobalBottomIsAccept()): getRawID(B);
 			case ACCEPT: getRawID(B);
 			case CANCEL: getRawID(A);
-			default: cast -1;// TODO: Throw error
+			default: cast -1; // TODO: Throw error
 		}
 	}
 	
@@ -99,7 +99,7 @@ class FlxTypedGamepadMapping<TInputID:Int>
 		
 		return bottomIsAccept;
 	}
-
+	
 	/**
 	 * Whether this axis needs to be flipped
 	 */
@@ -107,12 +107,12 @@ class FlxTypedGamepadMapping<TInputID:Int>
 	{
 		return false;
 	}
-
+	
 	public function isAxisForMotion(ID:TInputID):Bool
 	{
 		return false;
 	}
-
+	
 	#if FLX_JOYSTICK_API
 	/**
 	 * Given an axis index value like 0-6, figures out which input that
@@ -122,13 +122,13 @@ class FlxTypedGamepadMapping<TInputID:Int>
 	{
 		return -1;
 	}
-
+	
 	public function checkForFakeAxis(ID:FlxGamepadInputID):Int
 	{
 		return -1;
 	}
 	#end
-
+	
 	function set_attachment(attachment:FlxGamepadAttachment):FlxGamepadAttachment
 	{
 		return this.attachment = attachment;
@@ -142,8 +142,8 @@ class FlxTypedGamepadMapping<TInputID:Int>
 	public function getInputLabel(id:FlxGamepadInputID):Null<String>
 	{
 		if (getRawID(id) == -1)
-			return null;// return empty string, "unknown" or enum maybe?
-		
+			return null; // return empty string, "unknown" or enum maybe?
+			
 		return switch (id)
 		{
 			case A: "a";

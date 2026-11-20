@@ -69,22 +69,22 @@ import openfl.geom.Point;
  * Otherwise, the remainging points will become garbage, adding to the
  * heap, potentially triggering a garbage collection when you don't want.
  */
-@:forward abstract FlxPoint(FlxBasePoint) to FlxBasePoint from FlxBasePoint 
+@:forward abstract FlxPoint(FlxBasePoint) to FlxBasePoint from FlxBasePoint
 {
-	
 	/**
 	 * Vector components less than this are considered zero, to account for rounding errors
 	 */
 	public static inline var EPSILON:Float = 0.0000001;
+	
 	public static inline var EPSILON_SQUARED:Float = EPSILON * EPSILON;
 	
 	/**
 	 * Vector lengths less than this are considered zero, to account for rounding errors
 	 */
 	public static inline var EPSILON_LENGTH:Float = EPSILON * FlxMath.SQUARE_ROOT_OF_TWO;
-
+	
 	static var _point1 = new FlxPoint();
-
+	
 	/**
 	 * Recycle or create new FlxPoint.
 	 * Be sure to put() them back into the pool after you're done with them!
@@ -96,7 +96,7 @@ import openfl.geom.Point;
 	{
 		return FlxBasePoint.get(x, y);
 	}
-
+	
 	/**
 	 * Recycle or create a new FlxPoint which will automatically be released
 	 * to the pool when passed into a flixel function.
@@ -109,7 +109,7 @@ import openfl.geom.Point;
 	{
 		return FlxBasePoint.weak(x, y);
 	}
-
+	
 	/**
 	 * Operator that adds two points, returning a new point.
 	 */
@@ -122,7 +122,7 @@ import openfl.geom.Point;
 		b.putWeak();
 		return result;
 	}
-
+	
 	/**
 	 * Operator that subtracts two points, returning a new point.
 	 */
@@ -135,7 +135,7 @@ import openfl.geom.Point;
 		b.putWeak();
 		return result;
 	}
-
+	
 	/**
 	 * Operator that scales a point by float, returning a new point.
 	 */
@@ -148,7 +148,6 @@ import openfl.geom.Point;
 		a.putWeak();
 		return result;
 	}
-
 	
 	/**
 	 * Operator that divides a point by float, returning a new point.
@@ -161,7 +160,7 @@ import openfl.geom.Point;
 		a.putWeak();
 		return result;
 	}
-
+	
 	/**
 	 * Operator that adds the right point to the left point, returning the left point instance.
 	 */
@@ -171,7 +170,7 @@ import openfl.geom.Point;
 	{
 		return a.add(b);
 	}
-
+	
 	/**
 	 * Operator that subtracts the right point from the left point, returning the left point instance.
 	 */
@@ -181,7 +180,7 @@ import openfl.geom.Point;
 	{
 		return a.subtract(b);
 	}
-
+	
 	/**
 	 * Operator that scales a point by float, returning the same point instance.
 	 */
@@ -191,7 +190,6 @@ import openfl.geom.Point;
 	{
 		return a.scale(b);
 	}
-
 	
 	/**
 	 * Operator that adds two points, returning a new point.
@@ -205,7 +203,7 @@ import openfl.geom.Point;
 		a.putWeak();
 		return result;
 	}
-
+	
 	/**
 	 * Operator that subtracts two points, returning a new point.
 	 */
@@ -217,7 +215,7 @@ import openfl.geom.Point;
 		a.putWeak();
 		return result;
 	}
-
+	
 	/**
 	 * Operator that subtracts two points, returning a new point.
 	 */
@@ -229,7 +227,7 @@ import openfl.geom.Point;
 		b.putWeak();
 		return result;
 	}
-
+	
 	/**
 	 * Operator that adds the right point to the left point, returning the left point instance.
 	 */
@@ -239,7 +237,7 @@ import openfl.geom.Point;
 	{
 		return a.add(b.x, b.y);
 	}
-
+	
 	/**
 	 * Operator that subtracts the right point from the left point, returning the left point instance.
 	 */
@@ -249,66 +247,66 @@ import openfl.geom.Point;
 	{
 		return a.subtract(b.x, b.y);
 	}
-
+	
 	// Without these delegates we have to say `this.x` everywhere.
 	public var x(get, set):Float;
 	public var y(get, set):Float;
-
+	
 	/**
 	 * The horizontal component of the unit point
 	 */
 	public var dx(get, never):Float;
-
+	
 	/**
 	 * The vertical component of the unit point
 	 */
 	public var dy(get, never):Float;
-
+	
 	/**
 	 * Length of the point
 	 */
 	public var length(get, set):Float;
-
+	
 	/**
 	 * length of the point squared
 	 */
 	public var lengthSquared(get, never):Float;
-
+	
 	/**
 	 * The angle formed by the point with the horizontal axis (in degrees)
 	 */
 	public var degrees(get, set):Float;
-
+	
 	/**
 	 * The angle formed by the point with the horizontal axis (in radians)
 	 */
 	public var radians(get, set):Float;
-
+	
 	/**
 	 * The horizontal component of the right normal of the point
 	 */
 	public var rx(get, never):Float;
-
+	
 	/**
 	 * The vertical component of the right normal of the point
 	 */
 	public var ry(get, never):Float;
-
+	
 	/**
 	 * The horizontal component of the left normal of the point
 	 */
 	public var lx(get, never):Float;
-
+	
 	/**
 	 * The vertical component of the left normal of the point
 	 */
 	public var ly(get, never):Float;
-
+	
 	public inline function new(x:Float = 0, y:Float = 0)
 	{
 		this = FlxPoint.get(x, y);
 	}
-
+	
 	/**
 	 * Set the coordinates of this point object.
 	 *
@@ -319,7 +317,7 @@ import openfl.geom.Point;
 	{
 		return this.set(x, y);
 	}
-
+	
 	/**
 	 * Adds to the coordinates of this point.
 	 *
@@ -331,7 +329,7 @@ import openfl.geom.Point;
 	{
 		return set(this.x + x, this.y + y);
 	}
-
+	
 	/**
 	 * Adds the coordinates of another point to the coordinates of this point.
 	 * @since 6.0.0
@@ -364,12 +362,12 @@ import openfl.geom.Point;
 	 * @param   point  The point to add to this point
 	 * @return  This point.
 	 */
-	@:deprecated("addPoint is deprecated, use add(point), instead")// 6.1.2
+	@:deprecated("addPoint is deprecated, use add(point), instead") // 6.1.2
 	public inline function addPoint(point:FlxPoint):FlxPoint
 	{
 		return add(point);
 	}
-
+	
 	/**
 	 * Subtracts from the coordinates of this point.
 	 *
@@ -381,7 +379,7 @@ import openfl.geom.Point;
 	{
 		return set(this.x - x, this.y - y);
 	}
-
+	
 	/**
 	 * Subtracts the coordinates of another point from the coordinates of this point.
 	 * @since 6.0.0
@@ -395,7 +393,7 @@ import openfl.geom.Point;
 		point.putWeak();
 		return this;
 	}
-
+	
 	/**
 	 * Subtracts the coordinates of another point from the coordinates of this point.
 	 * @since 6.0.0
@@ -408,21 +406,21 @@ import openfl.geom.Point;
 		subtract(point.x, point.y);
 		return this;
 	}
-
+	
 	/**
 	 * Subtracts the coordinates of another point from the coordinates of this point.
 	 *
 	 * @param   point  The point to subtract from this point
 	 * @return  This point.
 	 */
-	@:deprecated("subtractPoint is deprecated, use subtract(point), instead")// 6.1.2
+	@:deprecated("subtractPoint is deprecated, use subtract(point), instead") // 6.1.2
 	public inline function subtractPoint(point:FlxPoint):FlxPoint
 	{
 		subtract(point.x, point.y);
 		point.putWeak();
 		return this;
 	}
-
+	
 	/**
 	 * Scale this point.
 	 *
@@ -470,21 +468,21 @@ import openfl.geom.Point;
 	{
 		return scale(point.x, point.y);
 	}
-
+	
 	/**
 	 * Scale this point by another point.
 	 *
 	 * @param   point  The x and y scale coefficient
 	 * @return  scaled point
 	 */
-	@:deprecated("scalePoint is deprecated, use scale(point), instead")// 6.1.2
+	@:deprecated("scalePoint is deprecated, use scale(point), instead") // 6.1.2
 	public inline function scalePoint(point:FlxPoint):FlxPoint
 	{
 		scale(point.x, point.y);
 		point.putWeak();
 		return this;
 	}
-
+	
 	/**
 	 * Returns scaled copy of this point.
 	 *
@@ -495,7 +493,7 @@ import openfl.geom.Point;
 	{
 		return clone().scale(k);
 	}
-
+	
 	/**
 	 * Return new point which equals to sum of this point and passed p point.
 	 *
@@ -506,7 +504,7 @@ import openfl.geom.Point;
 	{
 		return clone().add(p);
 	}
-
+	
 	/**
 	 * Returns new point which is result of subtraction of p point from this point.
 	 *
@@ -517,7 +515,7 @@ import openfl.geom.Point;
 	{
 		return clone().subtract(p);
 	}
-
+	
 	/**
 	 * Helper function, just copies the values from the specified point.
 	 *
@@ -530,7 +528,7 @@ import openfl.geom.Point;
 		p.putWeak();
 		return this;
 	}
-
+	
 	/**
 	 * Helper function, just copies the values from the specified Flash point.
 	 * @since 6.0.0
@@ -542,19 +540,19 @@ import openfl.geom.Point;
 	{
 		return set(p.x, p.y);
 	}
-
+	
 	/**
 	 * Helper function, just copies the values from the specified Flash point.
 	 *
 	 * @param   p  Any Point.
 	 * @return  A reference to itself.
 	 */
-	@:deprecated("copyFromFlash is deprecated, use copyFrom, instead")// 6.1.2
+	@:deprecated("copyFromFlash is deprecated, use copyFrom, instead") // 6.1.2
 	public inline function copyFromFlash(p:Point):FlxPoint
 	{
 		return set(p.x, p.y);
 	}
-
+	
 	/**
 	 * Helper function, just copies the values from this point to the specified point.
 	 *
@@ -569,7 +567,7 @@ import openfl.geom.Point;
 		}
 		return p.set(x, y);
 	}
-
+	
 	/**
 	 * Helper function, just copies the values from this point to the specified Flash point.
 	 * @since 6.0.0
@@ -583,19 +581,19 @@ import openfl.geom.Point;
 		p.y = y;
 		return p;
 	}
-
+	
 	/**
 	 * Helper function, just copies the values from this point to the specified Flash point.
 	 *
 	 * @param   p  Any Point.
 	 * @return  A reference to the altered point parameter.
 	 */
-	@:deprecated("copyToFlash is deprecated, use copyTo, instead")// 6.1.2
+	@:deprecated("copyToFlash is deprecated, use copyTo, instead") // 6.1.2
 	public inline function copyToFlash(?p:Point):Point
 	{
 		return copyTo(p != null ? p : new Point());
 	}
-
+	
 	/**
 	 * Helper function, just increases the values of the specified Flash point by the values of this point.
 	 *
@@ -606,10 +604,10 @@ import openfl.geom.Point;
 	{
 		p.x += x;
 		p.y += y;
-
+		
 		return p;
 	}
-
+	
 	/**
 	 * Helper function, just decreases the values of the specified Flash point by the values of this point.
 	 *
@@ -620,10 +618,10 @@ import openfl.geom.Point;
 	{
 		p.x -= x;
 		p.y -= y;
-
+		
 		return p;
 	}
-
+	
 	/**
 	 * Rounds x and y using Math.floor()
 	 */
@@ -631,7 +629,7 @@ import openfl.geom.Point;
 	{
 		return set(Math.floor(x), Math.floor(y));
 	}
-
+	
 	/**
 	 * Rounds x and y using Math.ceil()
 	 */
@@ -639,7 +637,7 @@ import openfl.geom.Point;
 	{
 		return set(Math.ceil(x), Math.ceil(y));
 	}
-
+	
 	/**
 	 * Rounds x and y using Math.round()
 	 */
@@ -647,7 +645,7 @@ import openfl.geom.Point;
 	{
 		return set(Math.round(x), Math.round(y));
 	}
-
+	
 	/**
 	 * Returns true if this point is within the given rectangular bounds
 	 *
@@ -661,7 +659,7 @@ import openfl.geom.Point;
 	{
 		return FlxMath.pointInCoordinates(this.x, this.y, x, y, width, height);
 	}
-
+	
 	/**
 	 * Returns true if this point is within the given rectangular block
 	 *
@@ -672,7 +670,7 @@ import openfl.geom.Point;
 	{
 		return FlxMath.pointInFlxRect(x, y, rect);
 	}
-
+	
 	/**
 	 * Rotates this point clockwise in 2D space around another point by the given radians.
 	 * Note: To rotate a point around 0,0 you can use `p.radians += angle`
@@ -690,7 +688,7 @@ import openfl.geom.Point;
 		pivot.putWeak();
 		return this;
 	}
-
+	
 	/**
 	 * Rotates this point clockwise in 2D space around another point by the given degrees.
 	 * Note: To rotate a point around 0,0 you can use `p.degrees += angle`
@@ -704,7 +702,7 @@ import openfl.geom.Point;
 	{
 		return pivotRadians(pivot, degrees * FlxAngle.TO_RAD);
 	}
-
+	
 	/**
 	 * Calculate the distance to another point.
 	 *
@@ -753,7 +751,7 @@ import openfl.geom.Point;
 	{
 		return (this.x - x) * (this.x - x) + (this.y - y) * (this.y - y);
 	}
-
+	
 	/**
 	 * Calculates the angle from this to another point.
 	 * If the point is straight right of this, 0 is returned.
@@ -766,7 +764,7 @@ import openfl.geom.Point;
 	{
 		return FlxAngle.radiansFromOrigin(point.x - x, point.y - y);
 	}
-
+	
 	/**
 	 * Calculates the angle from another point to this.
 	 * If this is straight right of the point, 0 is returned.
@@ -779,7 +777,7 @@ import openfl.geom.Point;
 	{
 		return point.radiansTo(this);
 	}
-
+	
 	/**
 	 * Calculates the angle from this to another point.
 	 * If the point is straight right of this, 0 is returned.
@@ -792,7 +790,7 @@ import openfl.geom.Point;
 	{
 		return FlxAngle.degreesFromOrigin(point.x - x, point.y - y);
 	}
-
+	
 	/**
 	 * Calculates the angle from another point to this.
 	 * If this is straight right of the point, 0 is returned.
@@ -805,7 +803,7 @@ import openfl.geom.Point;
 	{
 		return point.degreesTo(this);
 	}
-
+	
 	/**
 	 * Applies transformation matrix to this point
 	 * @param   matrix  transformation matrix
@@ -815,10 +813,10 @@ import openfl.geom.Point;
 	{
 		var x1 = x * matrix.a + y * matrix.c + matrix.tx;
 		var y1 = x * matrix.b + y * matrix.d + matrix.ty;
-
+		
 		return set(x1, y1);
 	}
-
+	
 	/**
 	 * Short for dot product.
 	 *
@@ -829,7 +827,7 @@ import openfl.geom.Point;
 	{
 		return dotProduct(p);
 	}
-
+	
 	/**
 	 * Dot product between two points.
 	 *
@@ -842,7 +840,7 @@ import openfl.geom.Point;
 		p.putWeak();
 		return dp;
 	}
-
+	
 	/**
 	 * Dot product between two points.
 	 * Meant for internal use, does not call putWeak.
@@ -859,7 +857,7 @@ import openfl.geom.Point;
 	{
 		return this.x * x + this.y * y;
 	}
-
+	
 	/**
 	 * Dot product of points with normalization of the second point.
 	 *
@@ -873,7 +871,7 @@ import openfl.geom.Point;
 		p.putWeak();
 		return result;
 	}
-
+	
 	/**
 	 * Check the perpendicularity of two points.
 	 *
@@ -884,7 +882,7 @@ import openfl.geom.Point;
 	{
 		return Math.abs(dotProduct(p)) < EPSILON_SQUARED;
 	}
-
+	
 	/**
 	 * Find the length of cross product between two points.
 	 *
@@ -897,7 +895,7 @@ import openfl.geom.Point;
 		p.putWeak();
 		return cp;
 	}
-
+	
 	/**
 	 * Find the length of cross product between two points.
 	 * Meant for internal use, does not call putWeak.
@@ -909,7 +907,7 @@ import openfl.geom.Point;
 	{
 		return x * p.y - y * p.x;
 	}
-
+	
 	/**
 	 * Check for parallelism of two points.
 	 *
@@ -922,7 +920,7 @@ import openfl.geom.Point;
 		p.putWeak();
 		return pp;
 	}
-
+	
 	/**
 	 * Check for parallelism of two points.
 	 * Meant for internal use, does not call putWeak.
@@ -934,7 +932,7 @@ import openfl.geom.Point;
 	{
 		return Math.abs(crossProductLengthWeak(p)) < EPSILON_SQUARED;
 	}
-
+	
 	/**
 	 * Check if this point has zero length.
 	 *
@@ -945,7 +943,7 @@ import openfl.geom.Point;
 		// i.e: x*x < EPSILON_SQUARED && y*y < EPSILON_SQUARED;
 		return lengthSquared < 2 * EPSILON_SQUARED;
 	}
-
+	
 	/**
 	 * point reset
 	 */
@@ -953,7 +951,7 @@ import openfl.geom.Point;
 	{
 		return set(0, 0);
 	}
-
+	
 	/**
 	 * Normalization of the point (reduction to unit length)
 	 */
@@ -965,7 +963,7 @@ import openfl.geom.Point;
 		}
 		return scale(1 / length);
 	}
-
+	
 	/**
 	 * Check the point for unit length
 	 */
@@ -973,7 +971,7 @@ import openfl.geom.Point;
 	{
 		return Math.abs(lengthSquared - 1) < EPSILON_SQUARED;
 	}
-
+	
 	/**
 	 * Rotate the point for a given angle.
 	 *
@@ -986,7 +984,7 @@ import openfl.geom.Point;
 		var c:Float = Math.cos(rads);
 		return set(x * c - y * s, x * s + y * c);
 	}
-
+	
 	/**
 	 * Rotate the point for a given angle.
 	 *
@@ -997,7 +995,7 @@ import openfl.geom.Point;
 	{
 		return rotateByRadians(degs * FlxAngle.TO_RAD);
 	}
-
+	
 	/**
 	 * Rotate the point with the values of sine and cosine of the angle of rotation.
 	 *
@@ -1009,7 +1007,7 @@ import openfl.geom.Point;
 	{
 		return set(x * cos - y * sin, x * sin + y * cos);
 	}
-
+	
 	/**
 	 * Sets the polar coordinates of the point
 	 *
@@ -1023,7 +1021,7 @@ import openfl.geom.Point;
 	{
 		return set(length * Math.cos(radians), length * Math.sin(radians));
 	}
-
+	
 	/**
 	 * Sets the polar coordinates of the point
 	 *
@@ -1037,7 +1035,7 @@ import openfl.geom.Point;
 	{
 		return setPolarRadians(length, degrees * FlxAngle.TO_RAD);
 	}
-
+	
 	/**
 	 * Right normal of the point
 	 */
@@ -1050,7 +1048,7 @@ import openfl.geom.Point;
 		p.set(rx, ry);
 		return p;
 	}
-
+	
 	/**
 	 * Left normal of the point
 	 */
@@ -1063,7 +1061,7 @@ import openfl.geom.Point;
 		p.set(lx, ly);
 		return p;
 	}
-
+	
 	/**
 	 * Change direction of the point to opposite
 	 */
@@ -1071,12 +1069,12 @@ import openfl.geom.Point;
 	{
 		return set(x * -1, y * -1);
 	}
-
+	
 	public inline function negateNew(?result:FlxPoint):FlxPoint
 	{
 		return clone(result).negate();
 	}
-
+	
 	/**
 	 * The projection of this point to point that is passed as an argument
 	 * (without modifying the original point!).
@@ -1089,17 +1087,17 @@ import openfl.geom.Point;
 	{
 		var dp:Float = dotProductWeak(p);
 		var lenSq:Float = p.lengthSquared;
-
+		
 		if (proj == null)
 		{
 			proj = get();
 		}
-
+		
 		proj.set(dp * p.x / lenSq, dp * p.y / lenSq);
 		p.putWeak();
 		return proj;
 	}
-
+	
 	/**
 	 * Projecting this point on the normalized point p.
 	 *
@@ -1113,7 +1111,7 @@ import openfl.geom.Point;
 		p.putWeak();
 		return proj;
 	}
-
+	
 	/**
 	 * Projecting this point on the normalized point p.
 	 * Meant for internal use, does not call putWeak.
@@ -1125,15 +1123,15 @@ import openfl.geom.Point;
 	inline function projectToNormalizedWeak(p:FlxPoint, ?proj:FlxPoint):FlxPoint
 	{
 		var dp:Float = dotProductWeak(p);
-
+		
 		if (proj == null)
 		{
 			proj = get();
 		}
-
+		
 		return proj.set(dp * p.x, dp * p.y);
 	}
-
+	
 	/**
 	 * Dot product of left the normal point and point p.
 	 */
@@ -1143,7 +1141,7 @@ import openfl.geom.Point;
 		p.putWeak();
 		return pp;
 	}
-
+	
 	/**
 	 * Dot product of left the normal point and point p.
 	 * Meant for internal use, does not call putWeak.
@@ -1157,7 +1155,7 @@ import openfl.geom.Point;
 	{
 		return lx * x + ly * y;
 	}
-
+	
 	/**
 	 * Find the ratio between the perpProducts of this point and p point. This helps to find the intersection point.
 	 *
@@ -1174,7 +1172,7 @@ import openfl.geom.Point;
 		p.putWeak();
 		return r;
 	}
-
+	
 	/**
 	 * Find the ratio between the perpProducts of this point and p point. This helps to find the intersection point.
 	 * Meant for internal use, does not call putWeak.
@@ -1190,13 +1188,13 @@ import openfl.geom.Point;
 			return Math.NaN;
 		if (lengthSquared < EPSILON_SQUARED || p.lengthSquared < EPSILON_SQUARED)
 			return Math.NaN;
-
+			
 		_point1 = b.clone(_point1);
 		_point1.subtract(a.x, a.y);
-
+		
 		return _point1.perpProductWeak(p) / perpProductWeak(p);
 	}
-
+	
 	/**
 	 * Finding the point of intersection of points.
 	 *
@@ -1208,12 +1206,12 @@ import openfl.geom.Point;
 	public function findIntersection(a:FlxPoint, b:FlxPoint, p:FlxPoint, ?intersection:FlxPoint):FlxPoint
 	{
 		var t:Float = ratioWeak(a, b, p);
-
+		
 		if (intersection == null)
 		{
 			intersection = get();
 		}
-
+		
 		if (Math.isNaN(t))
 		{
 			intersection.set(Math.NaN, Math.NaN);
@@ -1222,13 +1220,13 @@ import openfl.geom.Point;
 		{
 			intersection.set(a.x + t * x, a.y + t * y);
 		}
-
+		
 		a.putWeak();
 		b.putWeak();
 		p.putWeak();
 		return intersection;
 	}
-
+	
 	/**
 	 * Finding the point of intersection of points if it is in the "bounds" of the points.
 	 *
@@ -1243,7 +1241,7 @@ import openfl.geom.Point;
 		{
 			intersection = get();
 		}
-
+		
 		var t1:Float = ratioWeak(a, b, p);
 		var t2:Float = p.ratioWeak(b, a, this);
 		if (!Math.isNaN(t1) && !Math.isNaN(t2) && t1 > 0 && t1 <= 1 && t2 > 0 && t2 <= 1)
@@ -1254,13 +1252,13 @@ import openfl.geom.Point;
 		{
 			intersection.set(Math.NaN, Math.NaN);
 		}
-
+		
 		a.putWeak();
 		b.putWeak();
 		p.putWeak();
 		return intersection;
 	}
-
+	
 	/**
 	 * Limit the length of this point.
 	 *
@@ -1271,7 +1269,7 @@ import openfl.geom.Point;
 		length = Math.min(max, length);
 		return this;
 	}
-
+	
 	/**
 	 * Get the angle between points (in radians).
 	 *
@@ -1284,7 +1282,7 @@ import openfl.geom.Point;
 		p.putWeak();
 		return rads;
 	}
-
+	
 	/**
 	 * The angle between points (in degrees).
 	 *
@@ -1295,7 +1293,7 @@ import openfl.geom.Point;
 	{
 		return radiansBetween(p) * FlxAngle.TO_DEG;
 	}
-
+	
 	/**
 	 * The sign of half-plane of point with respect to the point through the a and b points.
 	 *
@@ -1313,7 +1311,7 @@ import openfl.geom.Point;
 		}
 		return Math.round(signFl / Math.abs(signFl));
 	}
-
+	
 	/**
 	 * The distance between points
 	 * @since 6.0.0
@@ -1322,7 +1320,7 @@ import openfl.geom.Point;
 	{
 		return distanceTo(x, y);
 	}
-
+	
 	/**
 	 * The distance between points
 	 */
@@ -1347,7 +1345,7 @@ import openfl.geom.Point;
 	{
 		return distanceSquaredTo(x, y);
 	}
-
+	
 	/**
 	 * Reflect the point with respect to the normal of the "wall".
 	 *
@@ -1362,7 +1360,7 @@ import openfl.geom.Point;
 		normal.putWeak();
 		return this;
 	}
-
+	
 	/**
 	 * Reflect the point with respect to the normal. This operation takes "friction" into account.
 	 *
@@ -1384,7 +1382,7 @@ import openfl.geom.Point;
 		
 		return set(bounceX * bounceCoeff + frictionX * friction, bounceY * bounceCoeff + frictionY * friction);
 	}
-
+	
 	/**
 	 * Checking if this is a valid point.
 	 *
@@ -1394,7 +1392,7 @@ import openfl.geom.Point;
 	{
 		return !Math.isNaN(x) && !Math.isNaN(y) && Math.isFinite(x) && Math.isFinite(y);
 	}
-
+	
 	/**
 	 * Copies this point.
 	 *
@@ -1405,48 +1403,48 @@ import openfl.geom.Point;
 	{
 		return copyTo(p);
 	}
-
+	
 	inline function get_x():Float
 	{
 		return this.x;
 	}
-
+	
 	inline function set_x(x:Float):Float
 	{
 		return this.x = x;
 	}
-
+	
 	inline function get_y():Float
 	{
 		return this.y;
 	}
-
+	
 	inline function set_y(y:Float):Float
 	{
 		return this.y = y;
 	}
-
+	
 	inline function get_dx():Float
 	{
 		if (isZero())
 			return 0;
-
+			
 		return x / length;
 	}
-
+	
 	inline function get_dy():Float
 	{
 		if (isZero())
 			return 0;
-
+			
 		return y / length;
 	}
-
+	
 	inline function get_length():Float
 	{
 		return Math.sqrt(lengthSquared);
 	}
-
+	
 	inline function set_length(l:Float):Float
 	{
 		if (!isZero())
@@ -1456,51 +1454,51 @@ import openfl.geom.Point;
 		}
 		return l;
 	}
-
+	
 	inline function get_lengthSquared():Float
 	{
 		return x * x + y * y;
 	}
-
+	
 	inline function get_degrees():Float
 	{
 		return radians * FlxAngle.TO_DEG;
 	}
-
+	
 	inline function set_degrees(degs:Float):Float
 	{
 		radians = degs * FlxAngle.TO_RAD;
 		return degs;
 	}
-
+	
 	function get_radians():Float
 	{
 		return FlxAngle.radiansFromOrigin(x, y);
 	}
-
+	
 	inline function set_radians(rads:Float):Float
 	{
 		var len:Float = length;
-
+		
 		set(len * Math.cos(rads), len * Math.sin(rads));
 		return rads;
 	}
-
+	
 	inline function get_rx():Float
 	{
 		return -y;
 	}
-
+	
 	inline function get_ry():Float
 	{
 		return x;
 	}
-
+	
 	inline function get_lx():Float
 	{
 		return y;
 	}
-
+	
 	inline function get_ly():Float
 	{
 		return -x;
@@ -1522,7 +1520,7 @@ class FlxBasePoint implements IFlxPooled
 	#if FLX_POINT_POOL
 	static var pool:FlxPool<FlxBasePoint> = new FlxPool(FlxBasePoint.new.bind(0, 0));
 	#end
-
+	
 	/**
 	 * Recycle or create a new FlxBasePoint.
 	 * Be sure to put() them back into the pool after you're done with them!
@@ -1541,7 +1539,7 @@ class FlxBasePoint implements IFlxPooled
 		return new FlxBasePoint(x, y);
 		#end
 	}
-
+	
 	/**
 	 * Recycle or create a new FlxBasePoint which will automatically be released
 	 * to the pool when passed into a flixel function.
@@ -1558,21 +1556,21 @@ class FlxBasePoint implements IFlxPooled
 		#end
 		return point;
 	}
-
+	
 	public var x(default, set):Float = 0;
 	public var y(default, set):Float = 0;
-
+	
 	#if FLX_POINT_POOL
 	var _weak:Bool = false;
 	var _inPool:Bool = false;
 	#end
-
+	
 	@:keep
 	public inline function new(x:Float = 0, y:Float = 0)
 	{
 		set(x, y);
 	}
-
+	
 	/**
 	 * Set the coordinates of this point object.
 	 *
@@ -1585,7 +1583,7 @@ class FlxBasePoint implements IFlxPooled
 		this.y = y;
 		return this;
 	}
-
+	
 	/**
 	 * Add this FlxBasePoint to the recycling pool.
 	 */
@@ -1600,7 +1598,7 @@ class FlxBasePoint implements IFlxPooled
 		}
 		#end
 	}
-
+	
 	/**
 	 * Add this FlxBasePoint to the recycling pool if it's a weak reference (allocated via weak()).
 	 */
@@ -1613,7 +1611,7 @@ class FlxBasePoint implements IFlxPooled
 		}
 		#end
 	}
-
+	
 	/**
 	 * Function to compare this FlxBasePoint to another.
 	 *
@@ -1626,12 +1624,12 @@ class FlxBasePoint implements IFlxPooled
 		point.putWeak();
 		return result;
 	}
-
+	
 	/**
 	 * Necessary for IFlxDestroyable.
 	 */
 	public function destroy() {}
-
+	
 	/**
 	 * Convert object to readable string name. Useful for debugging, save games, etc.
 	 */
@@ -1639,7 +1637,7 @@ class FlxBasePoint implements IFlxPooled
 	{
 		return FlxStringUtil.getDebugString([LabelValuePair.weak("x", x), LabelValuePair.weak("y", y)]);
 	}
-
+	
 	/**
 	 * Necessary for FlxCallbackPoint.
 	 */
@@ -1647,7 +1645,7 @@ class FlxBasePoint implements IFlxPooled
 	{
 		return x = Value;
 	}
-
+	
 	/**
 	 * Necessary for FlxCallbackPoint.
 	 */
@@ -1674,44 +1672,106 @@ abstract FlxReadOnlyPoint(FlxPoint) from FlxPoint
 	
 	/** The angle formed by the point with the horizontal axis (in degrees) */
 	public var degrees(get, never):Float;
-
+	
 	/** The angle formed by the point with the horizontal axis (in radians) */
 	public var radians(get, never):Float;
 	
-	inline function get_x():Float return this.x;
-	inline function get_y():Float return this.y;
-	inline function get_length():Float return this.length;
-	inline function get_radians():Float return this.radians;
-	inline function get_degrees():Float return this.degrees;
-	
+	inline function get_x():Float
+		return this.x;
+		
+	inline function get_y():Float
+		return this.y;
+		
+	inline function get_length():Float
+		return this.length;
+		
+	inline function get_radians():Float
+		return this.radians;
+		
+	inline function get_degrees():Float
+		return this.degrees;
+		
 	// hide underlying mutators
-	inline function set(x = 0, y = 0):FlxReadOnlyPoint return this.set(x, y);
-	inline function add(x = 0, y = 0):FlxReadOnlyPoint return this.add(x, y);
-	inline function addPoint(point):FlxReadOnlyPoint return this.add(point);
-	inline function subtract(x = 0, y = 0):FlxReadOnlyPoint return this.subtract(x, y);
-	inline function subtractPoint(point):FlxReadOnlyPoint return this.subtract(point);
-	inline function scale(x = 0, y = 0):FlxReadOnlyPoint return this.scale(x, y);
-	inline function scalePoint(point):FlxReadOnlyPoint return this.scale(point);
-	inline function copyFrom(point):FlxReadOnlyPoint return this.copyFrom(point);
-	inline function copyFromFlash(point):FlxReadOnlyPoint return this.copyFrom(point);
-	inline function floor():FlxReadOnlyPoint return this.floor();
-	inline function ceil():FlxReadOnlyPoint return this.ceil();
-	inline function round():FlxReadOnlyPoint return this.round();
-	inline function rotate(pivot, degrees):FlxReadOnlyPoint return this.pivotDegrees(pivot, degrees);
-	inline function pivotRadians(pivot, radians):FlxReadOnlyPoint return this.pivotRadians(pivot, radians);
-	inline function pivotDegrees(pivot, degrees):FlxReadOnlyPoint return this.pivotDegrees(pivot, degrees);
-	inline function transform(matrix):FlxReadOnlyPoint return this.transform(matrix);
-	inline function zero():FlxReadOnlyPoint return this.zero();
-	inline function normalize():FlxReadOnlyPoint return this.normalize();
-	inline function rotateByRadians(rads):FlxReadOnlyPoint return this.rotateByRadians(rads);
-	inline function rotateByDegrees(degs):FlxReadOnlyPoint return this.rotateByDegrees(degs);
-	inline function rotateWithTrig(sin, cos):FlxReadOnlyPoint return this.rotateWithTrig(sin, cos);
-	inline function setPolarRadians(length, radians):FlxReadOnlyPoint return this.setPolarRadians(length, radians);
-	inline function setPolarDegrees(length, degrees):FlxReadOnlyPoint return this.setPolarDegrees(length, degrees);
-	inline function negate():FlxReadOnlyPoint return this.negate();
-	inline function truncate(max):FlxReadOnlyPoint return this.truncate(max);
-	inline function bounce(normal, coeff = 1.0):FlxReadOnlyPoint return this.bounce(normal, coeff);
-	inline function bounceWithFriction(normal, coeff = 1.0, friction = 0.0):FlxReadOnlyPoint return this.bounce(normal, coeff);
+	inline function set(x = 0, y = 0):FlxReadOnlyPoint
+		return this.set(x, y);
+		
+	inline function add(x = 0, y = 0):FlxReadOnlyPoint
+		return this.add(x, y);
+		
+	inline function addPoint(point):FlxReadOnlyPoint
+		return this.add(point);
+		
+	inline function subtract(x = 0, y = 0):FlxReadOnlyPoint
+		return this.subtract(x, y);
+		
+	inline function subtractPoint(point):FlxReadOnlyPoint
+		return this.subtract(point);
+		
+	inline function scale(x = 0, y = 0):FlxReadOnlyPoint
+		return this.scale(x, y);
+		
+	inline function scalePoint(point):FlxReadOnlyPoint
+		return this.scale(point);
+		
+	inline function copyFrom(point):FlxReadOnlyPoint
+		return this.copyFrom(point);
+		
+	inline function copyFromFlash(point):FlxReadOnlyPoint
+		return this.copyFrom(point);
+		
+	inline function floor():FlxReadOnlyPoint
+		return this.floor();
+		
+	inline function ceil():FlxReadOnlyPoint
+		return this.ceil();
+		
+	inline function round():FlxReadOnlyPoint
+		return this.round();
+		
+	inline function rotate(pivot, degrees):FlxReadOnlyPoint
+		return this.pivotDegrees(pivot, degrees);
+		
+	inline function pivotRadians(pivot, radians):FlxReadOnlyPoint
+		return this.pivotRadians(pivot, radians);
+		
+	inline function pivotDegrees(pivot, degrees):FlxReadOnlyPoint
+		return this.pivotDegrees(pivot, degrees);
+		
+	inline function transform(matrix):FlxReadOnlyPoint
+		return this.transform(matrix);
+		
+	inline function zero():FlxReadOnlyPoint
+		return this.zero();
+		
+	inline function normalize():FlxReadOnlyPoint
+		return this.normalize();
+		
+	inline function rotateByRadians(rads):FlxReadOnlyPoint
+		return this.rotateByRadians(rads);
+		
+	inline function rotateByDegrees(degs):FlxReadOnlyPoint
+		return this.rotateByDegrees(degs);
+		
+	inline function rotateWithTrig(sin, cos):FlxReadOnlyPoint
+		return this.rotateWithTrig(sin, cos);
+		
+	inline function setPolarRadians(length, radians):FlxReadOnlyPoint
+		return this.setPolarRadians(length, radians);
+		
+	inline function setPolarDegrees(length, degrees):FlxReadOnlyPoint
+		return this.setPolarDegrees(length, degrees);
+		
+	inline function negate():FlxReadOnlyPoint
+		return this.negate();
+		
+	inline function truncate(max):FlxReadOnlyPoint
+		return this.truncate(max);
+		
+	inline function bounce(normal, coeff = 1.0):FlxReadOnlyPoint
+		return this.bounce(normal, coeff);
+		
+	inline function bounceWithFriction(normal, coeff = 1.0, friction = 0.0):FlxReadOnlyPoint
+		return this.bounce(normal, coeff);
 }
 
 /**
@@ -1723,7 +1783,7 @@ class FlxCallbackPoint extends FlxBasePoint
 	var _setXCallback:FlxPoint->Void;
 	var _setYCallback:Null<FlxPoint->Void>;
 	var _setXYCallback:Null<FlxPoint->Void>;
-
+	
 	/**
 	 * If you only specify one callback function, then the remaining two will use the same.
 	 *
@@ -1747,7 +1807,7 @@ class FlxCallbackPoint extends FlxBasePoint
 			_setXYCallback = setXYCallback;
 		}
 	}
-
+	
 	override public function set(x:Float = 0, y:Float = 0):FlxCallbackPoint
 	{
 		@:bypassAccessor this.x = x;
@@ -1755,42 +1815,42 @@ class FlxCallbackPoint extends FlxBasePoint
 		
 		if (_setXCallback != null)
 			_setXCallback(this);
-		
+			
 		if (_setYCallback != null)
 			_setYCallback(this);
-		
+			
 		if (_setXYCallback != null)
 			_setXYCallback(this);
-		
+			
 		return this;
 	}
-
+	
 	override function set_x(value:Float):Float
 	{
 		super.set_x(value);
 		
 		if (_setXCallback != null)
 			_setXCallback(this);
-		
+			
 		if (_setXYCallback != null)
 			_setXYCallback(this);
-		
+			
 		return value;
 	}
-
+	
 	override function set_y(value:Float):Float
 	{
 		super.set_y(value);
 		
 		if (_setYCallback != null)
 			_setYCallback(this);
-		
+			
 		if (_setXYCallback != null)
 			_setXYCallback(this);
-		
+			
 		return value;
 	}
-
+	
 	override public function destroy():Void
 	{
 		super.destroy();
@@ -1798,6 +1858,6 @@ class FlxCallbackPoint extends FlxBasePoint
 		_setYCallback = null;
 		_setXYCallback = null;
 	}
-
+	
 	override public function put():Void {} // don't pool FlxCallbackPoints
 }

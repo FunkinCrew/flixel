@@ -26,8 +26,7 @@ class BMFontKerning
 	
 	static function fromXml(kerningNode:BMFontXml):BMFontKerning
 	{
-		return
-		{
+		return {
 			first: kerningNode.att.int("first"),
 			second: kerningNode.att.int("second"),
 			amount: kerningNode.att.int("amount")
@@ -37,7 +36,7 @@ class BMFontKerning
 	static function listFromXml(kerningsNode:BMFontXml):Array<BMFontKerning>
 	{
 		final kernings = kerningsNode.nodes("kerning");
-		return [ for (pair in kernings) fromXml(pair) ];
+		return [for (pair in kernings) fromXml(pair)];
 	}
 	
 	static function fromText(kerningText:String):BMFontKerning
@@ -45,18 +44,19 @@ class BMFontKerning
 		var first:Int = -1;
 		var second:Int = -1;
 		var amount:Int = -1;
-		BMFontUtil.forEachAttribute(kerningText, 
-			function(key:String, value:UnicodeString)
+		BMFontUtil.forEachAttribute(kerningText, function(key:String, value:UnicodeString)
+		{
+			switch key
 			{
-				switch key
-				{
-					case 'first': first = Std.parseInt(value);
-					case 'second': second = Std.parseInt(value);
-					case 'amount': amount = Std.parseInt(value);
+				case 'first':
+					first = Std.parseInt(value);
+				case 'second':
+					second = Std.parseInt(value);
+				case 'amount':
+					amount = Std.parseInt(value);
 					// default: FlxG.log.warn('Unexpected font char attribute: $key=$value');
-				}
 			}
-		);
+		});
 		return new BMFontKerning(first, second, amount);
 	}
 	
@@ -66,14 +66,13 @@ class BMFontKerning
 		final kernings = new Array<BMFontKerning>();
 		while (blockSize > 0)
 		{
-			final kerning:BMFontKerning =
-			{
+			final kerning:BMFontKerning = {
 				first: bytes.readInt32(),
 				second: bytes.readInt32(),
 				amount: bytes.readInt16()
 			};
 			kernings.push(kerning);
-			blockSize -= 10;// 4 + 4 + 2
+			blockSize -= 10; // 4 + 4 + 2
 		}
 		return kernings;
 	}

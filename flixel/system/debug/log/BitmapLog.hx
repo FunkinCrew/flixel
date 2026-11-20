@@ -58,8 +58,8 @@ class BitmapLog extends Window
 		
 		header = new Header();
 		header.y = 2;
-		header.onPrev.add(()->setIndex(index - 1));
-		header.onNext.add(()->setIndex(index + 1));
+		header.onPrev.add(() -> setIndex(index - 1));
+		header.onNext.add(() -> setIndex(index + 1));
 		header.onReset.add(resetSettings);
 		addChild(header);
 		
@@ -87,15 +87,15 @@ class BitmapLog extends Window
 	override function destroy():Void
 	{
 		super.destroy();
-	
+		
 		clear();
-	
+		
 		removeChild(canvas);
 		canvas.bitmapData = FlxDestroyUtil.dispose(canvas.bitmapData);
 		entries.resize(0);
-	
+		
 		removeEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
-	
+		
 		FlxG.signals.preStateSwitch.remove(clear);
 	}
 	
@@ -205,13 +205,13 @@ class BitmapLog extends Window
 	{
 		if (bitmap == null)
 			return false;
-		
+			
 		setVisible(true);
 		
 		final entry = entryOf(bitmap);
 		if (entry != null && entry.name == name)
 			return true;
-		
+			
 		entries.push({bitmap: bitmap, name: name});
 		setIndex(index < 0 ? 0 : index);
 		return true;
@@ -236,9 +236,9 @@ class BitmapLog extends Window
 	{
 		if (index == -1)
 			index = entries.length - 1;
-		
+			
 		entries.splice(index, 1);
-	
+		
 		if (index > entries.length - 1)
 			setIndex(entries.length - 1);
 		else
@@ -299,7 +299,7 @@ class BitmapLog extends Window
 		
 		if (this.index < 0)
 			header.clear();
-		
+			
 		resetSettings();
 		drawCanvas();
 		return true;
@@ -309,13 +309,13 @@ class BitmapLog extends Window
 	{
 		if (entries.length == 0)
 			return -1;
-		
+			
 		if (index < 0)
 			return entries.length - 1;
-		
+			
 		if (index >= entries.length)
 			return 0;
-		
+			
 		return index;
 	}
 	
@@ -347,7 +347,7 @@ class Header extends Sprite
 	final dimensions:TextField;
 	final counter:TextField;
 	
-	public function new ()
+	public function new()
 	{
 		super();
 		prev = new FlxSystemButton(Icon.arrowLeft, onPrev.dispatch);
@@ -391,7 +391,8 @@ class Header extends Sprite
 	}
 	
 	// Note: get_height doesn't work in flash
-	public function getHeight() return Window.HEADER_HEIGHT;
+	public function getHeight()
+		return Window.HEADER_HEIGHT;
 }
 
 class Footer extends Sprite
@@ -399,7 +400,7 @@ class Footer extends Sprite
 	final bg = new Shape();
 	final text = new TextField();
 	
-	public function new ()
+	public function new()
 	{
 		super();
 		bg.graphics.beginFill(Window.HEADER_COLOR);
@@ -413,8 +414,7 @@ class Footer extends Sprite
 	
 	public function setText(entry:BitmapLogEntry)
 	{
-		text.text = (entry.name == "") ? "" : '"${entry.name}" | '
-			+ FlxStringUtil.formatBytes(entry.bitmap.getMemorySize());
+		text.text = (entry.name == "") ? "" : '"${entry.name}" | ' + FlxStringUtil.formatBytes(entry.bitmap.getMemorySize());
 		text.x = (bg.width - text.width) / 2;
 	}
 	
@@ -424,7 +424,8 @@ class Footer extends Sprite
 	}
 	
 	// Note: get_height doesn't work in flash
-	public function getHeight() return Window.HEADER_HEIGHT;
+	public function getHeight()
+		return Window.HEADER_HEIGHT;
 }
 
 private enum State

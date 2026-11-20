@@ -29,22 +29,21 @@ enum abstract XInputID(Int) to Int
 	var Y = 7;
 	var LB = 8;
 	var RB = 9;
-
+	
 	var BACK = 12;
 	var GUIDE = -1;
 	var START = 13;
-
+	
 	var LEFT_STICK_CLICK = 14;
 	var RIGHT_STICK_CLICK = 15;
-
+	
 	var DPAD_UP = 16;
 	var DPAD_DOWN = 17;
 	var DPAD_LEFT = 18;
 	var DPAD_RIGHT = 19;
-
+	
 	var LEFT_TRIGGER = 10;
 	var RIGHT_TRIGGER = 11;
-
 	
 	static final LEFT_X = 0;
 	static final LEFT_Y = 1;
@@ -65,17 +64,17 @@ enum abstract XInputID(Int) to Int
 	var B = 7;
 	var X = 8;
 	var Y = 9;
-
+	
 	var BACK = 10;
 	var GUIDE = #if mac 11 #else - 1 #end;
 	var START = 12;
-
+	
 	var LEFT_STICK_CLICK = 13;
 	var RIGHT_STICK_CLICK = 14;
-
+	
 	var LB = 15;
 	var RB = 16;
-
+	
 	var DPAD_UP = 17;
 	var DPAD_DOWN = 18;
 	var DPAD_LEFT = 19;
@@ -85,7 +84,7 @@ enum abstract XInputID(Int) to Int
 	static inline final LEFT_Y = 1;
 	static inline final RIGHT_X = 2;
 	static inline final RIGHT_Y = 3;
-
+	
 	var LEFT_STICK_UP = 21;
 	var LEFT_STICK_DOWN = 22;
 	var LEFT_STICK_LEFT = 23;
@@ -95,7 +94,7 @@ enum abstract XInputID(Int) to Int
 	var RIGHT_STICK_DOWN = 26;
 	var RIGHT_STICK_LEFT = 27;
 	var RIGHT_STICK_RIGHT = 28;
-
+	
 	var LEFT_TRIGGER = 4;
 	var RIGHT_TRIGGER = 5;
 	#elseif FLX_JOYSTICK_API
@@ -104,13 +103,13 @@ enum abstract XInputID(Int) to Int
 	var B = 1;
 	var X = 2;
 	var Y = 3;
-
+	
 	var LB = 4;
 	var RB = 5;
-
+	
 	var BACK = 6;
 	var START = 7;
-
+	
 	#if linux
 	var LEFT_STICK_CLICK = 9;
 	var RIGHT_STICK_CLICK = 10;
@@ -120,22 +119,22 @@ enum abstract XInputID(Int) to Int
 	var RIGHT_STICK_CLICK = 9;
 	var GUIDE = 10;
 	#end
-
+	
 	// "fake" IDs, we manually watch for hat axis changes and then send events using
 	// these otherwise unused joystick button codes
 	var DPAD_UP = 11;
 	var DPAD_DOWN = 12;
 	var DPAD_LEFT = 13;
 	var DPAD_RIGHT = 14;
-
+	
 	var LEFT_TRIGGER = 2;
 	var RIGHT_TRIGGER = 5;
-
+	
 	static inline final LEFT_X = 0;
 	static inline final LEFT_Y = 1;
 	static inline final RIGHT_X = 3;
 	static inline final RIGHT_Y = 4;
-
+	
 	var LEFT_STICK_UP = 21;
 	var LEFT_STICK_DOWN = 22;
 	var LEFT_STICK_LEFT = 23;
@@ -150,31 +149,31 @@ enum abstract XInputID(Int) to Int
 	var B = 1;
 	var X = 2;
 	var Y = 3;
-
+	
 	var LB = 4;
 	var RB = 5;
-
+	
 	var LEFT_STICK_CLICK = 6;
 	var RIGHT_STICK_CLICK = 7;
-
+	
 	var BACK = 9;
 	var START = 8;
-
+	
 	var GUIDE = 10;
-
+	
 	var DPAD_UP = 11;
 	var DPAD_DOWN = 12;
 	var DPAD_LEFT = 13;
 	var DPAD_RIGHT = 14;
-
+	
 	var LEFT_TRIGGER = 2;
 	var RIGHT_TRIGGER = 5;
-
+	
 	static inline final LEFT_X = 0;
 	static inline final LEFT_Y = 1;
 	static inline final RIGHT_X = 3;
 	static inline final RIGHT_Y = 4;
-
+	
 	var LEFT_STICK_UP = 21;
 	var LEFT_STICK_DOWN = 22;
 	var LEFT_STICK_LEFT = 23;
@@ -186,7 +185,6 @@ enum abstract XInputID(Int) to Int
 	var RIGHT_STICK_RIGHT = 28;
 	#end
 	#end
-	
 	public static final LEFT_ANALOG_STICK = new FlxTypedGamepadAnalogStick<XInputID>(LEFT_X, LEFT_Y, {
 		up: LEFT_STICK_UP,
 		down: LEFT_STICK_DOWN,

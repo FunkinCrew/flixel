@@ -12,42 +12,42 @@ import flixel.util.FlxSpriteUtil;
 import openfl.display.Graphics;
 
 /**
- * A simple ordered list of nodes that iterates based on conditions. For this class,
- * that condition is not defined, and must be implemented in your extending class.
- * 
- * ## Example
- * The following is an example of a class that moves the target to the next node and
- * and advances the iterator when it is near.
-```haxe
-class SimplePath extends flixel.path.FlxBasePath
-{
-	public var speed:Float;
-	
-	public function new (?nodes, ?target, speed = 100.0)
+	* A simple ordered list of nodes that iterates based on conditions. For this class,
+	* that condition is not defined, and must be implemented in your extending class.
+	* 
+	* ## Example
+	* The following is an example of a class that moves the target to the next node and
+	* and advances the iterator when it is near.
+	```haxe
+	class SimplePath extends flixel.path.FlxBasePath
 	{
-		this.speed = speed;
-		super(nodes, target);
+		public var speed:Float;
+		
+		public function new (?nodes, ?target, speed = 100.0)
+		{
+			this.speed = speed;
+			super(nodes, target);
+		}
+		
+		override function isTargetAtNext(elapsed:Float):Bool
+		{
+			final frameSpeed = elapsed * speed;
+			final deltaX = next.x - target.x;
+			final deltaY = next.y - target.y;
+			// Whether the distance remaining is less than the distance we will travel this frame
+			return Math.sqrt(deltaX * deltaX + deltaY * deltaY) <= frameSpeed;
+		}
+		
+		override function updateTarget(elapsed:Float)
+		{
+			// Aim velocity towards the next node then set magnitude to the desired speed
+			target.velocity.set(next.x - target.x, next.y - target.y);
+			target.velocity.length = speed;
+		}
 	}
-	
-	override function isTargetAtNext(elapsed:Float):Bool
-	{
-		final frameSpeed = elapsed * speed;
-		final deltaX = next.x - target.x;
-		final deltaY = next.y - target.y;
-		// Whether the distance remaining is less than the distance we will travel this frame
-		return Math.sqrt(deltaX * deltaX + deltaY * deltaY) <= frameSpeed;
-	}
-	
-	override function updateTarget(elapsed:Float)
-	{
-		// Aim velocity towards the next node then set magnitude to the desired speed
-		target.velocity.set(next.x - target.x, next.y - target.y);
-		target.velocity.length = speed;
-	}
-}
-```
- * 
- * @since 5.9.0
+	```
+	* 
+	* @since 5.9.0
  */
 typedef FlxBasePath = FlxTypedBasePath<FlxObject>;
 
@@ -78,21 +78,23 @@ class FlxTypedBasePath<TTarget:FlxBasic> extends FlxBasic implements IFlxDestroy
 	public var finished(get, never):Bool;
 	
 	/** Called whenenever the end is reached, for `YOYO` this means both ends */
-	public var onEndReached(default, null) = new FlxTypedSignal<(FlxTypedBasePath<TTarget>)->Void>();
+	public var onEndReached(default, null) = new FlxTypedSignal<(FlxTypedBasePath<TTarget>) -> Void>();
 	
 	/** Called whenenever any node reached */
-	public var onNodeReached(default, null) = new FlxTypedSignal<(FlxTypedBasePath<TTarget>)->Void>();
+	public var onNodeReached(default, null) = new FlxTypedSignal<(FlxTypedBasePath<TTarget>) -> Void>();
 	
 	/** Called when the end is reached and `loopType1 is `ONCE` */
-	public var onFinish(default, null) = new FlxTypedSignal<(FlxTypedBasePath<TTarget>)->Void>();
+	public var onFinish(default, null) = new FlxTypedSignal<(FlxTypedBasePath<TTarget>) -> Void>();
 	
 	/** The index of the last node the target has reached, `-1` means "no current node" */
 	public var currentIndex(default, null):Int = -1;
+	
 	/** The index of the node the target is currently moving toward, `-1` means the path is finished */
 	public var nextIndex(default, null):Int = -1;
 	
 	/** The last node the target has reached */
 	public var current(get, never):Null<FlxPoint>;
+	
 	/** The node the target is currently moving toward */
 	public var next(get, never):Null<FlxPoint>;
 	
@@ -102,7 +104,7 @@ class FlxTypedBasePath<TTarget:FlxBasic> extends FlxBasic implements IFlxDestroy
 	 * @param   nodes   An Optional array of nodes. Unlike `FlxPath`, no copy is made
 	 * @param   target  The target traversing our path
 	 */
-	public function new (?nodes:Array<FlxPoint>, ?target:TTarget, direction = FORWARD)
+	public function new(?nodes:Array<FlxPoint>, ?target:TTarget, direction = FORWARD)
 	{
 		this.nodes = nodes;
 		this.target = target;
@@ -223,7 +225,7 @@ class FlxTypedBasePath<TTarget:FlxBasic> extends FlxBasic implements IFlxDestroy
 		
 		if (finished || target == null)
 			return;
-		
+			
 		if (isTargetAtNext(elapsed))
 		{
 			nodeReached();
@@ -260,7 +262,7 @@ class FlxTypedBasePath<TTarget:FlxBasic> extends FlxBasic implements IFlxDestroy
 	
 	inline function get_next()
 	{
-		return nodes != null && nextIndex >= 0? nodes[nextIndex] : null;
+		return nodes != null && nextIndex >= 0 ? nodes[nextIndex] : null;
 	}
 	
 	/**
@@ -272,14 +274,8 @@ class FlxTypedBasePath<TTarget:FlxBasic> extends FlxBasic implements IFlxDestroy
 	 */
 	override function getCameras():Array<FlxCamera>
 	{
-		return if (_cameras != null)
-				_cameras;
-			else if (container != null)
-				container.getCameras();
-			else if (target != null)
-				target.getCameras();
-			else
-				@:privateAccess FlxCamera._defaultCameras;
+		return if (_cameras != null) _cameras; else if (container != null) container.getCameras(); else if (target != null) target.getCameras(); else
+			@:privateAccess FlxCamera._defaultCameras;
 	}
 	
 	#if FLX_DEBUG
@@ -332,11 +328,11 @@ class FlxTypedBasePath<TTarget:FlxBasic> extends FlxBasic implements IFlxDestroy
 		
 		final length = nodes.length;
 		// Then fill up the object with node and path graphics
-		for (i=>node in nodes)
+		for (i => node in nodes)
 		{
 			// find the screen position of the node on this camera
 			final prevNodeScreen = copyWorldToScreenPos(node, camera);
-
+			
 			// decide what color this node should be
 			var nodeSize:Int = debugDrawData.nodeSize;
 			var nodeColor:FlxColor = debugDrawData.nodeColor;
@@ -451,12 +447,12 @@ enum abstract FlxPathDirection(Bool)
 @:structInit
 class FlxPathDrawData
 {
-	public var lineColor  = FlxColor.WHITE;
-	public var nodeColor  = FlxColor.WHITE;
+	public var lineColor = FlxColor.WHITE;
+	public var nodeColor = FlxColor.WHITE;
 	public var startColor = FlxColor.GREEN;
-	public var endColor   = FlxColor.RED;
-	public var lineSize   = 1;
-	public var nodeSize   = 3;
-	public var startSize  = 5;
-	public var endSize    = 5;
+	public var endColor = FlxColor.RED;
+	public var lineSize = 1;
+	public var nodeSize = 3;
+	public var startSize = 5;
+	public var endSize = 5;
 }

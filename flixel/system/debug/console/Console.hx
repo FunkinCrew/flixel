@@ -31,41 +31,41 @@ class Console extends Window
 	 * The text that is displayed in the console's input field by default.
 	 */
 	static inline var DEFAULT_TEXT:String = #if (polymod || hscript) "(Click here / press [Tab] to enter command. Type 'help' for help.)" #else "Using the console requires hscript." #end;
-
+	
 	/**
 	 * Map containing all registered Objects. You can use registerObject() or add them directly to this map.
 	 */
 	public var registeredObjects:Map<String, Dynamic> = new Map<String, Dynamic>();
-
+	
 	/**
 	 * Map containing all registered Functions. You can use registerFunction() or add them directly to this map.
 	 */
 	public var registeredFunctions:Map<String, Dynamic> = new Map<String, Dynamic>();
-
+	
 	/**
 	 * Map containing all registered help text. Set these values from registerObject() or registerFunction().
 	 */
 	public var registeredHelp:Map<String, String> = new Map<String, String>();
-
+	
 	/**
 	 * Internal helper var containing all the FlxObjects created via the create command.
 	 */
 	public var objectStack:Array<FlxObject> = [];
-
+	
 	/**
 	 * The input textfield used to enter commands.
 	 */
 	var input:TextField;
-
+	
 	#if sys
 	var inputMouseDown:Bool = false;
 	var stageMouseDown:Bool = false;
 	#end
-
+	
 	public var history:ConsoleHistory;
-
+	
 	var completionList:CompletionList;
-
+	
 	/**
 	 * Creates a new console window object.
 	 */
@@ -74,22 +74,22 @@ class Console extends Window
 		super("Console", Icon.console, 0, 0, false);
 		this.completionList = completionList;
 		completionList.setY(y + Window.HEADER_HEIGHT);
-
+		
 		#if (polymod || hscript)
 		ConsoleUtil.init();
 		#end
-
+		
 		history = new ConsoleHistory();
 		createInputTextField();
 		new CompletionHandler(completionList, input);
 		registerEventListeners();
-
+		
 		// Install commands
 		#if FLX_DEBUG
 		new ConsoleCommands(this);
 		#end
 	}
-
+	
 	function createInputTextField()
 	{
 		// Create the input textfield
@@ -103,7 +103,7 @@ class Console extends Window
 		input.y = 15;
 		addChild(input);
 	}
-
+	
 	function registerEventListeners()
 	{
 		#if (polymod || hscript)
@@ -111,7 +111,7 @@ class Console extends Window
 		input.addEventListener(FocusEvent.FOCUS_IN, onFocus);
 		input.addEventListener(FocusEvent.FOCUS_OUT, onFocusLost);
 		input.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
-
+		
 		#if !flash
 		// openfl/openfl#1856
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, function(e:KeyboardEvent)
@@ -124,7 +124,7 @@ class Console extends Window
 		}, false, 1);
 		#end
 		#end
-
+		
 		#if sys // workaround for broken TextField focus on native
 		input.addEventListener(MouseEvent.MOUSE_DOWN, function(_)
 		{
@@ -136,25 +136,25 @@ class Console extends Window
 		});
 		#end
 	}
-
+	
 	#if sys
 	@:access(flixel.FlxGame.onFocus)
 	override public function update()
 	{
 		super.update();
-
+		
 		if (FlxG.stage.focus == input && stageMouseDown && !inputMouseDown)
 		{
 			FlxG.stage.focus = null;
 			// setting focus to null will trigger a focus lost event, let's undo that
 			FlxG.game.onFocus(null);
 		}
-
+		
 		stageMouseDown = false;
 		inputMouseDown = false;
 	}
 	#end
-
+	
 	@:access(flixel.FlxGame)
 	function onFocus(_)
 	{
@@ -162,17 +162,17 @@ class Console extends Window
 		// Pause game
 		if (FlxG.console.autoPause)
 			FlxG.vcr.pause();
-
+			
 		// Block keyboard input
 		#if FLX_KEYBOARD
 		FlxG.keys.enabled = false;
 		#end
-
+		
 		if (input.text == Console.DEFAULT_TEXT)
 			input.text = "";
 		#end
 	}
-
+	
 	@:access(flixel.FlxGame)
 	function onFocusLost(_)
 	{
@@ -180,20 +180,20 @@ class Console extends Window
 		// Unpause game
 		if (FlxG.console.autoPause && !FlxG.game.debugger.vcr.manualPause)
 			FlxG.vcr.resume();
-
+			
 		// Unblock keyboard input
 		#if FLX_KEYBOARD
 		FlxG.keys.enabled = true;
 		#end
-
+		
 		if (input.text == "")
 			input.text = Console.DEFAULT_TEXT;
 		#end
-
+		
 		completionList.close();
 		FlxG.game.debugger.onMouseFocusLost();
 	}
-
+	
 	#if (polymod || hscript)
 	function onKeyDown(e:KeyboardEvent)
 	{
@@ -203,78 +203,78 @@ class Console extends Window
 			completionList.onKeyDown(e);
 			return;
 		}
-
+		
 		switch (e.keyCode)
 		{
 			case Keyboard.ENTER:
 				if (input.text != "")
 					processCommand();
-
+					
 			case Keyboard.ESCAPE:
 				FlxG.stage.focus = null;
-
+				
 			case Keyboard.DELETE:
 				input.text = "";
-
+				
 			case Keyboard.UP:
 				if (!history.isEmpty)
 					setText(history.getPreviousCommand());
-
-			#if (html5 && FLX_KEYBOARD)
-			// FlxKeyboard.preventDefaultKeys adds "preventDefault" on HTML5
-			// so it ends up not fully propegating our inputs to the stage/event listeners
-			// we do this small work around so we don't need to mess around with lime/openfl events
-			// todo: support the modifier keys
-			case Keyboard.RIGHT:
-				if (FlxG.keys.preventDefaultKeys.contains(Keyboard.RIGHT))
-				{
-					@:privateAccess
-					input.window_onKeyDown(RIGHT, 0);
-				}
-			case Keyboard.LEFT:
-				if (FlxG.keys.preventDefaultKeys.contains(Keyboard.LEFT))
-				{
-					@:privateAccess
-					input.window_onKeyDown(LEFT, 0);
-				}
-			#end
+					
+				#if (html5 && FLX_KEYBOARD)
+				// FlxKeyboard.preventDefaultKeys adds "preventDefault" on HTML5
+				// so it ends up not fully propegating our inputs to the stage/event listeners
+				// we do this small work around so we don't need to mess around with lime/openfl events
+				// todo: support the modifier keys
+				case Keyboard.RIGHT:
+					if (FlxG.keys.preventDefaultKeys.contains(Keyboard.RIGHT))
+					{
+						@:privateAccess
+						input.window_onKeyDown(RIGHT, 0);
+					}
+				case Keyboard.LEFT:
+					if (FlxG.keys.preventDefaultKeys.contains(Keyboard.LEFT))
+					{
+						@:privateAccess
+						input.window_onKeyDown(LEFT, 0);
+					}
+				#end
 			case Keyboard.DOWN:
 				if (!history.isEmpty)
 					setText(history.getNextCommand());
 		}
 	}
-
+	
 	function setText(text:String)
 	{
 		input.text = text;
 		// Set caret to the end of the command
 		input.setSelection(text.length, text.length);
 	}
-
+	
 	function processCommand()
 	{
 		try
 		{
 			var text = input.text.trim();
-
+			
 			// Force registered functions to have "()" if the command doesn't already include them
 			// so when the user types "help" or "resetGame", something useful happens
 			if (registeredFunctions.get(text) != null)
 				text += "()";
-
+				
 			// Attempt to parse, run, and output the command
 			var output = ConsoleUtil.runCommand(text);
 			if (output != null)
 				ConsoleUtil.log(output);
-
+				
 			history.addCommand(input.text);
-
+			
 			// Step forward one frame to see the results of the command
 			#if FLX_DEBUG
 			if (FlxG.vcr.paused && FlxG.console.stepAfterCommand)
 				FlxG.game.debugger.vcr.onStep();
 			#end
-
+			
 			input.text = "";
 		}
 		catch (e:Dynamic)
@@ -283,7 +283,7 @@ class Console extends Window
 			FlxG.log.error("Console: Invalid syntax: '" + e + "'");
 		}
 	}
-
+	
 	override public function reposition(x:Float, y:Float)
 	{
 		super.reposition(x, y);
@@ -291,7 +291,7 @@ class Console extends Window
 		completionList.close();
 	}
 	#end
-
+	
 	/**
 	 * Register a new function to use in any command.
 	 *
@@ -305,11 +305,11 @@ class Console extends Window
 		#if (polymod || hscript)
 		ConsoleUtil.registerFunction(alias, func);
 		#end
-
+		
 		if (helpText != null)
 			registeredHelp.set(alias, helpText);
 	}
-
+	
 	/**
 	 * Register a new object to use in any command.
 	 *
@@ -323,7 +323,7 @@ class Console extends Window
 		ConsoleUtil.registerObject(alias, object);
 		#end
 	}
-
+	
 	/**
 	 * Removes an object or function from the command registry.
 	 *
@@ -338,7 +338,7 @@ class Console extends Window
 		ConsoleUtil.removeByAlias(alias);
 		#end
 	}
-
+	
 	/**
 	 * Removes an object from the command registry by searching through the list.
 	 *
@@ -361,7 +361,7 @@ class Console extends Window
 			}
 		}
 	}
-
+	
 	/**
 	 * Removes a function from the command registry by searching through the list.
 	 *
@@ -384,7 +384,7 @@ class Console extends Window
 			}
 		}
 	}
-
+	
 	/**
 	 * Register a new class to use in any command.
 	 *
@@ -394,7 +394,7 @@ class Console extends Window
 	{
 		registerObject(FlxStringUtil.getClassName(c, true), c);
 	}
-
+	
 	/**
 	 * Removes a class from the command registry.
 	 *
@@ -405,7 +405,7 @@ class Console extends Window
 	{
 		removeByAlias(FlxStringUtil.getClassName(c, true));
 	}
-
+	
 	/**
 	 * Register a new enum to use in any command.
 	 *
@@ -416,7 +416,7 @@ class Console extends Window
 	{
 		registerObject(FlxStringUtil.getEnumName(e, true), e);
 	}
-
+	
 	/**
 	 * Removes an enum from the command registry.
 	 *
@@ -427,37 +427,37 @@ class Console extends Window
 	{
 		removeByAlias(FlxStringUtil.getEnumName(e, true));
 	}
-
+	
 	override public function destroy()
 	{
 		super.destroy();
-
+		
 		#if (polymod || hscript)
 		input.removeEventListener(FocusEvent.FOCUS_IN, onFocus);
 		input.removeEventListener(FocusEvent.FOCUS_OUT, onFocusLost);
 		input.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		#end
-
+		
 		if (input != null)
 		{
 			removeChild(input);
 			input = null;
 		}
-
+		
 		registeredObjects = null;
 		registeredFunctions = null;
 		registeredHelp = null;
-
+		
 		objectStack = null;
 	}
-
+	
 	/**
 	 * Adjusts the width and height of the text field accordingly.
 	 */
 	override function updateSize()
 	{
 		super.updateSize();
-
+		
 		input.width = _width - 4;
 		input.height = _height - 15;
 	}

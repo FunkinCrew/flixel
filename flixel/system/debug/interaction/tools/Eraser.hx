@@ -20,21 +20,21 @@ class Eraser extends Tool
 		_name = "Eraser";
 		return this;
 	}
-
+	
 	override public function update():Void
 	{
 		if (_brain.keyJustPressed(Keyboard.DELETE))
 			doDeletion(_brain.keyPressed(Keyboard.SHIFT));
 	}
-
+	
 	override public function activate():Void
 	{
 		doDeletion(_brain.keyPressed(Keyboard.SHIFT));
-
+		
 		// No need to stay active
 		_brain.setActiveTool(null);
 	}
-
+	
 	function doDeletion(remove:Bool):Void
 	{
 		var selectedItems = _brain.selectedItems;
@@ -44,14 +44,14 @@ class Eraser extends Tool
 			selectedItems.clear();
 		}
 	}
-
+	
 	function findAndDelete(items:FlxTypedGroup<FlxObject>, remove:Bool = false):Void
 	{
 		for (member in items)
 		{
 			if (member == null)
 				continue;
-
+				
 			if ((member is FlxTypedGroup))
 			{
 				// TODO: walk in the group, removing all members.
@@ -64,14 +64,14 @@ class Eraser extends Tool
 			}
 		}
 	}
-
+	
 	function removeFromMemory(item:FlxBasic, parentGroup:FlxGroup):Void
 	{
 		for (member in parentGroup.members)
 		{
 			if (member == null)
 				continue;
-
+				
 			if ((member is FlxTypedGroup))
 				removeFromMemory(item, cast member);
 			else if (member == item)

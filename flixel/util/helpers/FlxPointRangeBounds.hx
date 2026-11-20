@@ -14,17 +14,17 @@ class FlxPointRangeBounds implements IFlxDestroyable
 	 * The beginning X and Y values of this property.
 	 */
 	public var start:FlxBounds<FlxPoint>;
-
+	
 	/**
 	 * The ending X and Y values of this property.
 	 */
 	public var end:FlxBounds<FlxPoint>;
-
+	
 	/**
 	 * A flag that can be used to toggle the use of this property.
 	 */
 	public var active:Bool = true;
-
+	
 	/**
 	 * Create a new FlxPointRangeBounds object.
 	 *
@@ -42,10 +42,10 @@ class FlxPointRangeBounds implements IFlxDestroyable
 	{
 		start = new FlxBounds<FlxPoint>(FlxPoint.get(), FlxPoint.get());
 		end = new FlxBounds<FlxPoint>(FlxPoint.get(), FlxPoint.get());
-
+		
 		set(startMinX, startMinY, startMaxX, startMaxY, endMinX, endMinY, endMaxX, endMaxY);
 	}
-
+	
 	/**
 	 * Handy function to set the the beginning and ending range of values for a FlxPoint in one line.
 	 *
@@ -70,10 +70,10 @@ class FlxPointRangeBounds implements IFlxDestroyable
 		end.min.y = endMinY == null ? start.min.y : endMinY;
 		end.max.x = endMaxX == null ? (endMinX == null ? start.max.x : end.min.x) : endMaxX;
 		end.max.y = endMaxY == null ? (endMinY == null ? start.max.y : end.min.y) : endMaxY;
-
+		
 		return this;
 	}
-
+	
 	/**
 	 * Function to compare this FlxPointRangeBounds to another.
 	 *
@@ -87,7 +87,7 @@ class FlxPointRangeBounds implements IFlxDestroyable
 			&& end.min.equals(OtherFlxPointRangeBounds.end.min)
 			&& end.max.equals(OtherFlxPointRangeBounds.end.max);
 	}
-
+	
 	/**
 	 * Convert object to readable string name. Useful for debugging, save games, etc.
 	 */
@@ -104,7 +104,7 @@ class FlxPointRangeBounds implements IFlxDestroyable
 			LabelValuePair.weak("end.max.y", end.max.y)
 		]);
 	}
-
+	
 	public function destroy():Void
 	{
 		start.min = FlxDestroyUtil.put(start.min);

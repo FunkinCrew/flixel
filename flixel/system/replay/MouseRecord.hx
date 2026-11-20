@@ -9,17 +9,17 @@ class MouseRecord
 {
 	public var x(default, null):Int;
 	public var y(default, null):Int;
-
+	
 	/**
 	 * The state of the left mouse button.
 	 */
 	public var button(default, null):FlxInputState;
-
+	
 	/**
 	 * The state of the mouse wheel.
 	 */
 	public var wheel(default, null):Float;
-
+	
 	/**
 	 * Instantiate a new mouse input record.
 	 *

@@ -9,14 +9,14 @@ class LinearMotion extends Motion
 	 * Length of the current line of movement.
 	 */
 	public var distance(get, never):Float;
-
+	
 	// Line information.
 	var _fromX:Float = 0;
 	var _fromY:Float = 0;
 	var _moveX:Float = 0;
 	var _moveY:Float = 0;
 	var _distance:Float = -1;
-
+	
 	/**
 	 * Starts moving along a line.
 	 *
@@ -34,7 +34,7 @@ class LinearMotion extends Motion
 		y = _fromY = FromY;
 		_moveX = ToX - FromX;
 		_moveY = ToY - FromY;
-
+		
 		if (UseDuration)
 		{
 			duration = DurationOrSpeed;
@@ -43,18 +43,18 @@ class LinearMotion extends Motion
 		{
 			duration = distance / DurationOrSpeed;
 		}
-
+		
 		start();
-
+		
 		return this;
 	}
-
+	
 	override function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
 		x = _fromX + _moveX * scale;
 		y = _fromY + _moveY * scale;
-
+		
 		if ((x == (_fromX + _moveX)) && (y == (_fromY + _moveY)) && active && (_secondsSinceStart >= duration))
 		{
 			finished = true;
@@ -64,7 +64,7 @@ class LinearMotion extends Motion
 			postUpdate();
 		}
 	}
-
+	
 	function get_distance():Float
 	{
 		if (_distance >= 0)

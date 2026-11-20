@@ -11,7 +11,9 @@ class BitmapLogFrontEnd
 {
 	#if FLX_DEBUG
 	public var window(get, never):flixel.system.debug.log.BitmapLog;
-	inline function get_window() return FlxG.game.debugger.bitmapLog;
+	
+	inline function get_window()
+		return FlxG.game.debugger.bitmapLog;
 	#end
 	
 	public overload inline extern function add(data:BitmapData, name = ""):Void
@@ -33,7 +35,7 @@ class BitmapLogFrontEnd
 		{
 			if (name == null)
 				name = getGraphicName(graphic);
-			
+				
 			add(graphic.bitmap, name);
 		}
 		#end
@@ -43,13 +45,13 @@ class BitmapLogFrontEnd
 	{
 		if (graphic.key != null)
 			return graphic.key;
-		
+			
 		if (graphic.assetsKey != null)
 			return graphic.assetsKey;
-		
+			
 		if (graphic.assetsClass != null)
 			return Type.getClassName(graphic.assetsClass);
-		
+			
 		#if FLX_TRACK_GRAPHICS
 		if (graphic.trackingInfo != null)
 			return graphic.trackingInfo;
@@ -57,7 +59,7 @@ class BitmapLogFrontEnd
 		
 		return null;
 	}
-
+	
 	/**
 	 * Clears all bitmaps
 	 */
@@ -67,7 +69,7 @@ class BitmapLogFrontEnd
 		window.clear();
 		#end
 	}
-
+	
 	/**
 	 * Clear one bitmap object from the log -- the last one, by default
 	 * @param	Index
@@ -78,7 +80,7 @@ class BitmapLogFrontEnd
 		window.clearAt(Index);
 		#end
 	}
-
+	
 	/**
 	 * Clears the bitmapLog window and adds the entire cache to it.
 	 */
@@ -92,7 +94,7 @@ class BitmapLogFrontEnd
 		}
 		#end
 	}
-
+	
 	@:allow(flixel.FlxG)
 	function new() {}
 }

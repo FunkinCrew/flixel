@@ -11,7 +11,7 @@ class MFiMapping extends FlxTypedGamepadMapping<MFiID>
 		leftStick = MFiID.LEFT_ANALOG_STICK;
 		rightStick = MFiID.RIGHT_ANALOG_STICK;
 	}
-
+	
 	override function getID(rawID:MFiID):FlxGamepadInputID
 	{
 		return switch (rawID)
@@ -42,7 +42,7 @@ class MFiMapping extends FlxTypedGamepadMapping<MFiID>
 			case _: NONE;
 		}
 	}
-
+	
 	override function getRawID(ID:FlxGamepadInputID):MFiID
 	{
 		return switch (ID)
@@ -79,7 +79,7 @@ class MFiMapping extends FlxTypedGamepadMapping<MFiID>
 			default: super.getRawID(ID);
 		}
 	}
-
+	
 	override function getMappedInput(id:FlxGamepadInputID)
 	{
 		return FlxGamepadMappedInput.MFI(getRawID(id));

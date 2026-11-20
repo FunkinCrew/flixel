@@ -156,7 +156,7 @@ class FlxSound extends FlxBasic
 	 * Helper var to prevent the sound from playing after focus was regained when it was already paused.
 	 */
 	var _resumeOnFocus:Bool = false;
-
+	
 	/**
 	 * If the sound's time is negative, how much milliseconds it needs to pass before the sound can play.
 	 */
@@ -231,7 +231,7 @@ class FlxSound extends FlxBasic
 	{
 		if (!playing)
 			return;
-
+			
 		if (_queuedTime < 0)
 		{
 			_queuedTime += elapsed * 1000;
@@ -239,10 +239,10 @@ class FlxSound extends FlxBasic
 			{
 				this.startSound(_queuedTime);
 			}
-
+			
 			return;
 		}
-			
+		
 		_volumeAdjust = 1.0;
 		
 		// Distance-based volume control
@@ -383,7 +383,8 @@ class FlxSound extends FlxBasic
 			return this;
 			
 		_paused = false;
-		if (_queuedTime == null) _source.play();
+		if (_queuedTime == null)
+			_source.play();
 		active = true;
 		
 		return this;
@@ -398,7 +399,8 @@ class FlxSound extends FlxBasic
 			return this;
 			
 		_paused = true;
-		if (_queuedTime == null) _source.pause();
+		if (_queuedTime == null)
+			_source.pause();
 		active = false;
 		
 		return this;
@@ -559,7 +561,7 @@ class FlxSound extends FlxBasic
 		
 		if (_source != null)
 			_source.stop();
-		
+			
 		active = false;
 		_queuedTime = null;
 		
@@ -657,7 +659,7 @@ class FlxSound extends FlxBasic
 			_source.pause();
 			return _queuedTime;
 		}
-
+		
 		_queuedTime = null;
 		if (_source != null)
 			_source.currentTime = time;

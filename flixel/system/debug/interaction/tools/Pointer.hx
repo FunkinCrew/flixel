@@ -37,14 +37,13 @@ class Pointer extends Tool
 		// If the tool is active, update the custom cursor cursor
 		if (!isActive())
 			return;
-		
+			
 		switch state
 		{
 			case IDLE:
-				
 				if (_brain.pointerJustPressed)
 					state = PRESS(_brain.flixelPointer.x, _brain.flixelPointer.y);
-			
+					
 			case PRESS(startX, startY):
 				if (_brain.pointerJustReleased)
 				{
@@ -57,7 +56,7 @@ class Pointer extends Tool
 				}
 				else if (_brain.flixelPointer.x != startX || _brain.flixelPointer.y != startY)
 					state = DRAG(startX, startY);
-				
+					
 			case DRAG(startX, startY):
 				if (_brain.pointerJustReleased)
 				{
@@ -79,8 +78,9 @@ class Pointer extends Tool
 		final shift = _brain.keyPressed(Keyboard.SHIFT);
 		
 		final selected = _brain.selectedItems;
-		inline function wasSelected(o) return _brain.selectedItems.members.contains(o);
-		
+		inline function wasSelected(o)
+			return _brain.selectedItems.members.contains(o);
+			
 		switch selection
 		{
 			case TOP(null) | ALL([]) if (alt || shift):
@@ -136,7 +136,7 @@ class Pointer extends Tool
 		var gfx:Graphics = _brain.getDebugGraphics();
 		if (gfx == null)
 			return;
-		
+			
 		switch state
 		{
 			case IDLE | PRESS(_, _):

@@ -38,9 +38,9 @@ class FlxSpriteUtil
 	 * Primarily used for "debug visuals" like drawing bounding boxes directly to the screen buffer.
 	 */
 	public static var flashGfxSprite(default, null):Sprite = new Sprite();
-
+	
 	public static var flashGfx(default, null):Graphics = flashGfxSprite.graphics;
-
+	
 	/**
 	 * Takes two source images (typically from Embedded bitmaps) and puts the resulting image into the output FlxSprite.
 	 * Note: It assumes the source and mask are the same size. Different sizes may result in undesired results.
@@ -58,18 +58,18 @@ class FlxSpriteUtil
 	{
 		var data:BitmapData = FlxAssets.resolveBitmapData(source);
 		var maskData:BitmapData = FlxAssets.resolveBitmapData(mask);
-
+		
 		if (data == null || maskData == null)
 		{
 			return null;
 		}
-
+		
 		data = data.clone();
 		data.copyChannel(maskData, new Rectangle(0, 0, data.width, data.height), new Point(), BitmapDataChannel.ALPHA, BitmapDataChannel.ALPHA);
 		output.pixels = data;
 		return output;
 	}
-
+	
 	/**
 	 * Takes the image data from two FlxSprites and puts the resulting image into the output FlxSprite.
 	 * Note: It assumes the source and mask are the same size. Different sizes may result in undesired results.
@@ -91,7 +91,7 @@ class FlxSpriteUtil
 		output.pixels = data;
 		return output;
 	}
-
+	
 	/**
 	 * Checks the x/y coordinates of the FlxSprite and keeps them within the
 	 * area of 0, 0, FlxG.width, FlxG.height (i.e. wraps it around the screen)
@@ -113,7 +113,7 @@ class FlxSpriteUtil
 		{
 			sprite.x = 0;
 		}
-
+		
 		if (Top && ((sprite.y + sprite.frameHeight / 2) <= 0))
 		{
 			sprite.y = FlxG.height;
@@ -146,16 +146,16 @@ class FlxSpriteUtil
 		{
 			MaxY = FlxG.height;
 		}
-
+		
 		MaxX -= sprite.frameWidth;
 		MaxY -= sprite.frameHeight;
-
+		
 		sprite.x = FlxMath.bound(sprite.x, MinX, MaxX);
 		sprite.y = FlxMath.bound(sprite.y, MinY, MaxY);
-
+		
 		return sprite;
 	}
-
+	
 	/**
 	 * Checks the sprite's screen bounds of the FlxSprite and keeps them within the camera by wrapping it around.
 	 *
@@ -169,23 +169,20 @@ class FlxSpriteUtil
 	{
 		if (camera == null)
 			camera = sprite.getDefaultCamera();
-		
+			
 		var spriteBounds = sprite.getScreenBounds(camera);
-		var offset = FlxPoint.get(
-			sprite.x - spriteBounds.x - camera.scroll.x,
-			sprite.y - spriteBounds.y - camera.scroll.y
-		);
+		var offset = FlxPoint.get(sprite.x - spriteBounds.x - camera.scroll.x, sprite.y - spriteBounds.y - camera.scroll.y);
 		
 		if (edges.has(LEFT) && spriteBounds.right < camera.viewMarginLeft)
 			sprite.x = camera.viewRight + offset.x;
 		else if (edges.has(RIGHT) && spriteBounds.left > camera.viewMarginRight)
 			sprite.x = camera.viewLeft + offset.x - spriteBounds.width;
-		
+			
 		if (edges.has(UP) && spriteBounds.bottom < camera.viewMarginTop)
 			sprite.y = camera.viewBottom + offset.y;
 		else if (edges.has(DOWN) && spriteBounds.top > camera.viewMarginBottom)
 			sprite.y = camera.viewTop + offset.y - spriteBounds.height;
-		
+			
 		spriteBounds.put();
 		offset.put();
 		
@@ -205,23 +202,20 @@ class FlxSpriteUtil
 	{
 		if (camera == null)
 			camera = sprite.getDefaultCamera();
-		
+			
 		var spriteBounds = sprite.getScreenBounds(camera);
-		var offset = FlxPoint.get(
-			sprite.x - spriteBounds.x - camera.scroll.x,
-			sprite.y - spriteBounds.y - camera.scroll.y
-		);
+		var offset = FlxPoint.get(sprite.x - spriteBounds.x - camera.scroll.x, sprite.y - spriteBounds.y - camera.scroll.y);
 		
 		if (edges.has(LEFT) && spriteBounds.left < camera.viewMarginLeft)
 			sprite.x = camera.viewLeft + offset.x;
 		else if (edges.has(RIGHT) && spriteBounds.right > camera.viewMarginRight)
 			sprite.x = camera.viewRight + offset.x - spriteBounds.width;
-		
+			
 		if (edges.has(UP) && spriteBounds.top < camera.viewMarginTop)
 			sprite.y = camera.viewTop + offset.y;
 		else if (edges.has(DOWN) && spriteBounds.bottom > camera.viewMarginBottom)
 			sprite.y = camera.viewBottom + offset.y - spriteBounds.height;
-		
+			
 		spriteBounds.put();
 		offset.put();
 		
@@ -244,7 +238,7 @@ class FlxSpriteUtil
 	{
 		var prevWidth:Float = 0;
 		var runningX:Float = 0;
-
+		
 		if (horizontalSpacing != null)
 		{
 			if (spaceFromBounds)
@@ -257,10 +251,10 @@ class FlxSpriteUtil
 		{
 			runningX = objects[0].x;
 		}
-
+		
 		var prevHeight:Float = 0;
 		var runningY:Float = 0;
-
+		
 		if (verticalSpacing != null)
 		{
 			if (spaceFromBounds)
@@ -273,7 +267,7 @@ class FlxSpriteUtil
 		{
 			runningY = objects[0].y;
 		}
-
+		
 		if (position != null)
 		{
 			position(objects[0], runningX, runningY);
@@ -283,14 +277,14 @@ class FlxSpriteUtil
 			objects[0].x = runningX;
 			objects[0].y = runningY;
 		}
-
+		
 		var curX:Float = 0;
 		var curY:Float = 0;
-
+		
 		for (i in 1...objects.length)
 		{
 			var object = objects[i];
-
+			
 			if (horizontalSpacing != null)
 			{
 				curX = runningX + prevWidth + horizontalSpacing;
@@ -300,7 +294,7 @@ class FlxSpriteUtil
 			{
 				curX = object.x;
 			}
-
+			
 			if (verticalSpacing != null)
 			{
 				curY = runningY + prevHeight + verticalSpacing;
@@ -310,7 +304,7 @@ class FlxSpriteUtil
 			{
 				curY = object.y;
 			}
-
+			
 			if (position != null)
 			{
 				position(object, curX, curY);
@@ -320,7 +314,7 @@ class FlxSpriteUtil
 				object.x = curX;
 				object.y = curY;
 			}
-
+			
 			if (spaceFromBounds)
 			{
 				prevWidth = object.width;
@@ -328,7 +322,7 @@ class FlxSpriteUtil
 			}
 		}
 	}
-
+	
 	/**
 	 * This function draws a line on a FlxSprite from position X1,Y1
 	 * to position X2,Y2 with the specified color.
@@ -351,7 +345,7 @@ class FlxSpriteUtil
 		endDraw(sprite, drawStyle);
 		return sprite;
 	}
-
+	
 	/**
 	 * This function draws a curve on a FlxSprite from position X1,Y1
 	 * to anchor position X2,Y2 using control points X3,Y3 with the specified color.
@@ -378,7 +372,7 @@ class FlxSpriteUtil
 		endDraw(sprite, drawStyle);
 		return sprite;
 	}
-
+	
 	/**
 	 * This function draws a rectangle on a FlxSprite.
 	 *
@@ -400,7 +394,7 @@ class FlxSpriteUtil
 		endDraw(sprite, drawStyle);
 		return sprite;
 	}
-
+	
 	/**
 	 * This function draws a rounded rectangle on a FlxSprite.
 	 *
@@ -424,7 +418,7 @@ class FlxSpriteUtil
 		endDraw(sprite, drawStyle);
 		return sprite;
 	}
-
+	
 	/**
 	 * This function draws a rounded rectangle on a FlxSprite. Same as drawRoundRect,
 	 * except it allows you to determine the radius of each corner individually.
@@ -451,7 +445,7 @@ class FlxSpriteUtil
 		endDraw(sprite, drawStyle);
 		return sprite;
 	}
-
+	
 	/**
 	 * This function draws a circle on a FlxSprite at position X,Y with the specified color.
 	 *
@@ -474,19 +468,19 @@ class FlxSpriteUtil
 			if (Y == -1)
 				Y = sprite.frameHeight / 2;
 		}
-
+		
 		if (Radius < 1)
 		{
 			var minVal = Math.min(sprite.frameWidth, sprite.frameHeight);
 			Radius = (minVal / 2);
 		}
-
+		
 		beginDraw(FillColor, lineStyle);
 		flashGfx.drawCircle(X, Y, Radius);
 		endDraw(sprite, drawStyle);
 		return sprite;
 	}
-
+	
 	/**
 	 * This function draws an ellipse on a FlxSprite.
 	 *
@@ -508,7 +502,7 @@ class FlxSpriteUtil
 		endDraw(sprite, drawStyle);
 		return sprite;
 	}
-
+	
 	/**
 	 * This function draws a simple, equilateral triangle on a FlxSprite.
 	 *
@@ -532,7 +526,7 @@ class FlxSpriteUtil
 		endDraw(sprite, drawStyle);
 		return sprite;
 	}
-
+	
 	/**
 	 * This function draws a polygon on a FlxSprite.
 	 *
@@ -557,7 +551,7 @@ class FlxSpriteUtil
 		Vertices.unshift(p);
 		return sprite;
 	}
-
+	
 	/**
 	 * Helper function that the drawing functions use at the start to set the color and lineStyle.
 	 *
@@ -569,13 +563,13 @@ class FlxSpriteUtil
 	{
 		flashGfx.clear();
 		setLineStyle(lineStyle);
-
+		
 		if (FillColor != FlxColor.TRANSPARENT)
 		{
 			flashGfx.beginFill(FillColor.rgb, FillColor.alphaFloat);
 		}
 	}
-
+	
 	/**
 	 * Helper function that the drawing functions use at the end.
 	 *
@@ -589,7 +583,7 @@ class FlxSpriteUtil
 		updateSpriteGraphic(sprite, drawStyle);
 		return sprite;
 	}
-
+	
 	/**
 	 * Just a helper function that is called at the end of the draw functions
 	 * to handle a few things related to updating a sprite's graphic.
@@ -608,12 +602,12 @@ class FlxSpriteUtil
 		{
 			drawStyle.smoothing = false;
 		}
-
+		
 		sprite.pixels.draw(flashGfxSprite, drawStyle.matrix, drawStyle.colorTransform, drawStyle.blendMode, drawStyle.clipRect, drawStyle.smoothing);
 		sprite.dirty = true;
 		return sprite;
 	}
-
+	
 	/**
 	 * Just a helper function that is called in the draw functions
 	 * to set the lineStyle via Graphics.lineStyle()
@@ -626,19 +620,19 @@ class FlxSpriteUtil
 		if (lineStyle != null)
 		{
 			var color = (lineStyle.color == null) ? FlxColor.BLACK : lineStyle.color;
-
+			
 			if (lineStyle.thickness == null)
 				lineStyle.thickness = 1;
 			if (lineStyle.pixelHinting == null)
 				lineStyle.pixelHinting = false;
 			if (lineStyle.miterLimit == null)
 				lineStyle.miterLimit = 3;
-
+				
 			flashGfx.lineStyle(lineStyle.thickness, color.rgb, color.alphaFloat, lineStyle.pixelHinting, lineStyle.scaleMode, lineStyle.capsStyle,
 				lineStyle.jointStyle, lineStyle.miterLimit);
 		}
 	}
-
+	
 	/**
 	 * Helper function for the default line styles of drawLine() and drawCurve()
 	 *
@@ -652,10 +646,10 @@ class FlxSpriteUtil
 			lineStyle.thickness = 1;
 		if (lineStyle.color == null)
 			lineStyle.color = FlxColor.WHITE;
-
+			
 		return lineStyle;
 	}
-
+	
 	/**
 	 * Fills this sprite's graphic with a specific color.
 	 *
@@ -666,15 +660,15 @@ class FlxSpriteUtil
 	public static function fill(sprite:FlxSprite, FillColor:FlxColor):FlxSprite
 	{
 		sprite.pixels.fillRect(sprite.pixels.rect, FillColor);
-
+		
 		if (sprite.pixels != sprite.framePixels)
 		{
 			sprite.dirty = true;
 		}
-
+		
 		return sprite;
 	}
-
+	
 	/**
 	 * A simple flicker effect for sprites achieved by toggling visibility.
 	 *
@@ -692,7 +686,7 @@ class FlxSpriteUtil
 	{
 		return FlxFlicker.flicker(Object, Duration, Interval, EndVisibility, ForceRestart, CompletionCallback, ProgressCallback);
 	}
-
+	
 	/**
 	 * Returns whether an object is flickering or not.
 	 *
@@ -702,7 +696,7 @@ class FlxSpriteUtil
 	{
 		return FlxFlicker.isFlickering(Object);
 	}
-
+	
 	/**
 	 * Stops flickering of the object. Also it will make the object visible.
 	 *
@@ -714,7 +708,7 @@ class FlxSpriteUtil
 		FlxFlicker.stopFlickering(Object);
 		return Object;
 	}
-
+	
 	/**
 	 * Fade in a sprite, tweening alpha to 1.
 	 *
@@ -731,7 +725,7 @@ class FlxSpriteUtil
 		FlxTween.num(sprite.alpha, 1, Duration, {onComplete: OnComplete}, alphaTween.bind(sprite));
 		return sprite;
 	}
-
+	
 	/**
 	 * Fade out a sprite, tweening alpha to 0.
 	 *
@@ -744,7 +738,7 @@ class FlxSpriteUtil
 		FlxTween.num(sprite.alpha, 0, Duration, {onComplete: OnComplete}, alphaTween.bind(sprite));
 		return sprite;
 	}
-
+	
 	static function alphaTween(sprite:FlxSprite, f:Float):Void
 	{
 		sprite.alpha = f;
@@ -782,13 +776,12 @@ class FlxSpriteUtil
 	 * 
 	 * @since 5.4.0
 	 */
-	public static inline function flashTint(sprite:FlxSprite, tint = FlxColor.WHITE, duration = 0.5,
-		?func:(Float)->Float, ?onComplete:()->Void)
+	public static inline function flashTint(sprite:FlxSprite, tint = FlxColor.WHITE, duration = 0.5, ?func:(Float) -> Float, ?onComplete:() -> Void)
 	{
-		final options:TweenOptions = onComplete != null ? { onComplete: (_)->onComplete} : null;
+		final options:TweenOptions = onComplete != null ? {onComplete: (_) -> onComplete} : null;
 		if (func == null)
-			func = (n)->1-FlxEase.circIn(n);// start at full, fade out
-		
+			func = (n) -> 1 - FlxEase.circIn(n); // start at full, fade out
+			
 		var color = tint.rgb;
 		final strength = tint.alphaFloat;
 		FlxTween.num(0, 1, duration, options, function(n)

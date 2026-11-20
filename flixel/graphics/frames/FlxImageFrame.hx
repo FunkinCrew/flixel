@@ -21,12 +21,12 @@ class FlxImageFrame extends FlxFramesCollection
 	 * Added this var for faster access, so you don't need to type something like: `imageFrame.frames[0]`
 	 */
 	public var frame(get, never):FlxFrame;
-
+	
 	function new(parent:FlxGraphic, ?border:FlxPoint)
 	{
 		super(parent, FlxFrameCollectionType.IMAGE, border);
 	}
-
+	
 	/**
 	 * Generates a `FlxImageFrame` object with empty frame of specified size.
 	 *
@@ -39,18 +39,18 @@ class FlxImageFrame extends FlxFramesCollection
 	{
 		if (graphic == null || frameRect == null)
 			return null;
-
+			
 		// find ImageFrame, if there is one already
 		var imageFrame = FlxImageFrame.findEmptyFrame(graphic, frameRect);
 		if (imageFrame != null)
 			return imageFrame;
-
+			
 		// or create it, if there is no such object
 		imageFrame = new FlxImageFrame(graphic);
 		imageFrame.addEmptyFrame(frameRect);
 		return imageFrame;
 	}
-
+	
 	/**
 	 * Generates a `FlxImageFrame` object from the specified `FlxFrame`.
 	 *
@@ -61,16 +61,16 @@ class FlxImageFrame extends FlxFramesCollection
 	{
 		var graphic:FlxGraphic = source.parent;
 		var rect:FlxRect = source.frame;
-
+		
 		var imageFrame:FlxImageFrame = FlxImageFrame.findFrame(graphic, rect);
 		if (imageFrame != null)
 			return imageFrame;
-
+			
 		imageFrame = new FlxImageFrame(graphic);
 		imageFrame.addSpriteSheetFrame(rect.copyTo(FlxRect.get()));
 		return imageFrame;
 	}
-
+	
 	/**
 	 * Creates a `FlxImageFrame` object for the whole image.
 	 *
@@ -81,7 +81,7 @@ class FlxImageFrame extends FlxFramesCollection
 	{
 		return fromRectangle(source, null);
 	}
-
+	
 	/**
 	 * Creates `FlxImageFrame` for the specified region of `FlxGraphic`.
 	 *
@@ -94,25 +94,25 @@ class FlxImageFrame extends FlxFramesCollection
 		// TODO: look into this
 		if (graphic == null || graphic.isDestroyed)
 			return null;
-
+			
 		// find ImageFrame, if there is one already
 		final checkRegion = FlxRect.get(0, 0, graphic.width, graphic.height);
 		if (region != null)
 			region.copyTo(checkRegion);
-		
+			
 		final imageFrame:FlxImageFrame = FlxImageFrame.findFrame(graphic, checkRegion);
 		checkRegion.put();
 		if (imageFrame != null)
 		{
 			if (region != null)
 				region.putWeak();
-			
+				
 			return imageFrame;
 		}
-
+		
 		// or create it, if there is no such object
 		final imageFrame = new FlxImageFrame(graphic);
-
+		
 		if (region == null)
 		{
 			region = FlxRect.weak(0, 0, graphic.width, graphic.height);
@@ -121,15 +121,15 @@ class FlxImageFrame extends FlxFramesCollection
 		{
 			if (region.width == 0)
 				region.width = graphic.width - region.x;
-
+				
 			if (region.height == 0)
 				region.height = graphic.height - region.y;
 		}
-
+		
 		imageFrame.addSpriteSheetFrame(region);
 		return imageFrame;
 	}
-
+	
 	/**
 	 * Creates a `FlxImageFrame` object for specified region of the image.
 	 *
@@ -142,7 +142,7 @@ class FlxImageFrame extends FlxFramesCollection
 		var graphic:FlxGraphic = FlxG.bitmap.add(source, false);
 		return fromGraphic(graphic, region);
 	}
-
+	
 	/**
 	 * Gets source BitmapData, generates new BitmapData (if there is no such BitmapData in the cache already)
 	 * and creates FlxImageFrame collection.
@@ -158,7 +158,7 @@ class FlxImageFrame extends FlxFramesCollection
 		var graphic:FlxGraphic = FlxG.bitmap.add(source, false);
 		if (graphic == null)
 			return null;
-
+			
 		var key:String = FlxG.bitmap.getKeyWithSpacesAndBorders(graphic.key, null, null, border, region);
 		var result:FlxGraphic = FlxG.bitmap.get(key);
 		if (result == null)
@@ -166,11 +166,11 @@ class FlxImageFrame extends FlxFramesCollection
 			var bitmap:BitmapData = FlxBitmapDataUtil.addSpacesAndBorders(graphic.bitmap, null, null, border, region);
 			result = FlxG.bitmap.add(bitmap, false, key);
 		}
-
+		
 		var imageFrame:FlxImageFrame = FlxImageFrame.fromGraphic(graphic);
 		return imageFrame.addBorder(border);
 	}
-
+	
 	/**
 	 * Gets `FlxFrame` object, generates new `BitmapData` with border pixels around
 	 * (if there is no such BitmapData in the cache already) and creates image frame collection.
@@ -184,7 +184,7 @@ class FlxImageFrame extends FlxFramesCollection
 		var bitmap:BitmapData = frame.paint();
 		return FlxImageFrame.fromBitmapAddSpacesAndBorders(bitmap, border);
 	}
-
+	
 	/**
 	 * Searches `FlxImageFrame` object for specified `FlxGraphic` object which have the same frame rectangle.
 	 *
@@ -198,7 +198,7 @@ class FlxImageFrame extends FlxFramesCollection
 	{
 		if (frameBorder == null)
 			frameBorder = FlxPoint.weak();
-		
+			
 		var imageFrames:Array<FlxImageFrame> = cast graphic.getFramesCollections(FlxFrameCollectionType.IMAGE);
 		for (imageFrame in imageFrames)
 		{
@@ -210,7 +210,7 @@ class FlxImageFrame extends FlxFramesCollection
 		frameRect.putWeak();
 		return null;
 	}
-
+	
 	/**
 	 * `FlxImageFrame` comparison method. For internal use.
 	 */
@@ -218,7 +218,7 @@ class FlxImageFrame extends FlxFramesCollection
 	{
 		return rect.equals(frame.frame) && border.equals(this.border);
 	}
-
+	
 	/**
 	 * Searches `FlxImageFrame` object with the empty frame which have specified size.
 	 *
@@ -229,30 +229,30 @@ class FlxImageFrame extends FlxFramesCollection
 	public static function findEmptyFrame(graphic:FlxGraphic, frameRect:FlxRect):FlxImageFrame
 	{
 		var imageFrames:Array<FlxImageFrame> = cast graphic.getFramesCollections(FlxFrameCollectionType.IMAGE);
-
+		
 		for (imageFrame in imageFrames)
 		{
 			var frame = imageFrame.frame;
 			if (frame.sourceSize.x == frameRect.width && frame.sourceSize.y == frameRect.height && frame.type == FlxFrameType.EMPTY)
 				return imageFrame;
 		}
-
+		
 		return null;
 	}
-
+	
 	override public function addBorder(border:FlxPoint):FlxImageFrame
 	{
 		var resultBorder:FlxPoint = FlxPoint.weak().add(this.border).add(border);
-
+		
 		var imageFrame:FlxImageFrame = FlxImageFrame.findFrame(parent, frame.frame, resultBorder);
 		if (imageFrame != null)
 			return imageFrame;
-
+			
 		imageFrame = new FlxImageFrame(parent, resultBorder);
 		imageFrame.pushFrame(frame.setBorderTo(border));
 		return imageFrame;
 	}
-
+	
 	function get_frame():FlxFrame
 	{
 		return frames[0];

@@ -11,11 +11,12 @@ import openfl.geom.Rectangle;
 class FlxRect implements IFlxPooled
 {
 	public static var pool(get, never):IFlxPool<FlxRect>;
-
+	
 	static var _pool:FlxPool<FlxRect> = new FlxPool(FlxRect.new.bind(0, 0, 0, 0));
+	
 	// With the version below, this caused weird CI issues when FLX_NO_POINT_POOL is defined
 	// static var _pool = new FlxPool<FlxRect>(FlxRect);
-
+	
 	/**
 	 * Recycle or create new FlxRect.
 	 * Be sure to put() them back into the pool after you're done with them!
@@ -26,7 +27,7 @@ class FlxRect implements IFlxPooled
 		rect._inPool = false;
 		return rect;
 	}
-
+	
 	/**
 	 * Recycle or create a new FlxRect which will automatically be released
 	 * to the pool when passed into a flixel function.
@@ -37,46 +38,46 @@ class FlxRect implements IFlxPooled
 		rect._weak = true;
 		return rect;
 	}
-
+	
 	public var x:Float;
 	public var y:Float;
 	public var width:Float;
 	public var height:Float;
-
+	
 	/**
 	 * The x coordinate of the left side of the rectangle.
 	 */
 	public var left(get, set):Float;
-
+	
 	/**
 	 * The x coordinate of the right side of the rectangle.
 	 */
 	public var right(get, set):Float;
-
+	
 	/**
 	 * The y coordinate of the top of the rectangle.
 	 */
 	public var top(get, set):Float;
-
+	
 	/**
 	 * The y coordinate of the bottom of the rectangle.
 	 */
 	public var bottom(get, set):Float;
-
+	
 	/**
 	 * Whether width or height of this rectangle is equal to zero or not.
 	 */
 	public var isEmpty(get, never):Bool;
-
+	
 	var _weak:Bool = false;
 	var _inPool:Bool = false;
-
+	
 	@:keep
 	public function new(X:Float = 0, Y:Float = 0, Width:Float = 0, Height:Float = 0)
 	{
 		set(X, Y, Width, Height);
 	}
-
+	
 	/**
 	 * Add this FlxRect to the recycling pool.
 	 */
@@ -89,7 +90,7 @@ class FlxRect implements IFlxPooled
 			_pool.putUnsafe(this);
 		}
 	}
-
+	
 	/**
 	 * Add this FlxRect to the recycling pool if it's a weak reference (allocated via weak()).
 	 */
@@ -100,7 +101,7 @@ class FlxRect implements IFlxPooled
 			put();
 		}
 	}
-
+	
 	/**
 	 * Shortcut for setting both width and Height.
 	 *
@@ -113,7 +114,7 @@ class FlxRect implements IFlxPooled
 		height = Height;
 		return this;
 	}
-
+	
 	/**
 	 * Shortcut for setting both x and y.
 	 */
@@ -123,7 +124,7 @@ class FlxRect implements IFlxPooled
 		this.y = y;
 		return this;
 	}
-
+	
 	/**
 	 * Fill this rectangle with the data provided.
 	 *
@@ -199,7 +200,7 @@ class FlxRect implements IFlxPooled
 	{
 		return setAbs(x1, y1, x2 - x1, y2 - y1);
 	}
-
+	
 	/**
 	 * Helper function, just copies the values from the specified rectangle.
 	 *
@@ -212,11 +213,11 @@ class FlxRect implements IFlxPooled
 		y = Rect.y;
 		width = Rect.width;
 		height = Rect.height;
-
+		
 		Rect.putWeak();
 		return this;
 	}
-
+	
 	/**
 	 * Helper function, just copies the values from this rectangle to the specified rectangle.
 	 *
@@ -229,11 +230,11 @@ class FlxRect implements IFlxPooled
 		Rect.y = y;
 		Rect.width = width;
 		Rect.height = height;
-
+		
 		Rect.putWeak();
 		return Rect;
 	}
-
+	
 	/**
 	 * Helper function, just copies the values from the specified Flash rectangle.
 	 *
@@ -248,7 +249,7 @@ class FlxRect implements IFlxPooled
 		height = FlashRect.height;
 		return this;
 	}
-
+	
 	/**
 	 * Helper function, just copies the values from this rectangle to the specified Flash rectangle.
 	 *
@@ -261,14 +262,14 @@ class FlxRect implements IFlxPooled
 		{
 			FlashRect = new Rectangle();
 		}
-
+		
 		FlashRect.x = x;
 		FlashRect.y = y;
 		FlashRect.width = width;
 		FlashRect.height = height;
 		return FlashRect;
 	}
-
+	
 	/**
 	 * Checks to see if this rectangle overlaps another
 	 *
@@ -277,14 +278,11 @@ class FlxRect implements IFlxPooled
 	 */
 	public inline function overlaps(rect:FlxRect):Bool
 	{
-		final result = rect.right > left
-			&& rect.left < right
-			&& rect.bottom > top
-			&& rect.top < bottom;
+		final result = rect.right > left && rect.left < right && rect.bottom > top && rect.top < bottom;
 		rect.putWeak();
 		return result;
 	}
-
+	
 	/**
 	 * Checks to see if this rectangle fully contains another
 	 *
@@ -294,14 +292,11 @@ class FlxRect implements IFlxPooled
 	 */
 	public inline function contains(rect:FlxRect):Bool
 	{
-		final result = rect.left >= left
-			&& rect.right <= right
-			&& rect.top >= top
-			&& rect.bottom <= bottom;
+		final result = rect.left >= left && rect.right <= right && rect.top >= top && rect.bottom <= bottom;
 		rect.putWeak();
 		return result;
 	}
-
+	
 	/**
 	 * Returns true if this FlxRect contains the FlxPoint
 	 *
@@ -314,7 +309,7 @@ class FlxRect implements IFlxPooled
 		point.putWeak();
 		return result;
 	}
-
+	
 	/**
 	 * Returns true if this FlxRect contains the FlxPoint
 	 *
@@ -326,7 +321,7 @@ class FlxRect implements IFlxPooled
 	{
 		return xPos >= left && xPos <= right && yPos >= top && yPos <= bottom;
 	}
-
+	
 	/**
 	 * Add another rectangle to this one by filling in the
 	 * horizontal and vertical space between the two rectangles.
@@ -340,11 +335,11 @@ class FlxRect implements IFlxPooled
 		var minY:Float = Math.min(y, Rect.y);
 		var maxX:Float = Math.max(right, Rect.right);
 		var maxY:Float = Math.max(bottom, Rect.bottom);
-
+		
 		Rect.putWeak();
 		return set(minX, minY, maxX - minX, maxY - minY);
 	}
-
+	
 	/**
 	 * Rounds x, y, width and height using Math.floor()
 	 */
@@ -356,7 +351,7 @@ class FlxRect implements IFlxPooled
 		height = Math.floor(height);
 		return this;
 	}
-
+	
 	/**
 	 * Rounds x, y, width and height using Math.ceil()
 	 */
@@ -368,7 +363,7 @@ class FlxRect implements IFlxPooled
 		height = Math.ceil(height);
 		return this;
 	}
-
+	
 	/**
 	 * Rounds x, y, width and height using Math.round()
 	 */
@@ -380,7 +375,7 @@ class FlxRect implements IFlxPooled
 		height = Math.round(height);
 		return this;
 	}
-
+	
 	/**
 	 * Calculation of bounding box for two points
 	 *
@@ -392,15 +387,15 @@ class FlxRect implements IFlxPooled
 	{
 		var minX:Float = Math.min(Point1.x, Point2.x);
 		var minY:Float = Math.min(Point1.y, Point2.y);
-
+		
 		var maxX:Float = Math.max(Point1.x, Point2.x);
 		var maxY:Float = Math.max(Point1.y, Point2.y);
-
+		
 		Point1.putWeak();
 		Point2.putWeak();
 		return this.set(minX, minY, maxX - minX, maxY - minY);
 	}
-
+	
 	/**
 	 * Add another point to this rectangle one by filling in the
 	 * horizontal and vertical space between the point and this rectangle.
@@ -414,18 +409,18 @@ class FlxRect implements IFlxPooled
 		var minY:Float = Math.min(y, Point.y);
 		var maxX:Float = Math.max(right, Point.x);
 		var maxY:Float = Math.max(bottom, Point.y);
-
+		
 		Point.putWeak();
 		return set(minX, minY, maxX - minX, maxY - minY);
 	}
-
+	
 	public inline function offset(dx:Float, dy:Float):FlxRect
 	{
 		x += dx;
 		y += dy;
 		return this;
 	}
-
+	
 	/**
 	 * Calculates the globally aligned bounding box of a `FlxRect` with the given angle and origin.
 	 * @param degrees The rotation, in degrees of the rect.
@@ -440,10 +435,10 @@ class FlxRect implements IFlxPooled
 	{
 		if (origin == null)
 			origin = FlxPoint.weak(0, 0);
-		
+			
 		if (newRect == null)
 			newRect = FlxRect.get();
-		
+			
 		degrees = degrees % 360;
 		if (degrees == 0)
 		{
@@ -453,7 +448,7 @@ class FlxRect implements IFlxPooled
 		
 		if (degrees < 0)
 			degrees += 360;
-		
+			
 		var radians = FlxAngle.TO_RAD * degrees;
 		var cos = Math.cos(radians);
 		var sin = Math.sin(radians);
@@ -470,7 +465,7 @@ class FlxRect implements IFlxPooled
 		else if (degrees < 180)
 		{
 			newRect.x = x + origin.x + cos * right - sin * bottom;
-			newRect.y = y + origin.y + sin * left  + cos * bottom;
+			newRect.y = y + origin.y + sin * left + cos * bottom;
 		}
 		else if (degrees < 270)
 		{
@@ -483,19 +478,19 @@ class FlxRect implements IFlxPooled
 			newRect.y = y + origin.y + sin * right + cos * top;
 		}
 		// temp var, in case input rect is the output rect
-		var newHeight = Math.abs(cos * height) + Math.abs(sin * width );
-		newRect.width = Math.abs(cos * width ) + Math.abs(sin * height);
+		var newHeight = Math.abs(cos * height) + Math.abs(sin * width);
+		newRect.width = Math.abs(cos * width) + Math.abs(sin * height);
 		newRect.height = newHeight;
 		
 		origin.putWeak();
 		return newRect;
 	}
-
+	
 	/**
 	 * Necessary for IFlxDestroyable.
 	 */
 	public function destroy() {}
-
+	
 	/**
 	 * Checks if this rectangle's properties are equal to properties of provided rect.
 	 *
@@ -521,7 +516,7 @@ class FlxRect implements IFlxPooled
 	{
 		if (result == null)
 			result = FlxRect.get();
-		
+			
 		final x0:Float = x < rect.x ? rect.x : x;
 		final x1:Float = right > rect.right ? rect.right : right;
 		final y0:Float = y < rect.y ? rect.y : y;
@@ -530,7 +525,7 @@ class FlxRect implements IFlxPooled
 		
 		if (x1 <= x0 || y1 <= y0)
 			return result.set(0, 0, 0, 0);
-		
+			
 		return result.set(x0, y0, x1 - x0, y1 - y0);
 	}
 	
@@ -557,7 +552,7 @@ class FlxRect implements IFlxPooled
 	{
 		if (point == null)
 			point = FlxPoint.get();
-		
+			
 		return point.set(x + 0.5 * width, y + 0.5 * height);
 	}
 	
@@ -573,56 +568,56 @@ class FlxRect implements IFlxPooled
 			LabelValuePair.weak("h", height)
 		]);
 	}
-
+	
 	inline function get_left():Float
 	{
 		return x;
 	}
-
+	
 	inline function set_left(Value:Float):Float
 	{
 		width -= Value - x;
 		return x = Value;
 	}
-
+	
 	inline function get_right():Float
 	{
 		return x + width;
 	}
-
+	
 	inline function set_right(Value:Float):Float
 	{
 		width = Value - x;
 		return Value;
 	}
-
+	
 	inline function get_top():Float
 	{
 		return y;
 	}
-
+	
 	inline function set_top(Value:Float):Float
 	{
 		height -= Value - y;
 		return y = Value;
 	}
-
+	
 	inline function get_bottom():Float
 	{
 		return y + height;
 	}
-
+	
 	inline function set_bottom(Value:Float):Float
 	{
 		height = Value - y;
 		return Value;
 	}
-
+	
 	inline function get_isEmpty():Bool
 	{
 		return width == 0 || height == 0;
 	}
-
+	
 	static function get_pool():IFlxPool<FlxRect>
 	{
 		return _pool;
@@ -635,11 +630,12 @@ class FlxRect implements IFlxPooled
 abstract FlxReadOnlyRect(FlxRect) from FlxRect to IFlxPooled
 {
 	public static var pool(get, never):IFlxPool<FlxRect>;
+	
 	static inline function get_pool()
 	{
 		return FlxRect.pool;
 	}
-
+	
 	/**
 	 * Recycle or create new FlxRect.
 	 * Be sure to put() them back into the pool after you're done with them!
@@ -648,7 +644,7 @@ abstract FlxReadOnlyRect(FlxRect) from FlxRect to IFlxPooled
 	{
 		return FlxRect.get(x, y, width, height);
 	}
-
+	
 	/**
 	 * Recycle or create a new FlxRect which will automatically be released
 	 * to the pool when passed into a flixel function.
@@ -657,55 +653,106 @@ abstract FlxReadOnlyRect(FlxRect) from FlxRect to IFlxPooled
 	{
 		return FlxRect.weak(x, y, width, height);
 	}
-
+	
 	public var x(get, never):Float;
-	inline function get_x() return this.x;
 	
+	inline function get_x()
+		return this.x;
+		
 	public var y(get, never):Float;
-	inline function get_y() return this.y;
 	
+	inline function get_y()
+		return this.y;
+		
 	public var width(get, never):Float;
-	inline function get_width() return this.width;
 	
+	inline function get_width()
+		return this.width;
+		
 	public var height(get, never):Float;
-	inline function get_height() return this.height;
 	
+	inline function get_height()
+		return this.height;
+		
 	/** The x coordinate of the left side of the rectangle */
 	public var left(get, never):Float;
-	inline function get_left() return this.left;
-
+	
+	inline function get_left()
+		return this.left;
+		
 	/** The x coordinate of the right side of the rectangle */
 	public var right(get, never):Float;
-	inline function get_right() return this.right;
-
+	
+	inline function get_right()
+		return this.right;
+		
 	/** The y coordinate of the top of the rectangle */
 	public var top(get, never):Float;
-	inline function get_top() return this.top;
-
+	
+	inline function get_top()
+		return this.top;
+		
 	/** The y coordinate of the bottom of the rectangle */
 	public var bottom(get, never):Float;
-	inline function get_bottom() return this.bottom;
 	
+	inline function get_bottom()
+		return this.bottom;
+		
 	/** Whether width or height of this rectangle is equal to zero or not */
 	public var isEmpty(get, never):Bool;
-	inline function get_isEmpty() return this.isEmpty;
 	
+	inline function get_isEmpty()
+		return this.isEmpty;
+		
 	// Hide functions that set fields, by making private versions
-	inline function destroy() return this.destroy();
-	inline function setSize(w, h) return this.setSize(w, h);
-	inline function setPosition(x, y) return this.setPosition(x, y);
-	inline function set(x = 0.0, y = 0.0, w = 0.0, h = 0.0) return this.set(x, y, w, h);
-	inline function setBounds(x1, y1, x2, y2) return this.setBounds(x1, y1, x2, y2);
-	inline function setAbs(x, y, w, h) return this.setAbs(x, y, w, h);
-	inline function setBoundsAbs(x1 = 0.0, y1 = 0.0, x2 = 0.0, y2 = 0.0) return this.setBoundsAbs(x1, y1, x2, y2);
-	inline function copyFrom(rect) return this.copyFrom(rect);
-	inline function copyFromFlash(rect) return this.copyFromFlash(rect);
-	inline function union(rect) return this.union(rect);
-	inline function floor() return this.floor();
-	inline function ceil() return this.ceil();
-	inline function round() return this.round();
-	inline function fromTwoPoints(p1, p2) return this.fromTwoPoints(p1, p2);
-	inline function unionWithPoint(p) return this.unionWithPoint(p);
-	inline function offset(dx, dy) return this.offset(dx, dy);
-	inline function clipTo(rect) return this.clipTo(rect);
+	inline function destroy()
+		return this.destroy();
+		
+	inline function setSize(w, h)
+		return this.setSize(w, h);
+		
+	inline function setPosition(x, y)
+		return this.setPosition(x, y);
+		
+	inline function set(x = 0.0, y = 0.0, w = 0.0, h = 0.0)
+		return this.set(x, y, w, h);
+		
+	inline function setBounds(x1, y1, x2, y2)
+		return this.setBounds(x1, y1, x2, y2);
+		
+	inline function setAbs(x, y, w, h)
+		return this.setAbs(x, y, w, h);
+		
+	inline function setBoundsAbs(x1 = 0.0, y1 = 0.0, x2 = 0.0, y2 = 0.0)
+		return this.setBoundsAbs(x1, y1, x2, y2);
+		
+	inline function copyFrom(rect)
+		return this.copyFrom(rect);
+		
+	inline function copyFromFlash(rect)
+		return this.copyFromFlash(rect);
+		
+	inline function union(rect)
+		return this.union(rect);
+		
+	inline function floor()
+		return this.floor();
+		
+	inline function ceil()
+		return this.ceil();
+		
+	inline function round()
+		return this.round();
+		
+	inline function fromTwoPoints(p1, p2)
+		return this.fromTwoPoints(p1, p2);
+		
+	inline function unionWithPoint(p)
+		return this.unionWithPoint(p);
+		
+	inline function offset(dx, dy)
+		return this.offset(dx, dy);
+		
+	inline function clipTo(rect)
+		return this.clipTo(rect);
 }

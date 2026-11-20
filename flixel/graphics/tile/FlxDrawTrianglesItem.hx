@@ -27,36 +27,36 @@ class FlxDrawTrianglesItem extends FlxDrawBaseItem<FlxDrawTrianglesItem>
 	static inline final INDICES_PER_QUAD = 6;
 	static var point:FlxPoint = FlxPoint.get();
 	static var rect:FlxRect = FlxRect.get();
-
+	
 	var alphas:Array<Float>;
 	var colorMultipliers:Array<Float>;
 	var colorOffsets:Array<Float>;
-
+	
 	public var vertices:DrawData<Float> = new DrawData<Float>();
 	public var indices:DrawData<Int> = new DrawData<Int>();
 	public var uvtData:DrawData<Float> = new DrawData<Float>();
 	@:deprecated("colors is deprecated, use colorMultipliers and colorOffsets")
 	public var colors:DrawData<Int> = new DrawData<Int>();
-
+	
 	public var verticesPosition:Int = 0;
 	public var indicesPosition:Int = 0;
 	@:deprecated("colorsPosition is deprecated")
 	public var colorsPosition:Int = 0;
-
+	
 	var bounds:FlxRect = FlxRect.get();
-
+	
 	public function new()
 	{
 		super();
 		type = FlxDrawItemType.TRIANGLES;
 		alphas = [];
 	}
-
+	
 	override public function render(camera:FlxCamera):Void
 	{
 		if (numTriangles <= 0)
 			return;
-
+			
 		#if !flash
 		var shader = shader != null ? shader : graphics.shader;
 		shader.bitmap.input = graphics.bitmap;
@@ -64,7 +64,7 @@ class FlxDrawTrianglesItem extends FlxDrawBaseItem<FlxDrawTrianglesItem>
 		shader.bitmap.blendTarget = blendTarget;
 		shader.bitmap.wrap = REPEAT; // in order to prevent breaking tiling behaviour in classes that use drawTriangles
 		shader.alpha.value = alphas;
-
+		
 		if (colored || hasColorOffsets)
 		{
 			shader.colorMultiplier.value = colorMultipliers;
@@ -75,21 +75,21 @@ class FlxDrawTrianglesItem extends FlxDrawBaseItem<FlxDrawTrianglesItem>
 			shader.colorMultiplier.value = null;
 			shader.colorOffset.value = null;
 		}
-
+		
 		setParameterValue(shader.hasTransform, true);
 		setParameterValue(shader.hasColorTransform, colored || hasColorOffsets);
 		setParameterValue(shader.premultiplyAlpha, !shader.bitmap.input.readable && shader.bitmap.input.__texture != null && shader.bitmap.input.__texture.__premultiplyAlpha);
-
+		
 		camera.canvas.graphics.overrideBlendMode(blend);
-
+		
 		camera.canvas.graphics.beginShaderFill(shader);
 		#else
 		camera.canvas.graphics.beginBitmapFill(graphics.bitmap, null, true, (camera.antialiasing || antialiasing));
 		#end
-
+		
 		camera.canvas.graphics.drawTriangles(vertices, indices, uvtData, TriangleCulling.NONE);
 		camera.canvas.graphics.endFill();
-
+		
 		#if FLX_DEBUG
 		if (FlxG.debugger.drawDebug)
 		{
@@ -98,31 +98,31 @@ class FlxDrawTrianglesItem extends FlxDrawBaseItem<FlxDrawTrianglesItem>
 			gfx.drawTriangles(vertices, indices, uvtData);
 		}
 		#end
-
+		
 		super.render(camera);
 	}
-
+	
 	override public function reset():Void
 	{
 		super.reset();
 		vertices.length = 0;
 		indices.length = 0;
 		uvtData.length = 0;
-
+		
 		verticesPosition = 0;
 		indicesPosition = 0;
-
+		
 		alphas.resize(0);
 		if (colorMultipliers != null)
 			colorMultipliers.resize(0);
 		if (colorOffsets != null)
 			colorOffsets.resize(0);
 	}
-
+	
 	override public function dispose():Void
 	{
 		super.dispose();
-
+		
 		vertices = null;
 		indices = null;
 		uvtData = null;
@@ -131,35 +131,35 @@ class FlxDrawTrianglesItem extends FlxDrawBaseItem<FlxDrawTrianglesItem>
 		colorMultipliers = null;
 		colorOffsets = null;
 	}
-
+	
 	public function addTriangles(vertices:DrawData<Float>, indices:DrawData<Int>, uvtData:DrawData<Float>, ?colors:DrawData<Int>, ?position:FlxPoint,
 			?cameraBounds:FlxRect #if !flash, ?transform:ColorTransform #end):Void
 	{
 		if (position == null)
 			position = point.set();
-
+			
 		if (cameraBounds == null)
 			cameraBounds = rect.set(0, 0, FlxG.width, FlxG.height);
-
+			
 		var verticesLength:Int = vertices.length;
 		var prevVerticesLength:Int = this.vertices.length;
 		var numberOfVertices:Int = Std.int(verticesLength / 2);
 		var prevIndicesLength:Int = this.indices.length;
 		var prevUVTDataLength:Int = this.uvtData.length;
 		var prevNumberOfVertices:Int = this.numVertices;
-
+		
 		var tempX:Float, tempY:Float;
 		var i:Int = 0;
 		var currentVertexPosition:Int = prevVerticesLength;
-
+		
 		while (i < verticesLength)
 		{
 			tempX = position.x + vertices[i];
 			tempY = position.y + vertices[i + 1];
-
+			
 			this.vertices[currentVertexPosition++] = tempX;
 			this.vertices[currentVertexPosition++] = tempY;
-
+			
 			if (i == 0)
 			{
 				bounds.set(tempX, tempY, 0, 0);
@@ -168,10 +168,10 @@ class FlxDrawTrianglesItem extends FlxDrawBaseItem<FlxDrawTrianglesItem>
 			{
 				inflateBounds(bounds, tempX, tempY);
 			}
-
+			
 			i += 2;
 		}
-
+		
 		var indicesLength:Int = indices.length;
 		if (!cameraBounds.overlaps(bounds))
 		{
@@ -184,12 +184,12 @@ class FlxDrawTrianglesItem extends FlxDrawBaseItem<FlxDrawTrianglesItem>
 			{
 				this.uvtData[prevUVTDataLength + i] = uvtData[i];
 			}
-
+			
 			for (i in 0...indicesLength)
 			{
 				this.indices[prevIndicesLength + i] = indices[i] + prevNumberOfVertices;
 			}
-
+			
 			final alphaMultiplier = transform != null ? transform.alphaMultiplier : 1.0;
 			final perVertexAlpha = colors != null && colors.length > 0;
 			var an:Int = alphas.length;
@@ -203,15 +203,15 @@ class FlxDrawTrianglesItem extends FlxDrawBaseItem<FlxDrawTrianglesItem>
 				for (i in 0...indicesLength)
 					alphas[an++] = alphaMultiplier;
 			}
-
+			
 			if (colored || hasColorOffsets)
 			{
 				if (colorMultipliers == null)
 					colorMultipliers = [];
-
+					
 				if (colorOffsets == null)
 					colorOffsets = [];
-
+					
 				final rm = transform != null ? transform.redMultiplier : 1.0;
 				final gm = transform != null ? transform.greenMultiplier : 1.0;
 				final bm = transform != null ? transform.blueMultiplier : 1.0;
@@ -219,10 +219,10 @@ class FlxDrawTrianglesItem extends FlxDrawBaseItem<FlxDrawTrianglesItem>
 				final go = transform != null ? transform.greenOffset : 0.0;
 				final bo = transform != null ? transform.blueOffset : 0.0;
 				final ao = transform != null ? transform.alphaOffset : 0.0;
-
+				
 				var mn:Int = colorMultipliers.length;
 				var on:Int = colorOffsets.length;
-
+				
 				for (i in 0...indicesLength)
 				{
 					if (perVertexAlpha)
@@ -239,30 +239,29 @@ class FlxDrawTrianglesItem extends FlxDrawBaseItem<FlxDrawTrianglesItem>
 						colorMultipliers[mn++] = bm;
 					}
 					colorMultipliers[mn++] = 1;
-
+					
 					colorOffsets[on++] = ro;
 					colorOffsets[on++] = go;
 					colorOffsets[on++] = bo;
 					colorOffsets[on++] = ao;
 				}
 			}
-
+			
 			verticesPosition += verticesLength;
 			indicesPosition += indicesLength;
 		}
-
+		
 		position.putWeak();
 		cameraBounds.putWeak();
-
 	}
-
+	
 	inline function setParameterValue(parameter:ShaderParameter<Bool>, value:Bool):Void
 	{
 		if (parameter.value == null)
 			parameter.value = [];
 		parameter.value[0] = value;
 	}
-
+	
 	public static inline function inflateBounds(bounds:FlxRect, x:Float, y:Float):FlxRect
 	{
 		if (x < bounds.x)
@@ -270,31 +269,31 @@ class FlxDrawTrianglesItem extends FlxDrawBaseItem<FlxDrawTrianglesItem>
 			bounds.width += bounds.x - x;
 			bounds.x = x;
 		}
-
+		
 		if (y < bounds.y)
 		{
 			bounds.height += bounds.y - y;
 			bounds.y = y;
 		}
-
+		
 		if (x > bounds.x + bounds.width)
 		{
 			bounds.width = x - bounds.x;
 		}
-
+		
 		if (y > bounds.y + bounds.height)
 		{
 			bounds.height = y - bounds.y;
 		}
-
+		
 		return bounds;
 	}
-
+	
 	override public function addQuad(frame:FlxFrame, matrix:FlxMatrix, ?transform:ColorTransform):Void
 	{
 		final prevVerticesPos = verticesPosition;
 		final prevNumberOfVertices = numVertices;
-
+		
 		final w = frame.frame.width;
 		final h = frame.frame.height;
 		vertices[prevVerticesPos + 0] = matrix.transformX(0, 0); // left
@@ -305,7 +304,7 @@ class FlxDrawTrianglesItem extends FlxDrawBaseItem<FlxDrawTrianglesItem>
 		vertices[prevVerticesPos + 5] = matrix.transformY(0, h); // bottom
 		vertices[prevVerticesPos + 6] = matrix.transformX(w, h); // right
 		vertices[prevVerticesPos + 7] = matrix.transformY(w, h); // bottom
-
+		
 		uvtData[prevVerticesPos + 0] = frame.uv.left;
 		uvtData[prevVerticesPos + 1] = frame.uv.top;
 		uvtData[prevVerticesPos + 2] = frame.uv.right;
@@ -314,7 +313,7 @@ class FlxDrawTrianglesItem extends FlxDrawBaseItem<FlxDrawTrianglesItem>
 		uvtData[prevVerticesPos + 5] = frame.uv.bottom;
 		uvtData[prevVerticesPos + 6] = frame.uv.right;
 		uvtData[prevVerticesPos + 7] = frame.uv.bottom;
-
+		
 		final prevIndicesPos = indicesPosition;
 		indices[prevIndicesPos + 0] = prevNumberOfVertices + 0; // TL
 		indices[prevIndicesPos + 1] = prevNumberOfVertices + 1; // TR
@@ -322,19 +321,19 @@ class FlxDrawTrianglesItem extends FlxDrawBaseItem<FlxDrawTrianglesItem>
 		indices[prevIndicesPos + 3] = prevNumberOfVertices + 1; // TR
 		indices[prevIndicesPos + 4] = prevNumberOfVertices + 2; // BL
 		indices[prevIndicesPos + 5] = prevNumberOfVertices + 3; // BR
-
+		
 		final alphaMultiplier = transform != null ? transform.alphaMultiplier : 1.0;
 		for (i in 0...INDICES_PER_QUAD)
 			alphas.push(alphaMultiplier);
-
+			
 		if (colored || hasColorOffsets)
 		{
 			if (colorMultipliers == null)
 				colorMultipliers = [];
-
+				
 			if (colorOffsets == null)
 				colorOffsets = [];
-
+				
 			for (i in 0...INDICES_PER_QUAD)
 			{
 				if (transform != null)
@@ -342,7 +341,7 @@ class FlxDrawTrianglesItem extends FlxDrawBaseItem<FlxDrawTrianglesItem>
 					colorMultipliers.push(transform.redMultiplier);
 					colorMultipliers.push(transform.greenMultiplier);
 					colorMultipliers.push(transform.blueMultiplier);
-
+					
 					colorOffsets.push(transform.redOffset);
 					colorOffsets.push(transform.greenOffset);
 					colorOffsets.push(transform.blueOffset);
@@ -353,26 +352,26 @@ class FlxDrawTrianglesItem extends FlxDrawBaseItem<FlxDrawTrianglesItem>
 					colorMultipliers.push(1);
 					colorMultipliers.push(1);
 					colorMultipliers.push(1);
-
+					
 					colorOffsets.push(0);
 					colorOffsets.push(0);
 					colorOffsets.push(0);
 					colorOffsets.push(0);
 				}
-
+				
 				colorMultipliers.push(1);
 			}
 		}
-
+		
 		verticesPosition += 8;
 		indicesPosition += 6;
 	}
-
+	
 	override function get_numVertices():Int
 	{
 		return Std.int(vertices.length / 2);
 	}
-
+	
 	override function get_numTriangles():Int
 	{
 		return Std.int(indices.length / 3);

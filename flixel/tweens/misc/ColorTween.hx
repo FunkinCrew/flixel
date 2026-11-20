@@ -11,15 +11,15 @@ import flixel.util.FlxColor;
 class ColorTween extends FlxTween
 {
 	public var color(default, null):FlxColor;
-
+	
 	var startColor:FlxColor;
 	var endColor:FlxColor;
-
+	
 	/**
 	 * Optional sprite object whose color to tween
 	 */
 	public var sprite(default, null):FlxSprite;
-
+	
 	/**
 	 * Clean up references
 	 */
@@ -28,7 +28,7 @@ class ColorTween extends FlxTween
 		super.destroy();
 		sprite = null;
 	}
-
+	
 	/**
 	 * Tweens the color to a new color and an alpha to a new alpha.
 	 *
@@ -47,12 +47,12 @@ class ColorTween extends FlxTween
 		start();
 		return this;
 	}
-
+	
 	override function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
 		color = FlxColor.interpolate(startColor, endColor, scale);
-
+		
 		if (sprite != null)
 		{
 			sprite.color = color;
