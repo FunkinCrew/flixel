@@ -87,14 +87,8 @@ class FlxSound extends FlxBasic
 	/**
 	 * Whether or not this sound should loop.
 	 */
-	public var looped:Bool;
-	
-	/**
-	 * In case of looping, the point (in milliseconds) from where to restart the sound when it loops back
-	 * @since 4.1.0
-	 */
-	public var loopTime:Float = 0;
-	
+	public var looped(get, set):Bool;
+
 	/**
 	 * The tween used to fade this sound's volume in and out (set via `fadeIn()` and `fadeOut()`)
 	 * @since 4.1.0
@@ -185,8 +179,6 @@ class FlxSound extends FlxBasic
 		_volume = 1.0;
 		_volumeAdjust = 1.0;
 		_pan = 0;
-		looped = false;
-		loopTime = 0.0;
 		_target = null;
 		_radius = 0;
 		_proximityPan = false;
@@ -305,7 +297,6 @@ class FlxSound extends FlxBasic
 	
 	function init(Looped:Bool = false, AutoDestroy:Bool = false, ?OnComplete:Void->Void):FlxSound
 	{
-		looped = Looped;
 		autoDestroy = AutoDestroy;
 		exists = true;
 		onComplete = OnComplete;
@@ -314,6 +305,7 @@ class FlxSound extends FlxBasic
 		{
 			@:privateAccess
 			_source = new AudioSource(_sound.__buffer);
+			_source.loop = Looped;
 			_source.onComplete.add(stopped);
 		}
 		
@@ -529,17 +521,14 @@ class FlxSound extends FlxBasic
 	
 	/**
 	 * An internal helper called when the source finishes playing.
-	 * Restarts looped sounds, otherwise cleans up (and destroys the sound if `autoDestroy` is enabled).
+	 * Cleans up (and destroys the sound if `autoDestroy` is enabled).
 	 */
 	function stopped():Void
 	{
 		if (onComplete != null)
 			onComplete();
-			
-		if (looped)
-			startSound(loopTime);
-		else
-			cleanup(autoDestroy);
+
+		cleanup(autoDestroy);
 	}
 	
 	/**
@@ -672,6 +661,19 @@ class FlxSound extends FlxBasic
 		return _source != null ? _source.length : 0;
 	}
 	
+	inline function get_looped():Bool
+	{
+		return _source != null ? _source.loop : false;
+	}
+
+	function set_looped(value:Bool):Bool
+	{
+		if (_source != null)
+			_source.loop = value;
+
+		return value;
+	}
+
 	override public function toString():String
 	{
 		return FlxStringUtil.getDebugString([
