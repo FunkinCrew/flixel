@@ -361,6 +361,53 @@ class AssetFrontEnd
 	}
 	
 	/**
+	 * Gets a sound that streams from disk.
+	 * Falls back to a regular sound where streaming isn't supported. 
+	 *
+	 * **Note:** If the `FLX_DEFAULT_SOUND_EXT` flag is enabled, you may omit the file extension
+	 *
+	 * @param   id        The ID or asset path for the sound
+	 * @param   useCache  Whether to allow use of the asset cache. Does nothing.
+	 * @return  A new `Sound` object Note: Dos not return a `FlxSound`
+	 */
+	public inline function getStreamedSoundUnsafe(id:String, useCache = false):Sound
+	{
+		var extid = addSoundExtIf(id);
+		
+		#if lime_miniaudio
+		if (#if FLX_STANDARD_ASSETS_DIRECTORY true #else useOpenflAssets(extid) #end)
+			return Assets.getMusic(extid, useCache);
+		#end
+		// unsupported
+		return getSoundUnsafe(extid, useCache);
+	}
+	
+	/**
+	 * Gets a sound that streams from disk, logs when the asset is not found or if streamingf is not supported
+	 * 
+	 * **Note:** If the `FLX_DEFAULT_SOUND_EXT` flag is enabled, you may omit the file extension
+	 * 
+	 * @param   id        The ID or asset path for the sound
+	 * @param   useCache  Whether to allow use of the asset cache. Does nothing.
+	 * @param   logStyle  How to log, if the asset is not found. Uses `LogStyle.ERROR` by default
+	 * @return  A new `Sound` object Note: Dos not return a `FlxSound`
+	 */
+	public inline function getStreamedSound(id:String, useCache = false, ?logStyle:LogStyle):Sound
+	{
+		var extid = addSoundExtIf(id);
+		#if lime_miniaudio
+		if (!exists(extid, SOUND))
+		{
+			FlxG.log.advanced('Could not find a SOUND asset with ID \'$extid\'.', logStyle ?? LogStyle.ERROR);
+			return null;
+		}
+		#else
+		FlxG.log.advanced('Could not stream SOUND asset with ID \'$extid\', as streaming is unsupported.', logStyle ?? LogStyle.ERROR);
+		#end
+		return getStreamedSoundUnsafe(extid, useCache);
+	}
+	
+	/**
 	 * Gets an instance of a sound, logs when the asset is not found
 	 * 
 	 * @param   id        The ID or asset path for the sound
