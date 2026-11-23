@@ -130,7 +130,7 @@ class SoundFrontEnd
 			music.stop();
 		}
 		
-		music.loadHelper(embeddedMusic, stream, looped, false);
+		music.loadAudio(embeddedMusic, stream, looped, false);
 		music.volume = volume;
 		music.persist = true;
 		group.add(music);
@@ -167,7 +167,7 @@ class SoundFrontEnd
 		
 		if (embeddedSound != null)
 		{
-			sound.loadHelper(embeddedSound, stream, looped, autoDestroy, onComplete);
+			sound.loadAudio(embeddedSound, stream, looped, autoDestroy, onComplete);
 			loadHelper(sound, volume, group, autoPlay);
 			// Call OnlLoad() because the sound already loaded
 			if (onLoad != null && sound._sound != null)
@@ -241,7 +241,7 @@ class SoundFrontEnd
 		{
 			embeddedSound = cache(embeddedSound);
 		}
-		var sound = list.recycle(FlxSound).loadHelper(embeddedSound, stream, looped, autoDestroy, onComplete);
+		var sound = list.recycle(FlxSound).loadAudio(embeddedSound, stream, looped, autoDestroy, onComplete);
 		return loadHelper(sound, volume, group, true);
 	}
 	
