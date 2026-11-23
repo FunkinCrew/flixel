@@ -270,35 +270,32 @@ class FlxSound extends FlxBasic
 	 * @param	OnComplete		Called when the sound finished playing
 	 * @return	This FlxSound instance (nice for chaining stuff together, if you're into that).
 	 */
+	@:deprecated("Use `FlxSound.loadAudio()` instead.")
 	public function loadEmbedded(EmbeddedSound:FlxSoundAsset, Looped = false, AutoDestroy = false, ?OnComplete:Void->Void):FlxSound
 	{
-		return loadHelper(EmbeddedSound, false, Looped, AutoDestroy, OnComplete);
+		return loadAudio(EmbeddedSound, false, Looped, AutoDestroy, OnComplete);
 	}
 	
 	/**
-	 * Opens an audio stream from the given StreamedSound.
+	 * Loads the given sound asset, then returns it for chaining.
 	 *
 	 * **Note:** If the `FLX_DEFAULT_SOUND_EXT` flag is enabled, you may omit the file extension
 	 *
 	 * @param	StreamedSound	A Class object representing an MP3 file.
 	 * @param	Looped			Whether or not this sound should loop endlessly.
+	 * @param	Streamed		Whether or not this sound should be streamed.
 	 * @param	AutoDestroy		Whether or not this FlxSound instance should be destroyed when the sound finishes playing.
 	 * 							Default value is false, but `FlxG.sound.play()` and `FlxG.sound.stream()` will set it to true by default.
 	 * @param	OnComplete		Called when the sound finished playing
 	 * @return	This FlxSound instance (nice for chaining stuff together, if you're into that).
 	 */
-	public function loadStreamed(StreamedSound:FlxSoundAsset, Looped = false, AutoDestroy = false, ?OnComplete:Void->Void):FlxSound
-	{
-		return loadHelper(StreamedSound, true, Looped, AutoDestroy, OnComplete);
-	}
-	
-	public function loadHelper(asset:FlxSoundAsset, streamed:Bool, Looped:Bool, AutoDestroy:Bool, ?OnComplete:Void->Void):FlxSound
+	public function loadAudio(asset:FlxSoundAsset, Streamed:Bool = false, Looped:Bool = false, AutoDestroy:Bool = false, ?OnComplete:Void->Void):FlxSound
 	{
 		if (asset == null)
 			return this;
 			
 		cleanup(true);
-		_sound = resolveSound(asset, streamed);
+		_sound = resolveSound(asset, Streamed);
 		return init(Looped, AutoDestroy, OnComplete);
 	}
 	
