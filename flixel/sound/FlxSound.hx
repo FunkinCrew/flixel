@@ -1,5 +1,6 @@
 package flixel.sound;
 
+import flixel.system.frontEnds.SoundFrontEnd;
 import flixel.FlxBasic;
 import flixel.FlxG;
 import flixel.math.FlxMath;
@@ -291,7 +292,7 @@ class FlxSound extends FlxBasic
 		return loadHelper(StreamedSound, true, Looped, AutoDestroy, OnComplete);
 	}
 	
-	function loadHelper(asset:FlxSoundAsset, streamed:Bool, Looped:Bool, AutoDestroy:Bool, ?OnComplete:Void->Void):FlxSound
+	public function loadHelper(asset:FlxSoundAsset, streamed:Bool, Looped:Bool, AutoDestroy:Bool, ?OnComplete:Void->Void):FlxSound
 	{
 		if (asset == null)
 			return this;
