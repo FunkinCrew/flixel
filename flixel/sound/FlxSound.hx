@@ -210,7 +210,15 @@ class FlxSound extends FlxBasic
 			_source = null;
 		}
 		
-		_sound = null;
+		if (_sound != null)
+		{
+			if (_sound.isStreaming)
+			{
+				_sound.close();
+			}
+			
+			_sound = null;
+		}
 		
 		onComplete = null;
 		
