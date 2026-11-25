@@ -660,7 +660,7 @@ class FlxSound extends FlxBasic
 	
 	inline function get_time():Float
 	{
-		return _source != null ? _source.currentTime : 0;
+		return _queuedTime != null ? _queuedTime : (_source != null ? _source.currentTime : 0);
 	}
 	
 	function set_time(time:Float):Float
