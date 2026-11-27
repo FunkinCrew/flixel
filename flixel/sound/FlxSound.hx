@@ -297,14 +297,15 @@ class FlxSound extends FlxBasic
 	 * @param	OnComplete		Called when the sound finished playing
 	 * @return	This FlxSound instance (nice for chaining stuff together, if you're into that).
 	 */
-	public function loadAudio(asset:FlxSoundAsset, Streamed:Bool = false, Looped:Bool = false, AutoDestroy:Bool = false, ?OnComplete:Void->Void):FlxSound
+	public function loadAudio(asset:FlxSoundAsset, Streamed:Bool = false, Looped:Bool = false, AutoDestroy:Bool = false, WarmUp:Bool = false,
+			?OnComplete:Void->Void):FlxSound
 	{
 		if (asset == null)
 			return this;
 			
 		cleanup(true);
 		_sound = resolveSound(asset, Streamed);
-		return init(Looped, AutoDestroy, OnComplete);
+		return init(Looped, AutoDestroy, WarmUp, OnComplete);
 	}
 	
 	function resolveSound(asset:FlxSoundAsset, streamed:Bool):Null<Sound>
@@ -318,7 +319,7 @@ class FlxSound extends FlxBasic
 		return null;
 	}
 	
-	function init(Looped:Bool = false, AutoDestroy:Bool = false, ?OnComplete:Void->Void):FlxSound
+	function init(Looped:Bool = false, AutoDestroy:Bool = false, WarmUp:Bool = false, ?OnComplete:Void->Void):FlxSound
 	{
 		autoDestroy = AutoDestroy;
 		exists = true;
@@ -335,7 +336,19 @@ class FlxSound extends FlxBasic
 		pitch = 1;
 		updateVolume();
 		updatePan();
+		
+		if (WarmUp)
+			warmUp();
 		return this;
+	}
+	
+	public function warmUp()
+	{
+		@:privateAccess
+		if (_source == null || _sound == null || _sound.__buffer == null)
+			return;
+		@:privateAccess
+		_sound.__buffer.warmUp();
 	}
 	
 	/**
