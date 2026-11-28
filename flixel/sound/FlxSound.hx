@@ -80,6 +80,12 @@ class FlxSound extends FlxBasic
 	public var length(get, never):Float;
 	
 	/**
+	 * The length of the sound.
+	 */
+	@:deprecated("Use `length` instead.")
+	public var _length(get, never):Float;
+	
+	/**
 	 * The sound group this sound belongs to, can only be in one group.
 	 * NOTE: This setter is deprecated, use `group.add(sound)` or `group.remove(sound)`.
 	 */
@@ -682,6 +688,11 @@ class FlxSound extends FlxBasic
 	inline function get_length():Float
 	{
 		return _source != null ? _source.length : 0;
+	}
+	
+	inline function get__length():Float
+	{
+		return length;
 	}
 	
 	inline function get_looped():Bool
